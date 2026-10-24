@@ -329,7 +329,7 @@
   drop.addEventListener("drop", function (e) { readFile(e.dataTransfer && e.dataTransfer.files[0]); });
 
   // Адрес приёмника общего каталога (Cloudflare Worker). Пустой: берётся только catalog.json рядом с сайтом.
-  var COMMUNITY_URL = "https://ocbot-catalog.makar2186.workers.dev";
+  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
   function grab(url) {
     return fetch(url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })

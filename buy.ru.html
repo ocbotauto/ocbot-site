@@ -96,7 +96,7 @@
 <script>
 (function () {
   // Адрес сервера продаж задаётся при выкладке сайта. Пустой: страница показывает «приём платежей недоступен».
-  var SALES_URL = "";
+  var SALES_URL = "https://ocbot-sales.ocbotauto.workers.dev";
   var $ = function (id) { return document.getElementById(id); };
   var prices = null, months1 = 1, months2 = 1, timer = null;
   function say(t) { $("msg").textContent = t || ""; }
