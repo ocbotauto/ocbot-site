@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){var p=location.pathname;var t=/\.html$/.test(p)?p.replace(/\.html$/,'.ru.html'):p.replace(/\/$/,'')+'/index.ru.html';if(t!==p)location.replace(t+location.search+location.hash);}}catch(e){}})();</script>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>OCBot guide: auto-overclock</title>
@@ -56,9 +56,17 @@
       </li>
       <li>
         <h3>Install the bot</h3>
-        <p>The author sends you <code>hive-oc-bot.zip</code> and your licence file <code>license.json</code>. Put both into <code>/root</code> on the rig (WinSCP or any SFTP client). Then open the rig's Hive Shell (the <code>&gt;_</code> icon) and paste one command. The wizard finds the cards, the miner and the rig name itself and asks about the power supply, the tuning goal and Telegram.</p>
-        <div class="code"><pre><code>cd /root &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; { [ -f /root/license.json ] &amp;&amp; cp -f /root/license.json /root/hive-oc-bot/; true; } &amp;&amp; cd /root/hive-oc-bot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
-        <figure class="fig"><svg viewBox="0 0 360 220" role="img" aria-label="How the files reach the rig"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Your computer</text><text class="mono" x="180" y="43" text-anchor="middle">hive-oc-bot.zip + license.json</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">WinSCP / SFTP</text><rect class="bx" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. The /root folder on the rig</text><text class="m" x="180" y="123" text-anchor="middle">both files side by side</text><line class="ln" x1="180" y1="134" x2="180" y2="162" marker-end="url(#a2)"/><text class="m" x="192" y="152">Hive Shell and one command</text><rect class="bs" x="20" y="166" width="320" height="46" rx="8"/><text class="t" x="180" y="186" text-anchor="middle">3. Setup wizard</text><text class="m" x="180" y="203" text-anchor="middle">finds cards itself, asks about the PSU</text></svg></figure>
+        <p>No files to download to your computer and upload to the rig. Open the rig's Hive Shell (the <code>&gt;_</code> icon) and paste one command — it downloads the bot, unpacks it and starts the setup wizard itself. The wizard finds the cards, the miner and the rig name itself and asks about the power supply, the tuning goal and Telegram.</p>
+        <div class="code"><pre><code>cd /root &amp;&amp; wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip &amp;&amp; unzip -qo ocbot.zip -d /root &amp;&amp; cd /root/ocbot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="One-command install"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Rig's Hive Shell</text><text class="m" x="180" y="43" text-anchor="middle">one command, the &gt;_ icon</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">download and unpack</text><rect class="bs" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. Setup wizard</text><text class="m" x="180" y="123" text-anchor="middle">finds cards itself, asks about the PSU</text></svg></figure>
+      </li>
+      <li>
+        <h3>Start the trial or activate a key</h3>
+        <p>Right after install the bot changes nothing yet, until a licence is active. Free, no card needed — 3 days per rig, once:</p>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --trial</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p>Bought a key on the <a href="buy.html">purchase page</a>? Activate it with one command — no file to copy anywhere, use your own key instead of OC-...:</p>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p class="note">One key works for one rig: each rig needs its own key and its own activation.</p>
       </li>
       <li>
         <h3>Connect Telegram</h3>
