@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){var p=location.pathname;var t=/\.html$/.test(p)?p.replace(/\.html$/,'.ru.html'):p.replace(/\/$/,'')+'/index.ru.html';if(t!==p)location.replace(t+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="canonical" href="https://makar2186.github.io/ocbot-site/buy.html">
