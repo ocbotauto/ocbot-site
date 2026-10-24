@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RTX 3060 Ti: настройки разгона для майнинга</title>
+<meta name="description" content="Проверенные пресеты разгона RTX 3060 Ti: core, mem, power limit, хешрейт и потребление в трёх режимах. Данные присылают боты с ригов.">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/rtx-3060-ti.ru.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/rtx-3060-ti.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/rtx-3060-ti.ru.html">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RTX 3060 Ti: настройки разгона для майнинга">
+<meta property="og:description" content="Проверенные пресеты разгона RTX 3060 Ti: core, mem, power limit, хешрейт и потребление в трёх режимах. Данные присылают боты с ригов.">
+<meta property="og:url" content="https://makar2186.github.io/ocbot-site/rtx-3060-ti.ru.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="stylesheet" href="assets/catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="navtop" aria-label="Разделы сайта"><a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a><a href="catalog.ru.html">Каталог</a><a href="guide.ru.html">Инструкция</a><a href="#" onclick="try{var u=location.pathname;u=u.replace(/\.ru\.html$/,'.html');localStorage.setItem('ocbot_lang','en');location.href=u;}catch(e){}return false;">EN</a></nav>
+  <header class="hero"><div><h1>RTX 3060 Ti</h1>
+  <a class="guidelink" href="catalog.ru.html">&larr; весь каталог</a>
+  <p class="lede">Проверенные пресеты: каждый прошёл двухчасовую проверку на риге. Эффективность, компромисс и хешрейт показаны рядом.</p></div></header>
+  <div class="tw"><table class="tbl"><thead><tr><th>Режим</th><th>Пресет</th><th class="num">Хешрейт</th><th class="num">Потребл.</th><th class="num">Эффективность</th></tr></thead>
+  <tbody><tr><td><b>Хешрейт</b><small>pearl / rgminer 1.1.3b</small><small>✓ сработало на 1 рига(х)</small></td><td><div class="pre"><i>core</i> +150 &nbsp;<i>mem</i> −450<br><i>PL</i> 120 Вт</div><span class="cps"><button type="button" class="cp" data-copy="Core clock: 150
+Memory clock: -450
+Power limit: 120 W">Hive</button><button type="button" class="cp" data-copy="GPU=0   # номер карты
+nvidia-smi -i $GPU -pl 120
+DISPLAY=:0 nvidia-settings -a &quot;[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=150&quot; -a &quot;[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=-450&quot;">Консоль</button></span></td><td class="num">64.6 <small>TH/s</small></td><td class="num">119 <small>Вт</small></td><td class="num"><span class="good">0.544</span> <small>TH/Вт</small></td></tr></tbody></table></div>
+  <p class="others"><b>Другие модели:</b> <a class="mlink" href="rtx-3060.ru.html">RTX 3060</a> <a class="mlink" href="rtx-3070-samsung.ru.html">RTX 3070 (Samsung)</a> <a class="mlink" href="rtx-3070-ti.ru.html">RTX 3070 Ti</a> <a class="mlink" href="rtx-3080-ti-micron.ru.html">RTX 3080 Ti (Micron)</a> <a class="mlink" href="rtx-3090-micron.ru.html">RTX 3090 (Micron)</a> <a class="mlink" href="rtx-3090-ti-micron.ru.html">RTX 3090 Ti (Micron)</a> <a class="mlink" href="rtx-3090.ru.html">RTX 3090</a> <a class="mlink" href="rtx-4060.ru.html">RTX 4060</a> <a class="mlink" href="rtx-4070-micron.ru.html">RTX 4070 (Micron)</a> <a class="mlink" href="rtx-4070-ti.ru.html">RTX 4070 Ti</a> </p>
+  <footer>Пресет подходит одной модели с той же памятью, майнером и версией. Перед использованием проверьте охлаждение, райзеры и питание. Данные предоставляются «как есть», использование на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</footer>
+</div>
+<script>
+document.addEventListener("click", function (ev) {
+  var b = ev.target.closest("[data-copy]"); if (!b) return;
+  var t = b.getAttribute("data-copy"), old = b.textContent;
+  function ok() { b.textContent = "Скопировано"; setTimeout(function () { b.textContent = old; }, 1400); }
+  if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () {}); else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); ok(); } catch (x) {} a.remove(); }
+});
+</script>
+<script src="chat.js" defer></script>
+</body>
+</html>

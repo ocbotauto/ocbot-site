@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://makar2186.github.io/ocbot-site/sitemap.xml

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/buy.ru.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/buy.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/buy.ru.html">
+<title>Купить ключ OCBot</title>
+<link rel="stylesheet" href="assets/buy.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<meta name="description" content="Ключ для бота авторазгона OCBot: 1 месяц $2, 3 месяца $5.4, 12 месяцев $20 за риг. Оплата USDT в сети BNB Chain, без аккаунтов и почты.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Купить ключ OCBot">
+<meta property="og:description" content="Ключ для бота авторазгона OCBot: 1 месяц $2, 3 месяца $5.4, 12 месяцев $20 за риг. Оплата USDT в сети BNB Chain, без аккаунтов и почты.">
+<meta property="og:locale" content="ru_RU">
+</head>
+<body>
+<div class="wrap">
+    <nav class="navtop" aria-label="Разделы сайта"><a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a><a href="catalog.ru.html">Каталог</a><a href="buy.ru.html" aria-current="page">Купить</a><a href="guide.ru.html">Инструкция</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='buy.html';}catch(e){}return false;">EN</a></nav>
+  <header class="hero">
+    <div>
+      <h1>Ключ для рига</h1>
+      <p class="lede">Один ключ работает на одном риге. Оплата в USDT (сеть BNB Chain), без регистрации, почты и аккаунтов. Сначала можно попробовать 3 дня бесплатно.</p>
+    </div>
+  </header>
+
+  <div class="card2 down" id="down"><b>Приём платежей временно недоступен.</b> Уже купленные ключи продолжают работать. Попробуйте позже.</div>
+
+  <div class="card2">
+    <h2>Пробный период: 3 дня</h2>
+    <p>Один раз на риг. Выполните на риге и посмотрите, как бот работает на ваших картах:</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --trial</pre>
+    <p>Пробная версия работает в режиме «Компромисс» и принимает основные команды: /status, /card, /stop, /resume, /safe, /table, /psu, /pl, /balance. Выбор режима, «4 параметра», ручной подбор и каталог открываются с ключом.</p>
+    <p><b>Условие пробного периода:</b> проверенные пресеты анонимно отправляются в общий каталог на сайте (модель карты, core/mem/PL, хешрейт и потребление; без имени рига, UUID карт и IP). На пробном периоде это отключить нельзя. С купленным ключом отправку можно отключить в любой момент командой /share off. Перед стартом бот попросит подтвердить, что вы прочитали <a href="guide.ru.html#terms">условия и отказ от ответственности</a>.</p>
+  </div>
+
+  <div class="buy" id="forms">
+    <div class="card2">
+      <h2>Купить новые ключи</h2>
+      <p>Срок начинается с первой активации на риге, а не с оплаты.</p>
+      <div class="opts" id="opts1"></div>
+      <div class="row2"><label for="qty">Ригов:</label><input type="number" id="qty" min="1" max="50" value="1"><span class="total" id="tot1"></span></div>
+      <button type="button" class="primary" id="go1">Получить реквизиты</button>
+    </div>
+    <div class="card2">
+      <h2>Продлить</h2>
+      <p>Вставьте ключи (по одному на строку). Бот сам подхватит новый срок, вводить ничего заново не нужно.</p>
+      <textarea id="keys" placeholder="OC-XXXXX-XXXXX-XXXXX-XXXXX" spellcheck="false"></textarea>
+      <div class="opts" id="opts2"></div>
+      <div class="row2"><span class="total" id="tot2"></span></div>
+      <button type="button" class="primary" id="go2">Получить реквизиты</button>
+    </div>
+  </div>
+
+  <p id="msg" role="status"></p>
+
+  <div class="invoice" id="inv">
+    <h2 style="margin-top:0">Оплата заказа</h2>
+    <p>Отправьте <b>точно эту сумму</b> USDT в сети <b id="net"></b> на адрес:</p>
+    <div class="field"><code id="addr"></code><button type="button" data-copy="addr">Копировать адрес</button></div>
+    <div class="field"><code class="amt" id="amt"></code><button type="button" data-copy="amt">Копировать сумму</button></div>
+    <div class="warn">Сумма должна совпасть до последней цифры: по ней мы узнаём ваш заказ. Адрес и сумма действуют 24 часа. Комиссию сети платите сверху. Заказ: <code id="oid" style="display:inline"></code></div>
+    <p id="state">Ждём платёж…</p>
+    <div class="keys" id="result"></div>
+  </div>
+
+  <div class="card2">
+    <h2>Мой заказ</h2>
+    <p>Закрыли страницу? Введите номер заказа и получите ключи.</p>
+    <div class="row2"><input type="text" id="oidin" placeholder="номер заказа" style="font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-width:260px"><button type="button" id="goo">Показать</button></div>
+  </div>
+
+  <div class="card2">
+    <h2>Как активировать ключ</h2>
+    <p>На риге выполните (подставьте свой ключ вместо OC-...):</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</pre>
+    <p>Один ключ действует на один риг: для каждого рига нужен свой ключ. <a href="status.ru.html">Статус сервисов</a></p>
+    <p class="small">Независимый проект: не связан с Hiveon и HiveOS, не одобрен и не спонсируется ими. HiveOS, NVIDIA, Telegram и другие названия принадлежат их владельцам и упомянуты только для описания совместимости.</p>
+  </div>
+
+  <div class="card2 terms">
+    <h2>Условия</h2>
+    <ul>
+      <li>Ключ на 30 дней стоит 2 USDT за риг, на 3 месяца 5,4 USDT, на год 20 USDT.</li>
+      <li>Когда срок заканчивается, бот применяет безопасные значения и перестаёт подбирать разгон.</li>
+      <li>Если ключ не продлить, через 5 дней бот удаляет с рига свой код и службу. Пресеты, база и конфиг остаются: после продления работа продолжится с того же места.</li>
+      <li>Если сервер лицензий недоступен, бот ничего не удаляет и работает ещё до 3 дней сверх срока.</li>
+      <li>Платежи необратимы. Сохраните ключи и номер заказа: восстановить их без номера заказа нельзя.</li>
+      <li>Бот и пресеты предоставляются «как есть»: <a href="guide.ru.html#terms">отказ от ответственности</a>.</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function () {
+  // Адрес сервера продаж задаётся при выкладке сайта. Пустой: страница показывает «приём платежей недоступен».
+  var SALES_URL = "";
+  var $ = function (id) { return document.getElementById(id); };
+  var prices = null, months1 = 1, months2 = 1, timer = null;
+  function say(t) { $("msg").textContent = t || ""; }
+  function api(path, body) {
+    return fetch(SALES_URL.replace(/\/$/, "") + path, body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) } : { cache: "no-store" })
+      .then(function (r) { return r.json().then(function (j) { j._status = r.status; return j; }); });
+  }
+  function label(m) { return m === 1 ? "30 дней" : m === 3 ? "3 месяца" : "12 месяцев"; }
+  function opts(box, name, cur, pick) {
+    box.innerHTML = Object.keys(prices).map(function (m) {
+      return '<label><input type="radio" name="' + name + '" value="' + m + '"' + (+m === cur ? " checked" : "") + '><b>' + prices[m].toFixed(2) + ' $</b><span>' + label(+m) + ' за риг</span></label>';
+    }).join("");
+    box.onchange = function (e) { pick(+e.target.value); calc(); };
+  }
+  function keyList() { return $("keys").value.split(/[\s,;]+/).map(function (k) { return k.trim().toUpperCase(); }).filter(Boolean); }
+  function calc() {
+    if (!prices) return;
+    var q = Math.max(1, Math.min(50, parseInt($("qty").value, 10) || 1));
+    $("tot1").textContent = "≈ " + (prices[months1] * q).toFixed(2) + " USDT";
+    $("tot2").textContent = keyList().length ? "≈ " + (prices[months2] * keyList().length).toFixed(2) + " USDT" : "";
+  }
+  function copy(id, btn) {
+    var t = $(id).textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { btn.textContent = "Скопировано"; setTimeout(function () { btn.textContent = id === "addr" ? "Копировать адрес" : "Копировать сумму"; }, 1500); }, function () {});
+  }
+  function show(o) {
+    $("inv").className = "invoice on";
+    $("net").textContent = o.network || "BNB Chain (BEP20)";
+    $("addr").textContent = o.address; $("amt").textContent = o.amount; $("oid").textContent = o.order_id;
+    try { localStorage.setItem("ocbot-order", o.order_id); } catch (e) {}
+    $("inv").scrollIntoView({ behavior: "smooth", block: "start" });
+    poll(o.order_id);
+  }
+  function poll(id) {
+    clearInterval(timer);
+    function once() {
+      api("/order/" + id).then(function (o) {
+        if (o.status === "paid") {
+          clearInterval(timer);
+          $("state").textContent = "Оплата получена. Сохраните эти данные:";
+          var list = o.keys || (o.renewed || []).map(function (r) { return r.key + (r.expires ? " — до " + r.expires : " — срок начнётся с активации"); });
+          $("result").innerHTML = list.map(function (k) { return "<code>" + k.replace(/[<>&]/g, "") + "</code>"; }).join("");
+          $("inv").className = "invoice on";
+          $("addr").textContent = o.address || $("addr").textContent; $("oid").textContent = id; $("amt").textContent = o.amount || $("amt").textContent;
+        } else if (o.status === "expired") {
+          clearInterval(timer); $("state").textContent = "Заказ истёк. Создайте новый.";
+        } else if (o.status === "pending") {
+          $("state").textContent = "Ждём платёж… (страница проверяет сама, обычно около минуты после отправки)";
+        } else { clearInterval(timer); $("state").textContent = "Заказ не найден."; }
+      }).catch(function () { $("state").textContent = "Связь с сервером прервалась, пробуем снова…"; });
+    }
+    once(); timer = setInterval(once, 15000);
+  }
+  function order(body) {
+    say("Создаём заказ…");
+    api("/order", body).then(function (o) {
+      if (o.order_id) { say(""); show(o); }
+      else if (o.error === "unknown_key") say("Такого ключа нет: " + o.key);
+      else if (o.error === "bad_key") say("Ключ введён неверно. Он выглядит так: OC-XXXXX-XXXXX-XXXXX-XXXXX.");
+      else say("Не получилось создать заказ (" + (o.error || "ошибка") + "). Повторите позже.");
+    }).catch(function () { say("Связь с сервером недоступна. Повторите позже."); });
+  }
+  $("go1").onclick = function () { order({ months: months1, qty: Math.max(1, Math.min(50, parseInt($("qty").value, 10) || 1)) }); };
+  $("go2").onclick = function () { if (!keyList().length) return say("Вставьте хотя бы один ключ."); order({ months: months2, keys: keyList() }); };
+  $("goo").onclick = function () { var v = $("oidin").value.trim(); if (v) { $("inv").className = "invoice on"; $("oid").textContent = v; poll(v); } };
+  $("qty").oninput = calc; $("keys").oninput = calc;
+  document.querySelectorAll("[data-copy]").forEach(function (b) { b.onclick = function () { copy(b.getAttribute("data-copy"), b); }; });
+  if (!SALES_URL) { $("down").className = "card2 down on"; $("forms").style.display = "none"; return; }
+  api("/config").then(function (c) {
+    prices = c.prices; months1 = months2 = +Object.keys(prices)[0];
+    opts($("opts1"), "m1", months1, function (m) { months1 = m; }); opts($("opts2"), "m2", months2, function (m) { months2 = m; });
+    calc();
+    try { var last = localStorage.getItem("ocbot-order"); if (last) { $("oidin").value = last; } } catch (e) {}
+  }).catch(function () { $("down").className = "card2 down on"; $("forms").style.display = "none"; });
+})();
+</script>
+<script src="chat.js" defer></script>
+</body>
+</html>

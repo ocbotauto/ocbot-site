@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RTX 3070 Ti: mining overclock presets</title>
+<meta name="description" content="Verified overclock presets for RTX 3070 Ti: core, mem, power limit, hashrate and power draw across three modes. Data is submitted by bots running on rigs.">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/rtx-3070-ti.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/rtx-3070-ti.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/rtx-3070-ti.ru.html">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RTX 3070 Ti: mining overclock presets">
+<meta property="og:description" content="Verified overclock presets for RTX 3070 Ti: core, mem, power limit, hashrate and power draw across three modes. Data is submitted by bots running on rigs.">
+<meta property="og:url" content="https://makar2186.github.io/ocbot-site/rtx-3070-ti.html">
+<meta property="og:locale" content="en_US">
+<link rel="stylesheet" href="assets/catalog.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a><a href="catalog.html">Catalog</a><a href="guide.html">Guide</a><a href="#" onclick="try{var u=location.pathname;u=u.replace(/\.html$/,'.ru.html');localStorage.setItem('ocbot_lang','ru');location.href=u;}catch(e){}return false;">RU</a></nav>
+  <header class="hero"><div><h1>RTX 3070 Ti</h1>
+  <a class="guidelink" href="catalog.html">&larr; full catalog</a>
+  <p class="lede">Verified presets: each one passed a two-hour test run on a rig. Efficiency, compromise and hashrate modes are shown side by side.</p></div></header>
+  <div class="tw"><table class="tbl"><thead><tr><th>Mode</th><th>Preset</th><th class="num">Hashrate</th><th class="num">Power</th><th class="num">Efficiency</th></tr></thead>
+  <tbody><tr><td><b>Hashrate</b><small>pearl / rgminer 1.1.3b</small><small>✓ matched on 1 rig(s)</small></td><td><div class="pre"><i>core</i> +275 &nbsp;<i>mem</i> −50<br><i>PL</i> 148 W</div><span class="cps"><button type="button" class="cp" data-copy="Core clock: 275
+Memory clock: -50
+Power limit: 148 W">Hive</button><button type="button" class="cp" data-copy="GPU=0   # card index
+nvidia-smi -i $GPU -pl 148
+DISPLAY=:0 nvidia-settings -a &quot;[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=275&quot; -a &quot;[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=-50&quot;">Console</button></span></td><td class="num">81.6 <small>TH/s</small></td><td class="num">129 <small>W</small></td><td class="num"><span class="good">0.636</span> <small>TH/W</small></td></tr></tbody></table></div>
+  <p class="others"><b>Other models:</b> <a class="mlink" href="rtx-3060-ti.html">RTX 3060 Ti</a> <a class="mlink" href="rtx-3060.html">RTX 3060</a> <a class="mlink" href="rtx-3070-samsung.html">RTX 3070 (Samsung)</a> <a class="mlink" href="rtx-3080-ti-micron.html">RTX 3080 Ti (Micron)</a> <a class="mlink" href="rtx-3090-micron.html">RTX 3090 (Micron)</a> <a class="mlink" href="rtx-3090-ti-micron.html">RTX 3090 Ti (Micron)</a> <a class="mlink" href="rtx-3090.html">RTX 3090</a> <a class="mlink" href="rtx-4060.html">RTX 4060</a> <a class="mlink" href="rtx-4070-micron.html">RTX 4070 (Micron)</a> <a class="mlink" href="rtx-4070-ti.html">RTX 4070 Ti</a> </p>
+  <footer>A preset fits one model with the same memory, miner and version. Before using it, check cooling, risers and power delivery. Data is provided “as is”, use at your own risk: <a href="guide.html#terms">disclaimer</a>.</footer>
+</div>
+<script>
+document.addEventListener("click", function (ev) {
+  var b = ev.target.closest("[data-copy]"); if (!b) return;
+  var t = b.getAttribute("data-copy"), old = b.textContent;
+  function ok() { b.textContent = "Copied"; setTimeout(function () { b.textContent = old; }, 1400); }
+  if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () {}); else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); ok(); } catch (x) {} a.remove(); }
+});
+</script>
+<script src="chat.en.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/catalog.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/catalog.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/catalog.ru.html">
+<title>Catalog of GPU overclock presets for mining</title>
+<link rel="stylesheet" href="assets/catalog.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<meta name="description" content="Verified NVIDIA GPU overclock settings by model (AMD coming soon): core, mem, power limit, hashrate and power draw across three modes. Data is submitted by bots running on rigs.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Catalog of GPU overclock presets for mining">
+<meta property="og:description" content="Verified NVIDIA GPU overclock settings by model (AMD coming soon): core, mem, power limit, hashrate and power draw across three modes. Data is submitted by bots running on rigs.">
+<meta property="og:locale" content="en_US">
+</head>
+<body>
+<div class="wrap">
+  <nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a><a href="catalog.html" aria-current="page">Catalog</a><a href="guide.html">Guide</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='catalog.ru.html';}catch(e){}return false;">RU</a></nav>
+  <header class="hero">
+    <div>
+      <h1>Preset catalog</h1>
+      <a class="guidelink" href="guide.html">Install and command guide →</a>
+      <p class="lede">The best overclock settings by GPU model. Data is submitted by bots running on rigs: only verified presets, no card UUIDs or rig names. The page updates itself.</p>
+    </div>
+    <div class="source" id="source"></div>
+  </header>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Tuning mode"></div>
+  <p class="modenote" id="modenote"></p>
+  <div class="kpi" id="kpi" role="list"></div>
+  <div class="top" id="top" aria-label="Best by efficiency"></div>
+  <div class="chips" id="chips" role="group" aria-label="Card series"></div>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Model, e.g. 3070" aria-label="Search by model" autocomplete="off">
+    <select id="sort" aria-label="Sort">
+      <option value="model">By model (series)</option>
+      <option value="eff">By efficiency (TH/W)</option>
+      <option value="hash">By hashrate</option>
+    </select>
+    <input type="text" id="kwh" inputmode="decimal" placeholder="Price per kWh" aria-label="Electricity price per kWh" autocomplete="off">
+    <select id="algo" aria-label="Algorithm and miner" hidden></select>
+    <span class="spacer"></span>
+    <button id="reset" type="button">Reload site data</button>
+    <button id="pick" type="button" class="primary">Load catalog.json</button>
+    <input type="file" id="file" accept=".json,application/json" hidden>
+  </div>
+
+  <div id="drop">You can also view your own catalog file: drag it here (the bot sends it via /catalog). It isn’t stored on the site.</div>
+  <p id="msg" role="status"></p>
+
+  <div id="list"></div>
+
+  <details>
+    <summary>How to get your own catalog file</summary>
+    <p>In Telegram: send the bot <code>/catalog</code> and it will send you the file. Without Telegram, on the rig itself:</p>
+    <pre id="cmd">cd /root/hive-oc-bot && python3 -m ocbot --config config.json --catalog-export catalog.json</pre>
+    <button id="copycmd" type="button">Copy command</button>
+    <p>Someone else’s file can be fed back into the bot: <code>--catalog-import catalog.json</code>, or just send the file to the bot in Telegram. Those presets become a starting point for cards with no history of their own; the 2-hour verification still applies.</p>
+  </details>
+
+  <footer>A preset fits one model with the same memory, miner and version. Before using it on another rig, check it: cooling, risers and power delivery differ. The bot and its presets are provided “as is”, use at your own risk: <a href="guide.html#terms">disclaimer</a>.</footer>
+</div>
+
+<script>
+(function () {
+  var LANG_SUFFIX = /\.ru\.html$/.test(location.pathname) ? ".ru.html" : ".html";
+  // Example: real results from rig rig35E2AC (7 cards, pearl, rgminer 1.1.3b), collected in the catalog file format.
+  var SAMPLE = {
+    format: "ocbot-catalog", version: 1, created_at: "2026-10-20T13:20:00+00:00", label: "one rig, 7 cards",
+    entries: [
+      { model: "GeForce RTX 3070", mem_vendor: "Samsung", algo: "pearl", miner: "rgminer", miner_version: "1.1.3b", objective: "", cards: 4,
+        best: { core: 225, mem: -100, pl: 106 }, median: { core: 137, mem: -25, pl: 106 },
+        hashrate: 67.84, power_w: 104.8, efficiency: 0.6501, updated_at: "2026-10-20T08:03:00+00:00" },
+      { model: "GeForce RTX 3090", mem_vendor: "Micron", algo: "pearl", miner: "rgminer", miner_version: "1.1.3b", objective: "", cards: 1,
+        best: { core: 150, mem: 0, pl: 171 }, median: { core: 150, mem: 0, pl: 171 },
+        hashrate: 113.4, power_w: 171, efficiency: 0.6679, updated_at: "2026-10-19T21:00:00+00:00" },
+      { model: "GeForce RTX 4070", mem_vendor: "Micron", algo: "pearl", miner: "rgminer", miner_version: "1.1.3b", objective: "", cards: 1,
+        best: { core: 0, mem: -50, pl: 126 }, median: { core: 0, mem: -50, pl: 126 },
+        hashrate: 106.2, power_w: 126, efficiency: 0.8518, updated_at: "2026-10-19T19:00:00+00:00" },
+      { model: "GeForce RTX 3080 Ti", mem_vendor: "Micron", algo: "pearl", miner: "rgminer", miner_version: "1.1.3b", objective: "", cards: 1,
+        best: { core: -25, mem: -100, pl: 171 }, median: { core: -25, mem: -100, pl: 171 },
+        hashrate: 97.47, power_w: 171, efficiency: 0.5721, updated_at: "2026-10-20T02:17:00+00:00" }
+    ]
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { data: SAMPLE, isSample: true };
+
+  function mname(m) { return String(m || "").replace(/[-_ ]v?\d[\w.\-]*$/i, ""); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function sgn(n) { n = Math.round(n); return (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n); }
+  function num(n, d) { return n == null ? "—" : Number(n).toFixed(d); }
+  function dateOf(s) { var t = Date.parse(s); return isNaN(t) ? "" : new Date(t).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" }); }
+  function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
+
+  function validate(d) {
+    if (!d || d.format !== "ocbot-catalog" || !Array.isArray(d.entries)) throw new Error("this is not a bot catalog file");
+    if (d.version !== 1) throw new Error("file version " + d.version + " is not supported");
+    var ok = d.entries.filter(function (e) {
+      return e && typeof e.model === "string" && e.best && e.median &&
+        ["core", "mem", "pl"].every(function (k) { return isFinite(e.best[k]) && isFinite(e.median[k]); });
+    });
+    if (!ok.length) throw new Error("the file has no usable entries");
+    return { format: d.format, version: d.version, created_at: d.created_at, label: d.label, entries: ok };
+  }
+
+  function load(text, name) {
+    try {
+      state.data = validate(JSON.parse(text));
+      state.isSample = false;
+      say("Entries loaded: " + state.data.entries.length + (name ? " (" + name + ")" : ""));
+      render();
+    } catch (e) { say("Could not read the file: " + e.message, true); }
+  }
+
+  function presetBlock(kind, title, p, e) {
+    var txt = "core " + sgn(p.core) + ", mem " + sgn(p.mem) + ", PL " + Math.round(p.pl) + " W";
+    var lock = "";
+    if (p.core_lock || p.mem_lock) {
+      txt += ", locked core " + (p.core_lock || "—") + ", mem " + (p.mem_lock || "—") + " MHz";
+      lock = '<dt>locked core</dt><dd>' + (p.core_lock ? esc(p.core_lock) + '<small>MHz</small>' : '—') + '</dd>' +
+        '<dt>locked mem</dt><dd>' + (p.mem_lock ? esc(p.mem_lock) + '<small>MHz</small>' : '—') + '</dd>';
+    }
+    return '<div class="' + kind + '"><div class="label"><span>' + title + '</span>' +
+      '<button type="button" data-copy="' + esc(txt) + '">Copy</button></div>' +
+      '<dl class="preset"><dt>core</dt><dd>' + sgn(p.core) + '</dd><dt>mem</dt><dd>' + sgn(p.mem) + '</dd>' +
+      '<dt>PL</dt><dd>' + Math.round(p.pl) + '<small>W</small></dd>' + lock + '</dl></div>';
+  }
+
+  var MODES = [
+    { id: "efficiency", name: "Efficiency", note: "maximum hashrate per watt: a lower power bill, cooler cards." },
+    { id: "compromise", name: "Compromise", note: "maximum hashrate while staying above an efficiency floor: the sweet spot (default mode)." },
+    { id: "hashrate", name: "Hashrate", note: "maximum hashrate: higher power draw and temperature, needs good airflow." }
+  ];
+  function obj(e) { return e.objective || "compromise"; }
+
+  function render() {
+    var d = state.data;
+    var counts = { efficiency: 0, compromise: 0, hashrate: 0 };
+    d.entries.forEach(function (e) { counts[obj(e)] = (counts[obj(e)] || 0) + 1; });
+    if (!state.mode || (!counts[state.mode] && state.modeAuto !== false)) {
+      var lead = MODES.slice().sort(function (a, b) { return counts[b.id] - counts[a.id]; })[0];
+      state.mode = counts.compromise >= counts[lead.id] ? "compromise" : lead.id;
+    }
+    var curMode = MODES.filter(function (m) { return m.id === state.mode; })[0];
+    $("tabs").innerHTML = MODES.map(function (m) {
+      return '<button type="button" data-mode="' + m.id + '" aria-pressed="' + (m.id === state.mode) + '"><small>' + counts[m.id] + '</small><b>' + m.name + '</b><span>' + esc(m.note.split(":")[0]) + '</span></button>';
+    }).join("");
+    $("modenote").textContent = "Mode “" + curMode.name + "”: " + curMode.note;
+    var all = d;
+    d = { entries: d.entries.filter(function (e) { return obj(e) === state.mode; }), created_at: all.created_at, label: all.label };
+    var q = $("q").value.trim().toLowerCase().replace(/\s+/g, "");
+    var algo = $("algo").value;
+    var algos = {};
+    d.entries.forEach(function (e) { algos[e.algo + " / " + mname(e.miner) + " " + (e.miner_version || "")] = 1; });
+    var keys = Object.keys(algos), sel = $("algo"), cur = sel.value;
+    sel.innerHTML = keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + '</option>'; }).join("");
+    sel.hidden = keys.length < 2;
+    sel.value = keys.indexOf(cur) >= 0 ? cur : (keys[0] || "");
+    algo = sel.hidden ? "" : sel.value;
+
+    var rows = d.entries.filter(function (e) {
+      var k = e.algo + " / " + mname(e.miner) + " " + (e.miner_version || "");
+      return (!q || e.model.toLowerCase().replace(/\s+/g, "").indexOf(q) >= 0) && (!algo || k === algo) &&
+        (!state.series || series(clean(e.model)).title === state.series) && obj(e) === state.mode;
+    });
+    var by = $("sort").value;
+    function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
+    function num4(m) { var x = /(\d{3,4})/.exec(m); return x ? parseInt(x[1], 10) : 0; }
+    function series(m) {
+      var x = /RTX\s*(\d)\d{2,3}/i.exec(m);
+      return x ? { key: parseInt(x[1], 10), title: "RTX " + x[1] + "0" } : { key: -1, title: "Other cards" };
+    }
+    function rank(m) { return num4(m) * 10 + (/ti/i.test(m) ? 5 : 0) + (/super/i.test(m) ? 3 : 0); }
+    rows.forEach(function (e) { e._m = clean(e.model); e._s = series(e._m); });
+    rows.sort(function (a, b) {
+      if (by === "eff" || by === "hash") {
+        var k = by === "hash" ? "hashrate" : "efficiency";
+        return (b[k] || 0) - (a[k] || 0);
+      }
+      return (b._s.key - a._s.key) || (rank(b._m) - rank(a._m)) || a._m.localeCompare(b._m) ||
+        String(a.mem_vendor || "").localeCompare(String(b.mem_vendor || ""));
+    });
+    var maxEff = Math.max.apply(null, d.entries.map(function (e) { return e.efficiency || 0; }).concat([0.0001]));
+
+    var kwh = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
+    var ser = {}; d.entries.forEach(function (e) { ser[series(clean(e.model)).title] = series(clean(e.model)).key; });
+    var serKeys = Object.keys(ser).sort(function (a, b) { return ser[b] - ser[a]; });
+    $("chips").innerHTML = serKeys.length > 1 ? ['All'].concat(serKeys).map(function (t) {
+      var on = (t === "All" && !state.series) || t === state.series;
+      return '<button type="button" data-ser="' + esc(t === "All" ? "" : t) + '" aria-pressed="' + on + '">' + esc(t) + '</button>';
+    }).join("") : "";
+    var models = {}, cardsN = 0, rigsMax = 0;
+    d.entries.forEach(function (e) { models[clean(e.model)] = 1; cardsN += e.cards || 1; rigsMax = Math.max(rigsMax, e.rigs || 0); });
+    var best = d.entries.slice().sort(function (a, b) { return (b.efficiency || 0) - (a.efficiency || 0); })[0];
+    $("kpi").innerHTML = '<div role="listitem"><b>' + Object.keys(models).length + '</b><span>card models</span></div>' +
+      '<div role="listitem"><b>' + cardsN + '</b><span>cards in the data</span></div>' +
+      '<div role="listitem"><b>' + d.entries.length + '</b><span>verified presets</span></div>' +
+      '<div role="listitem"><b>' + (best ? num(best.efficiency, 3) : "—") + '</b><span>best efficiency, TH/W</span></div>';
+    var topL = d.entries.slice().sort(function (a, b) { return (b.efficiency || 0) - (a.efficiency || 0); }).slice(0, 3);
+    $("top").innerHTML = topL.map(function (e, i) {
+      return '<div><small>#' + (i + 1) + ' by efficiency</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/W</span>' +
+        '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' W</div></div>';
+    }).join("");
+    $("source").innerHTML = (state.isSample ? "<b>Example</b>" : state.remote ? "<b>Site data</b>" : "<b>Your file</b>") + (d.label ? " · " + esc(d.label) : "") +
+      "<br>entries: " + all.entries.length + (d.created_at ? " · " + esc(dateOf(d.created_at)) : "");
+
+    if (!rows.length) {
+      $("list").innerHTML = '<div class="empty">' + (d.entries.length ? 'Nothing found. Try a different search or series.' : 'No data yet for “' + esc(curMode.name) + '” mode: an entry appears once rigs running this mode submit verified presets.') + '</div>';
+      return;
+    }
+    function hiveText(p) {
+      var s = "Core clock: " + Math.round(p.core) + "\nMemory clock: " + Math.round(p.mem) + "\nPower limit: " + Math.round(p.pl) + " W";
+      if (p.core_lock || p.mem_lock) s += "\n(locked clocks: core " + (p.core_lock || "—") + ", mem " + (p.mem_lock || "—") + " MHz, set via console)";
+      return s;
+    }
+    function consoleText(p) {
+      var s = "GPU=0   # card index\nnvidia-smi -i $GPU -pl " + Math.round(p.pl) +
+        "\nDISPLAY=:0 nvidia-settings -a \"[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=" + Math.round(p.core) +
+        "\" -a \"[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=" + Math.round(p.mem) + "\"";
+      if (p.core_lock) s += "\nnvidia-smi -i $GPU -lgc " + p.core_lock + "," + p.core_lock;
+      if (p.mem_lock) s += "\nnvidia-smi -i $GPU -lmc " + p.mem_lock + "," + p.mem_lock;
+      return s;
+    }
+    function pcell(p, label) {
+      var txt = "core " + sgn(p.core) + ", mem " + sgn(p.mem) + ", PL " + Math.round(p.pl) + " W";
+      if (p.core_lock || p.mem_lock) txt += ", locked core " + (p.core_lock || "—") + ", mem " + (p.mem_lock || "—") + " MHz";
+      return '<div class="pre"><i>core</i> ' + sgn(p.core) + ' &nbsp;<i>mem</i> ' + sgn(p.mem) + '<br><i>PL</i> ' + Math.round(p.pl) + ' W' +
+        (p.core_lock || p.mem_lock ? '<br><i>locked</i> ' + esc(p.core_lock || "—") + ' / ' + esc(p.mem_lock || "—") + ' MHz' : '') +
+        '</div><span class="cps"><button type="button" class="cp" data-copy="' + esc(hiveText(p)) + '" aria-label="Copy the ' + esc(label) + ' preset for the Hive panel" title="Values for the Overclocking tab in the Hive panel">Hive</button>' +
+        '<button type="button" class="cp" data-copy="' + esc(consoleText(p)) + '" aria-label="Copy the ' + esc(label) + ' preset for the console" title="nvidia-smi and nvidia-settings commands">Console</button>' +
+        '<button type="button" class="cp" data-copy="' + esc(txt) + '" aria-label="Copy the ' + esc(label) + ' preset as text">Text</button></span>';
+    }
+    function beforeAfter(was, now, d, unit, up) {
+      if (!was || !now) return "";
+      var pct = Math.round((now - was) / was * 100), good = up ? pct > 0 : pct < 0;
+      return '<span class="cost ba">was ' + num(was, d) + ' ' + unit + ' · <b class="' + (good ? "up" : "down") + '">' + (pct > 0 ? "+" : "") + pct + '%</b></span>';
+    }
+    // other modes for the same entry (model, memory, algorithm, miner, version): a compact comparison
+    var sibKey = function (e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version].join("|"); };
+    var sibs = {};
+    all.entries.forEach(function (e) { (sibs[sibKey(e)] = sibs[sibKey(e)] || []).push(e); });
+    function compare(e) {
+      var others = (sibs[sibKey(e)] || []).filter(function (o) { return obj(o) !== obj(e); });
+      if (!others.length) return "";
+      var order = { efficiency: 0, compromise: 1, hashrate: 2 };
+      var list = (sibs[sibKey(e)] || []).slice().sort(function (a, b) { return order[obj(a)] - order[obj(b)]; });
+      return '<details class="cmp"><summary>Compare modes</summary><table><thead><tr><th>Mode</th><th>TH/s</th><th>W</th><th>TH/W</th></tr></thead><tbody>' +
+        list.map(function (o) {
+          var m = MODES.filter(function (x) { return x.id === obj(o); })[0];
+          return '<tr' + (o === e ? ' class="cur"' : '') + '><td>' + esc(m ? m.name : obj(o)) + '</td><td>' + num(o.hashrate, 1) + '</td><td>' + num(o.power_w, 0) + '</td><td>' + num(o.efficiency, 3) + '</td></tr>';
+        }).join("") + '</tbody></table></details>';
+    }
+    function slugOf(e) { return (clean(e.model) + " " + (e.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
+    function tr(e) {
+      var eff = e.efficiency ? Math.max(4, Math.round(100 * e.efficiency / maxEff)) : 0;
+      return '<tr><td class="mdl"><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(e._m) + '</a></b><small>' + esc(e.mem_vendor ? e.mem_vendor + " memory" : "memory not specified") + '</small>' +
+        '<div class="tags"><span class="tag">' + esc(e.algo) + ' / ' + esc(mname(e.miner)) + ' ' + esc(e.miner_version || "") + '</span>' +
+        '<span class="tag plain">cards: ' + (e.cards || 1) + '</span>' +
+        (e.rigs ? '<span class="tag' + (e.rigs >= 5 ? ' conf-hi' : ' plain') + '" title="How many different rigs submitted this preset, each verified over two hours of work">✓ matched on ' + e.rigs + ' rig' + (e.rigs === 1 ? '' : 's') + ' · ' + (e.rigs >= 5 ? 'reliable' : e.rigs >= 3 ? 'confirmed' : 'limited data') + '</span>' : '') +
+        (e.source ? '<span class="tag plain">source: ' + esc(e.source) + '</span>' : '') + '</div>' + compare(e) + '</td>' +
+        '<td data-l="Best">' + pcell(e.best, "best") + '</td>' +
+        '<td data-l="Typical' + ((e.cards || 1) > 1 ? ' (median)' : '') + '">' + pcell(e.median, "typical") + '</td>' +
+        '<td class="num" data-l="Hashrate">' + num(e.hashrate, 1) + ' <small>TH/s</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, 'TH/s', true) + '</td>' +
+        '<td class="num" data-l="Power">' + num(e.power_w, 0) + ' <small>W</small>' + beforeAfter(e.stock_power_w, e.power_w, 0, 'W', false) +
+        (kwh && e.power_w ? '<span class="cost">≈ ' + num(e.power_w * 24 / 1000 * kwh, 1) + '/day</span>' : '') + '</td>' +
+        '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/W</small>' +
+        '<div class="eff" aria-hidden="true"><i style="width:' + eff + '%"></i></div></td>' +
+        '<td class="num" data-l="Updated">' + (e.updated_at ? esc(dateOf(e.updated_at)) : "—") + '</td></tr>';
+    }
+    var head = '<thead><tr><th>Model</th><th>Best preset</th><th>Typical preset</th><th class="num">Hashrate</th><th class="num">Power</th>' +
+      '<th class="num">Efficiency</th><th class="num">Updated</th></tr></thead>';
+    function table(list) { return '<div class="tw"><table class="tbl">' + head + '<tbody>' + list.map(tr).join("") + '</tbody></table></div>'; }
+    var html;
+    if (by === "model") {
+      var groups = [], idx = {};
+      rows.forEach(function (e) {
+        var k = e._s.title;
+        if (!(k in idx)) { idx[k] = groups.length; groups.push({ title: k, items: [] }); }
+        groups[idx[k]].items.push(e);
+      });
+      html = groups.map(function (g) {
+        return '<div class="grp"><h2>' + esc(g.title) + '</h2><span>models: ' + g.items.length + '</span></div>' + table(g.items);
+      }).join("");
+    } else {
+      html = table(rows);
+    }
+    $("list").innerHTML = html;
+  }
+
+  function copy(text, btn) {
+    var done = function () { var t = btn.textContent; btn.textContent = "Copied"; setTimeout(function () { btn.textContent = t; }, 1200); };
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { say("Select and copy manually: " + text); }
+      document.body.removeChild(ta);
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  }
+
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-copy]");
+    if (b) copy(b.getAttribute("data-copy"), b);
+  });
+  $("copycmd").addEventListener("click", function () { copy($("cmd").textContent, $("copycmd")); });
+  $("q").addEventListener("input", render);
+  $("sort").addEventListener("change", render);
+  $("algo").addEventListener("change", render);
+  $("pick").addEventListener("click", function () { $("file").click(); });
+  $("reset").addEventListener("click", function () {
+    loadRemote(true);
+  });
+  function readFile(f) {
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () { load(String(r.result), f.name); };
+    r.onerror = function () { say("Could not read the file, please try again.", true); };
+    r.readAsText(f);
+  }
+  $("file").addEventListener("change", function () { readFile(this.files[0]); this.value = ""; });
+  var drop = $("drop");
+  ["dragenter", "dragover"].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (e) { readFile(e.dataTransfer && e.dataTransfer.files[0]); });
+
+  // Address of the shared catalog receiver (Cloudflare Worker). Empty: only catalog.json next to the site is used.
+  var COMMUNITY_URL = "https://ocbot-catalog.makar2186.workers.dev";
+  function grab(url) {
+    return fetch(url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+      .then(function (t) { var d = validate(JSON.parse(t)); return d; });
+  }
+  function loadRemote(announce) {
+    var urls = (COMMUNITY_URL ? [COMMUNITY_URL.replace(/\/$/, "") + "/catalog.json"] : []).concat(["catalog.json"]);
+    var chain = Promise.reject(new Error("start"));
+    urls.forEach(function (u) { chain = chain.catch(function () { return grab(u); }); });
+    chain.then(function (d) {
+        state.data = d; state.isSample = false; state.remote = true;
+        if (announce) say("Showing site data.");
+        render();
+      })
+      .catch(function () {
+        state = { data: SAMPLE, isSample: true };
+        say("The shared catalog is still empty: an entry appears once at least 3 different rigs submit presets for a model. Showing an example for now.");
+        render();
+      });
+  }
+  $("tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-mode]"); if (!b) return;
+    state.mode = b.getAttribute("data-mode"); state.modeAuto = false; render();
+  });
+  $("chips").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-ser]"); if (!b) return;
+    state.series = b.getAttribute("data-ser"); render();
+  });
+  try { var sk = localStorage.getItem("ocbot-kwh"); if (sk) $("kwh").value = sk; } catch (e) {}
+  $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh", this.value); } catch (e) {} render(); });
+  render();
+  loadRemote(false);
+})();
+</script>
+
+<script src="chat.en.js" defer></script>
+</html>

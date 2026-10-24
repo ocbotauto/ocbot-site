@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Инструкция OCBot: авторазгон</title>
+<link rel="stylesheet" href="assets/guide.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<!-- favicon-done -->
+<meta name="description" content="Как установить и использовать бота OCBot для авторазгона видеокарт NVIDIA (поддержка AMD готовится): установка, команды Telegram, консоль, обновление и частые проблемы.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Инструкция OCBot: авторазгон">
+<meta property="og:description" content="Как установить и использовать бота OCBot для авторазгона видеокарт NVIDIA (поддержка AMD готовится): установка, команды Telegram, консоль, обновление и частые проблемы.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/guide.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a>
+  <a href="guide.ru.html" aria-current="page">Инструкция</a>
+  <a href="guide.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <svg class="logo biglogo" viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg2)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+  <h1>Инструкция</h1>
+  <p class="lede">Бот сам подбирает разгон каждой карты NVIDIA на HiveOS (поддержка AMD готовится), проверяет его два часа, ведёт перезагрузки при отвалах и бережёт блок питания. Установка занимает несколько минут, остальное он делает сам.</p>
+  </div>
+  <p class="legal">Используя бота, вы принимаете <a href="#terms">условия и отказ от ответственности</a>: разгон и перезагрузки несут риск для оборудования, и все последствия на вас.</p>
+  <p class="legal">Независимый проект: не связан с Hiveon и HiveOS, не одобрен и не спонсируется ими. HiveOS, NVIDIA, Telegram и другие названия принадлежат их владельцам и упомянуты только для описания совместимости.</p>
+  <ul class="chips">
+    <li><a href="#install">Установка</a></li><li><a href="#how">Как работает</a></li><li><a href="#telegram">Команды Telegram</a></li>
+    <li><a href="#console">Консоль</a></li><li><a href="#update">Обновление и удаление</a></li><li><a href="#help">Если что-то не так</a></li><li><a href="#terms">Отказ от ответственности</a></li>
+  </ul>
+
+  <div class="cfgbar">
+    <label for="cfgname">Файл конфига этого рига</label>
+    <input id="cfgname" value="config.json" autocomplete="off" spellcheck="false" aria-describedby="cfghint">
+    <span class="hint" id="cfghint">Впишите имя, например <code>config.rig1.json</code>: оно подставится во все команды ниже. Если рига один, оставьте как есть.</span>
+  </div>
+
+  <section class="block" id="install">
+    <h2>Установка</h2>
+    <p class="sub">Четыре шага. Бот меняет разгон и перезагружает риг: первые часы лучше быть рядом или хотя бы в Telegram.</p>
+    <ol class="steps">
+      <li>
+        <h3>Подготовьте риг в панели Hive</h3>
+        <p>Очистите разгон в панели (вкладка «Разгон» воркера), иначе Hive применит свой поверх бота. Отключите перезагрузку по хешрейту в Watchdog на время подбора: на тестовых точках хешрейт падает. Майнер должен работать и отдавать хешрейт.</p>
+        <figure class="fig"><svg viewBox="0 0 360 122" role="img" aria-label="Что отключить в панели"><defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="8" y="8" width="344" height="104" rx="10"/><text class="m" x="20" y="28">Воркер в панели</text><rect class="bs" x="18" y="38" width="76" height="28" rx="6"/><text class="m" x="56" y="57" text-anchor="middle">Обзор</text><rect class="bw" x="104" y="38" width="86" height="28" rx="6"/><text class="t" x="147" y="57" text-anchor="middle">Разгон</text><rect class="bw" x="200" y="38" width="86" height="28" rx="6"/><text class="t" x="243" y="57" text-anchor="middle">Watchdog</text><text class="w" x="147" y="86" text-anchor="middle">очистить</text><text class="w" x="243" y="86" text-anchor="middle">выключить</text><text class="m" x="243" y="101" text-anchor="middle">перезагрузку по хешрейту</text></svg></figure>
+      </li>
+      <li>
+        <h3>Поставьте бота</h3>
+        <p>Архив <code>hive-oc-bot.zip</code> и ваш лицензионный файл <code>license.json</code> вам присылает автор. Положите оба файла в папку <code>/root</code> рига (через WinSCP или любой SFTP-клиент). Затем откройте Hive Shell рига (значок <code>&gt;_</code>) и вставьте одну команду. Мастер сам найдёт карты, майнер и имя рига и спросит блок питания, цель подбора и данные Telegram.</p>
+        <div class="code"><pre><code>cd /root &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; { [ -f /root/license.json ] &amp;&amp; cp -f /root/license.json /root/hive-oc-bot/; true; } &amp;&amp; cd /root/hive-oc-bot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <figure class="fig"><svg viewBox="0 0 360 220" role="img" aria-label="Как попадают файлы на риг"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Ваш компьютер</text><text class="mono" x="180" y="43" text-anchor="middle">hive-oc-bot.zip + license.json</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">WinSCP / SFTP</text><rect class="bx" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. Папка /root на риге</text><text class="m" x="180" y="123" text-anchor="middle">оба файла лежат рядом</text><line class="ln" x1="180" y1="134" x2="180" y2="162" marker-end="url(#a2)"/><text class="m" x="192" y="152">Hive Shell и одна команда</text><rect class="bs" x="20" y="166" width="320" height="46" rx="8"/><text class="t" x="180" y="186" text-anchor="middle">3. Мастер установки</text><text class="m" x="180" y="203" text-anchor="middle">сам найдёт карты, спросит про блок питания</text></svg></figure>
+      </li>
+      <li>
+        <h3>Подключите Telegram</h3>
+        <p>Создайте бота у @BotFather, возьмите токен и узнайте свой числовой ID у @userinfobot. Мастер спросит их сам; позже их можно задать командой. Токен никому не отправляйте и в чат не вставляйте.</p>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;ТОКЕН&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Подставьте свой токен и ID. Если Telegram недоступен с рига, см. «Если что-то не так».</p>
+        <figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="Подключение Telegram"><defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><circle class="ac" cx="30" cy="28" r="14"/><text class="w2" x="30" y="33" text-anchor="middle">1</text><rect class="bs" x="56" y="6" width="290" height="44" rx="8"/><text class="t" x="70" y="25">@BotFather</text><text class="m" x="70" y="42">создайте бота, получите токен</text><line class="ln" x1="30" y1="44" x2="30" y2="68" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="86" r="14"/><text class="w2" x="30" y="91" text-anchor="middle">2</text><rect class="bs" x="56" y="64" width="290" height="44" rx="8"/><text class="t" x="70" y="83">@userinfobot</text><text class="m" x="70" y="100">узнайте свой числовой ID</text><line class="ln" x1="30" y1="102" x2="30" y2="126" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="144" r="14"/><text class="w2" x="30" y="149" text-anchor="middle">3</text><rect class="bs" x="56" y="122" width="290" height="44" rx="8"/><text class="t" x="70" y="141">Hive Shell</text><text class="m" x="70" y="158">вставьте токен и ID в мастер</text><text class="m" x="56" y="190">Токен никому не отправляйте.</text></svg></figure>
+      </li>
+      <li>
+        <h3>Посмотрите, что бот делает</h3>
+        <p>Бот стартует примерно через минуту (пауза после загрузки) и пишет в Telegram о каждом шаге. Отправьте <code>/status</code>: там видно, чем занята каждая карта. Подбор разгона занимает несколько часов, после каждого найденного пресета идёт двухчасовая проверка.</p>
+        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/hive-oc-bot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Если Telegram не работает, состояние видно здесь.</p>
+        <figure class="fig"><svg viewBox="0 0 360 206" role="img" aria-label="Пример ответа бота на /status"><defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="220" y="6" width="124" height="28" rx="14"/><text class="t" x="282" y="25" text-anchor="middle">/status</text><rect class="bs" x="16" y="42" width="320" height="136" rx="12"/><text class="t" x="30" y="64">Риг rig01 · цель compromise</text><text class="m" x="30" y="82">автоматика: работает</text><text class="mono" x="30" y="106">GPU 0  RTX 3070 Ti  [ok]</text><text class="mono" x="30" y="122">68°C · 85.4 TH/s · 222 W</text><text class="mono" x="30" y="146">GPU 1  RTX 3080     [ok]</text><text class="mono" x="30" y="162">69°C · 104.9 TH/s · 201 W</text><text class="m" x="180" y="196" text-anchor="middle">пример ответа бота (значения условные)</text></svg></figure>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block" id="how">
+    <h2>Как это работает</h2>
+    <p class="sub">Что бот делает с картой от первого запуска до рабочего пресета.</p>
+    <figure class="fig"><svg viewBox="0 0 360 190" role="img" aria-label="Цикл работы бота"><defs><marker id="a5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="10" y="14" width="96" height="52" rx="8"/><text class="t" x="58" y="36" text-anchor="middle">Подбор</text><text class="m" x="58" y="54" text-anchor="middle">core · mem · PL</text><rect class="bx" x="132" y="14" width="96" height="52" rx="8"/><text class="t" x="180" y="36" text-anchor="middle">Проверка</text><text class="m" x="180" y="54" text-anchor="middle">2 часа</text><rect class="bx" x="254" y="14" width="96" height="52" rx="8"/><text class="t" x="302" y="36" text-anchor="middle">Пресет</text><text class="m" x="302" y="54" text-anchor="middle">сохранён в базе</text><line class="ln" x1="108" y1="40" x2="130" y2="40" marker-end="url(#a5)"/><line class="ln" x1="230" y1="40" x2="252" y2="40" marker-end="url(#a5)"/><path class="lw" d="M180 70 V102 H58 V70" marker-end="url(#a5)"/><text class="w" x="119" y="118" text-anchor="middle">не прошла: поиск заново</text><rect class="bw" x="10" y="132" width="340" height="46" rx="8"/><text class="t" x="180" y="152" text-anchor="middle">Отвал карты</text><text class="m" x="180" y="169" text-anchor="middle">безопасный профиль, перезагрузка, точка = граница</text></svg></figure>
+    <div class="grid">
+      <article class="card"><h3>Подбор <span class="badge">core · mem · PL</span></h3><p>Бот ищет смещение ядра, смещение памяти и лимит мощности. Каждая точка измеряется окном, при отвале точка становится границей, и риг перезагружается.</p></article>
+      <article class="card"><h3>Проверка <span class="badge">2 часа</span></h3><p>Лучший найденный пресет работает под нагрузкой два часа. Не прошёл: берётся запасной, поиск идёт заново с увеличенным запасом.</p></article>
+      <article class="card"><h3>Цель <span class="badge">/mode</span></h3><p><b>efficiency</b>: максимум хешрейта на ватт. <b>compromise</b>: максимум хешрейта, если эффективность не хуже лучшей на заданный допуск. <b>hashrate</b>: максимум хешрейта, мощность делится в рамках блока питания.</p></article>
+      <article class="card"><h3>4 параметра <span class="badge">/params</span></h3><p>К смещениям добавляется фиксация частоты ядра и памяти. Включается для каждой карты отдельно и подбирается на готовом пресете. На цели <b>hashrate</b> с упором в блок питания фиксация обычно выигрыша не даёт, на <b>efficiency</b> и <b>compromise</b> даёт заметный. Для rgminer после фиксации бот поднимает оффсет ядра.</p></article>
+      <article class="card"><h3>Отвалы</h3><p>Карта упала на границе разгона: безопасный профиль и перезагрузка. Падает на мягких настройках: лесенка из перезагрузок, потом пометка карты <code>suspect</code> или <code>faulty</code>.</p></article>
+      <article class="card"><h3>Блок питания <span class="badge">/psu</span></h3><p>Сумма лимитов PL карт не выходит за бюджет блока. Для нескольких блоков можно задать, какие слоты на каком. Режим hashrate раздаёт лимит по потенциалу карт.</p></article>
+    </div>
+    <div class="callout"><b>Важно.</b> Пресеты привязаны к конкретной карте, алгоритму, майнера и его версии. Сменили майнер или алгоритм: бот подбирает заново, старые пресеты остаются в базе.</div>
+  </section>
+
+  <section class="block" id="telegram">
+    <h2>Команды Telegram</h2>
+    <p class="sub">Карту можно указать номером слота, меткой или последними символами UUID: <code>/card 3</code>. Список всегда доступен по <code>/help</code>.</p>
+    <div class="tg"><section class="grp"><h3>1. Состояние</h3><ul class="cmds"><li><code>/status</code><span>Состояние всех карт и пресетов</span></li><li><code>/card</code><span>Подробно по одной карте: /card 3</span></li><li><code>/profiles</code><span>Готовые пресеты</span></li><li><code>/history</code><span>История карты: /history 3</span></li><li><code>/slots</code><span>Статистика по слотам</span></li><li><code>/table</code><span>Сводная таблица по ригу (максимум, минимум, лучшая эффективность), файл CSV</span></li></ul></section><section class="grp"><h3>2. Подбор и проверка</h3><ul class="cmds"><li><code>/tune</code><span>Подбор заново для одной карты: /tune 3</span></li><li><code>/newsearch</code><span>Новый подбор: /newsearch 3 (одна карта) или /newsearch all (весь риг)</span></li><li><code>/restore</code><span>Вернуть прежний пресет без нового подбора: /restore 3 или /restore all</span></li><li><code>/verify</code><span>Двухчасовая проверка карты: /verify 3</span></li><li><code>/optimize</code><span>Подробный поиск лучшего вокруг готового пресета: /optimize 3, /optimize all, /optimize cancel</span></li></ul></section><section class="grp"><h3>3. Цель и режимы</h3><ul class="cmds"><li><code>/mode</code><span>Цель подбора: efficiency, compromise, hashrate; для одной карты /mode 3 hashrate</span></li><li><code>/params</code><span>Режим карты: /params 3 4 (плюс фиксация частот ядра и памяти), /params all 4, /params 3 2</span></li></ul></section><section class="grp"><h3>4. Управление</h3><ul class="cmds"><li><code>/safe</code><span>Безопасные настройки на карты</span></li><li><code>/stop</code><span>Остановить автоматику</span></li><li><code>/resume</code><span>Продолжить автоматику</span></li><li><code>/faulty</code><span>Пометить карту неисправной: /faulty 3 [off]</span></li></ul></section><section class="grp"><h3>5. Питание</h3><ul class="cmds"><li><code>/pl</code><span>Замок мощности: /pl 3 150 или /pl 3 off</span></li><li><code>/psu</code><span>Нагрузка на блок питания; сменить вводные: /psu 1400 1200 [база]</span></li><li><code>/balance</code><span>Распределение лимита PL: /balance (показать), /balance run (раздать), /balance deep (плотный перебор)</span></li></ul></section><section class="grp"><h3>6. Каталог и обмен</h3><ul class="cmds"><li><code>/export</code><span>Выгрузить пресеты файлом</span></li><li><code>/models</code><span>Каталог лучших пресетов по моделям карт</span></li><li><code>/model</code><span>Пресеты одной модели: /model 3070</span></li><li><code>/catalog</code><span>Файл каталога для друзей (без UUID и имён ригов)</span></li></ul></section><section class="grp"><h3>7. Справка</h3><ul class="cmds"><li><code>/help</code><span>Список команд</span></li></ul></section></div>
+  </section>
+
+  <section class="block" id="console">
+    <h2>Команды консоли</h2>
+    <p class="sub">То же самое без Telegram. Каждая команда запускается так, из папки бота:</p>
+    <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+    <div class="tablewrap"><table><tbody><tr><td><code>--service install</code></td><td>поставить автозапуск и запустить; stop / start / restart / status / remove для управления</td></tr><tr><td><code>--mode compromise --tolerance 3</code></td><td>сменить цель: efficiency, compromise (допуск в %), hashrate; show покажет текущую</td></tr><tr><td><code>--mode hashrate --card 3</code></td><td>цель для одной карты; --mode rig вернёт её под общую</td></tr><tr><td><code>--params all 4</code></td><td>режим «4 параметра» (фиксация частот ядра и памяти); --params 3 2 вернёт два параметра</td></tr><tr><td><code>--table</code></td><td>сводная таблица по ригу: максимум, минимум и лучшая эффективность каждой карты</td></tr><tr><td><code>--restore 3</code></td><td>вернуть прежний проверенный пресет карты без нового подбора (без аргумента: все карты)</td></tr><tr><td><code>--optimize 3</code></td><td>подробный поиск лучшего вокруг готового пресета; --opt-gain 2 задаёт порог выигрыша в %</td></tr><tr><td><code>--balance show</code></td><td>как карты упираются в лимит блока питания; run раздаёт лимит, deep ищет плотнее</td></tr><tr><td><code>--telegram-set &#x27;ТОКЕН&#x27; 123456789</code></td><td>записать токен бота и ваш Telegram ID (токен в чат не вставляйте)</td></tr><tr><td><code>--telegram-proxy http://192.168.3.5:8080</code></td><td>прокси для Telegram, если он недоступен напрямую; &#x27;&#x27; отключает</td></tr><tr><td><code>--fix-external-gpus</code></td><td>карты в Thunderbolt не видны иксам: добавить AllowExternalGpus в скрипт Hive (затем reboot)</td></tr><tr><td><code>--catalog 3070</code></td><td>каталог лучших пресетов по моделям; --catalog-export / --catalog-import для обмена файлом</td></tr><tr><td><code>--repair</code></td><td>исправить ложные отвалы, записанные при перезапуске бота (бота сначала остановить)</td></tr><tr><td><code>--uninstall --yes</code></td><td>полностью удалить бота с рига; --keep-data оставит конфиги, базу и лог</td></tr></tbody></table></div>
+  </section>
+
+  <section class="block" id="update">
+    <h2>Обновление и удаление</h2>
+    <p class="sub">Конфиг, база и пресеты при обновлении не затрагиваются. Не обновляйте риг во время двухчасовой проверки: перезапуск бота её оборвёт.</p>
+    <div class="grid one">
+      <article class="card"><h3>Обновить</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop &amp;&amp; cd /root &amp;&amp; wget -qO hive-oc-bot.zip https://github.com/makar2186/ocbot-dist/raw/main/hive-oc-bot.zip &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; cd /root/hive-oc-bot &amp;&amp; python3 -m unittest discover -s tests &gt; /tmp/t.log 2&gt;&amp;1 &amp;&amp; tail -n 3 /tmp/t.log &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service install</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <p>В конце должно быть <code>OK</code>.</p></article>
+      <article class="card"><h3>Остановить и вернуть</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <p>После <code>stop</code> бот не запустится и после перезагрузки.</p></article>
+      <article class="card"><h3>Удалить совсем</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <p>Уберёт службу, автозапуск и папку. Чтобы оставить конфиги и базу, добавьте <code>--keep-data</code>.</p></article>
+    </div>
+  </section>
+
+  <section class="block" id="help">
+    <h2>Если что-то не так</h2>
+    <p class="sub">Частые случаи и что с ними делать.</p>
+    <details><summary>Бот не запустился после перезагрузки рига</summary>
+      <p>Подождите минуту: перед стартом стоит пауза. Потом проверьте службу и автозапуск.</p>
+      <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 8; crontab -l | grep ocbot</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+      <p>Если службы нет или она остановлена командой <code>--service stop</code>, выполните <code>--service install</code>.</p></details>
+    <details><summary>Telegram не отвечает с рига</summary>
+      <p>Telegram может быть недоступен у провайдера. Укажите прокси, а состояние смотрите в логе, пока он не заработает.</p>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div></details>
+    <details><summary>Карта помечена suspect</summary>
+      <p>Бот не нашёл для неё стабильный пресет и остановил автоматику, чтобы не мучить карту. Проверьте питание, райзер и температуру, потом запустите подбор заново командой <code>/tune 3</code>.</p></details>
+    <details><summary>Карты в Thunderbolt не видны иксам, оффсеты не применяются</summary>
+      <p>Иксы по умолчанию отключают внешние карты (в <code>/var/log/Xorg.0.log</code> есть «external GPUs have not been enabled»). Бот умеет добавить нужный параметр в скрипт Hive. После этого перезагрузите риг.</p>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+      <div class="code"><pre><code>nvidia-smi -L | wc -l; DISPLAY=:0 nvidia-settings -q gpus | grep -c &quot;\[gpu:&quot;</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Два числа должны совпасть с числом карт.</p>
+      <p>При обновлении образа Hive скрипт перезаписывается: команду повторите.</p></details>
+    <details><summary>Пропали настройки после перезапуска майнера</summary>
+      <p>Hive мог применить свой разгон поверх. Убедитесь, что в панели разгон очищен, и проверьте <code>/status</code>.</p></details>
+  </section>
+
+  <section class="block" id="terms">
+    <h2>Отказ от ответственности</h2>
+    <p class="sub">Условия использования. Прочитайте перед установкой.</p>
+    <ol class="terms"><li><b>Без гарантий.</b> Бот предоставляется «как есть». Автор не гарантирует его пригодность для ваших целей, бесперебойную работу и отсутствие ошибок.</li><li><b>Риск для оборудования.</b> Бот сам меняет смещения частот, фиксацию частот и лимиты мощности, а также перезагружает риг. Это может привести к нестабильной работе, отвалам карт, перегреву, ускоренному износу или поломке видеокарт, блоков питания, райзеров и другого оборудования, потере хешрейта и дохода, потере данных, а также к потере гарантии производителя.</li><li><b>Вы отвечаете за результат.</b> Устанавливая и запуская бота, вы принимаете на себя все риски и всю ответственность за любые последствия его работы, включая прямые и косвенные убытки и упущенную выгоду. Автор и распространители бота ответственности за них не несут в пределах, допустимых законом.</li><li><b>Что остаётся на вас.</b> Охлаждение, питание, райзеры, температура и наблюдение за ригом. Данные блока питания (команда /psu) вводит владелец, и верность этих данных на нём. Первые запуски делайте рядом с ригом. Перед применением проверяйте любые пресеты, особенно полученные из каталога или от других людей.</li><li><b>Пресеты и каталог.</b> На пробном периоде проверенные пресеты вашего рига анонимно (без имени рига, UUID карт и IP) обязательно отправляются в общий каталог; это условие пробного периода. С купленным ключом отправку можно отключить командой /share off. Пресеты в каталоге присылают сторонние пользователи. Они подходят не всем картам и ригам, никак не проверяются автором и даются без гарантий.</li><li><b>Сторонние программы.</b> HiveOS, драйвер NVIDIA, майнеры (в том числе rgminer), пулы и Telegram разрабатываются третьими лицами и не связаны с автором бота. Их названия принадлежат их владельцам. Вы сами соблюдаете условия их лицензий и использования.</li><li><b>Доступы и данные.</b> Токен Telegram и, если вы включите публикацию каталога, токен GitHub хранятся в конфиге на вашем риге. Их сохранность на вас: не публикуйте их и не вставляйте в чаты. Каталог не содержит UUID карт и имён ригов, но публикуете его вы.</li><li><b>Закон.</b> Вы сами отвечаете за соблюдение законов вашей страны (майнинг, электроэнергия, налоги и т. д.) и за то, что использование бота не нарушает гарантийные и иные обязательства перед третьими лицами.</li><li><b>Изменения.</b> Функциональность и эти условия могут меняться. Актуальная редакция всегда на этой странице.</li><li><b>Согласие.</b> Если вы не согласны с этими условиями, не устанавливайте бота; уже установленного удалите командой --uninstall --yes.</li></ol>
+  </section>
+
+  <footer>Токены и пароли никому не отправляйте и не вставляйте в чат. Бот только настраивает разгон карт NVIDIA (поддержка AMD готовится): проверяйте охлаждение, райзеры и питание.</footer>
+</main>
+
+<script>
+(function () {
+  var KEY = "ocbot.guide.cfg", input = document.getElementById("cfgname");
+  function safe(fn) { try { return fn(); } catch (e) { return null; } }
+  function apply() {
+    var v = (input.value || "").trim() || "config.json";
+    document.querySelectorAll(".cfg").forEach(function (n) { n.textContent = v; });
+    safe(function () { localStorage.setItem(KEY, input.value); });
+  }
+  var saved = safe(function () { return localStorage.getItem(KEY); });
+  if (saved) input.value = saved;
+  input.addEventListener("input", apply);
+  apply();
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest(".copy");
+    if (!b) return;
+    var text = b.parentNode.querySelector("pre").textContent.replace(/\s+$/, "");
+    function done() { b.textContent = "Готово"; b.classList.add("done"); setTimeout(function () { b.textContent = "Копировать"; b.classList.remove("done"); }, 1400); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else { fallback(text, done); }
+  });
+  function fallback(text, done) {
+    var t = document.createElement("textarea"); t.value = text; t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select(); safe(function () { document.execCommand("copy"); }); document.body.removeChild(t); done();
+  }
+})();
+</script>
+<script src="chat.js" defer></script>
+</body>
+</html>

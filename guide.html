@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OCBot guide: auto-overclock</title>
+<link rel="stylesheet" href="assets/guide.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<!-- favicon-done -->
+<meta name="description" content="How to install and use OCBot, the bot that tunes NVIDIA GPU overclock automatically (AMD support is coming): setup, Telegram commands, console, updates and troubleshooting.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OCBot guide: auto-overclock">
+<meta property="og:description" content="How to install and use OCBot, the bot that tunes NVIDIA GPU overclock automatically (AMD support is coming): setup, Telegram commands, console, updates and troubleshooting.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/guide.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/guide.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="guide.html" aria-current="page">Guide</a>
+  <a href="guide.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <svg class="logo biglogo" viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg2)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+  <h1>Guide</h1>
+  <p class="lede">The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming) by itself, verifies it for two hours, handles reboots after card drops and protects the power supply. Installation takes a few minutes, the rest it does on its own.</p>
+  </div>
+  <p class="legal">By using the bot you accept the <a href="#terms">terms and disclaimer</a>: overclocking and reboots put your hardware at risk, and all consequences are yours.</p>
+  <p class="legal">Independent project: not affiliated with, endorsed or sponsored by Hiveon or HiveOS. HiveOS, NVIDIA, Telegram and other names belong to their owners and are mentioned only to describe compatibility.</p>
+  <ul class="chips">
+    <li><a href="#install">Installation</a></li><li><a href="#how">How it works</a></li><li><a href="#telegram">Telegram commands</a></li>
+    <li><a href="#console">Console</a></li><li><a href="#update">Update and removal</a></li><li><a href="#help">Troubleshooting</a></li><li><a href="#terms">Disclaimer</a></li>
+  </ul>
+
+  <div class="cfgbar">
+    <label for="cfgname">Config file of this rig</label>
+    <input id="cfgname" value="config.json" autocomplete="off" spellcheck="false" aria-describedby="cfghint">
+    <span class="hint" id="cfghint">Type the name, for example <code>config.rig1.json</code>: it is inserted into every command below. With a single rig, leave it as is.</span>
+  </div>
+
+  <section class="block" id="install">
+    <h2>Installation</h2>
+    <p class="sub">Four steps. The bot changes the overclock and reboots the rig: for the first hours stay nearby, or at least in Telegram.</p>
+    <ol class="steps">
+      <li>
+        <h3>Prepare the rig in the Hive panel</h3>
+        <p>Clear the overclock in the panel (the worker's OC tab), otherwise Hive applies its own on top of the bot. Turn off the hashrate-based reboot in Watchdog during tuning: hashrate drops on test points. The miner must be running and reporting hashrate.</p>
+        <figure class="fig"><svg viewBox="0 0 360 122" role="img" aria-label="What to turn off in the panel"><defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="8" y="8" width="344" height="104" rx="10"/><text class="m" x="20" y="28">Worker in the panel</text><rect class="bs" x="18" y="38" width="76" height="28" rx="6"/><text class="m" x="56" y="57" text-anchor="middle">Overview</text><rect class="bw" x="104" y="38" width="86" height="28" rx="6"/><text class="t" x="147" y="57" text-anchor="middle">Overclock</text><rect class="bw" x="200" y="38" width="86" height="28" rx="6"/><text class="t" x="243" y="57" text-anchor="middle">Watchdog</text><text class="w" x="147" y="86" text-anchor="middle">clear it</text><text class="w" x="243" y="86" text-anchor="middle">turn off</text><text class="m" x="243" y="101" text-anchor="middle">reboot on low hashrate</text></svg></figure>
+      </li>
+      <li>
+        <h3>Install the bot</h3>
+        <p>The author sends you <code>hive-oc-bot.zip</code> and your licence file <code>license.json</code>. Put both into <code>/root</code> on the rig (WinSCP or any SFTP client). Then open the rig's Hive Shell (the <code>&gt;_</code> icon) and paste one command. The wizard finds the cards, the miner and the rig name itself and asks about the power supply, the tuning goal and Telegram.</p>
+        <div class="code"><pre><code>cd /root &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; { [ -f /root/license.json ] &amp;&amp; cp -f /root/license.json /root/hive-oc-bot/; true; } &amp;&amp; cd /root/hive-oc-bot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <figure class="fig"><svg viewBox="0 0 360 220" role="img" aria-label="How the files reach the rig"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Your computer</text><text class="mono" x="180" y="43" text-anchor="middle">hive-oc-bot.zip + license.json</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">WinSCP / SFTP</text><rect class="bx" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. The /root folder on the rig</text><text class="m" x="180" y="123" text-anchor="middle">both files side by side</text><line class="ln" x1="180" y1="134" x2="180" y2="162" marker-end="url(#a2)"/><text class="m" x="192" y="152">Hive Shell and one command</text><rect class="bs" x="20" y="166" width="320" height="46" rx="8"/><text class="t" x="180" y="186" text-anchor="middle">3. Setup wizard</text><text class="m" x="180" y="203" text-anchor="middle">finds cards itself, asks about the PSU</text></svg></figure>
+      </li>
+      <li>
+        <h3>Connect Telegram</h3>
+        <p>Create a bot with @BotFather, take its token, and get your numeric ID from @userinfobot. The wizard asks for both; you can set them later with a command. Never share the token and never paste it into a chat.</p>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;TOKEN&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">Use your own token and ID. If Telegram is unreachable from the rig, see Troubleshooting.</p>
+        <figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="Connecting Telegram"><defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><circle class="ac" cx="30" cy="28" r="14"/><text class="w2" x="30" y="33" text-anchor="middle">1</text><rect class="bs" x="56" y="6" width="290" height="44" rx="8"/><text class="t" x="70" y="25">@BotFather</text><text class="m" x="70" y="42">create a bot, get a token</text><line class="ln" x1="30" y1="44" x2="30" y2="68" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="86" r="14"/><text class="w2" x="30" y="91" text-anchor="middle">2</text><rect class="bs" x="56" y="64" width="290" height="44" rx="8"/><text class="t" x="70" y="83">@userinfobot</text><text class="m" x="70" y="100">get your numeric ID</text><line class="ln" x1="30" y1="102" x2="30" y2="126" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="144" r="14"/><text class="w2" x="30" y="149" text-anchor="middle">3</text><rect class="bs" x="56" y="122" width="290" height="44" rx="8"/><text class="t" x="70" y="141">Hive Shell</text><text class="m" x="70" y="158">enter token and ID in the wizard</text><text class="m" x="56" y="190">Never share the token.</text></svg></figure>
+      </li>
+      <li>
+        <h3>See what the bot is doing</h3>
+        <p>The bot starts in about a minute (a pause after boot) and reports every step in Telegram. Send <code>/status</code> to see what each card is doing. Tuning takes several hours, and every preset found goes through a two-hour verification.</p>
+        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/hive-oc-bot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">If Telegram does not work, the state is visible here.</p>
+        <figure class="fig"><svg viewBox="0 0 360 206" role="img" aria-label="Sample bot reply to /status"><defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="220" y="6" width="124" height="28" rx="14"/><text class="t" x="282" y="25" text-anchor="middle">/status</text><rect class="bs" x="16" y="42" width="320" height="136" rx="12"/><text class="t" x="30" y="64">Rig rig01 · goal compromise</text><text class="m" x="30" y="82">automation: running</text><text class="mono" x="30" y="106">GPU 0  RTX 3070 Ti  [ok]</text><text class="mono" x="30" y="122">68°C · 85.4 TH/s · 222 W</text><text class="mono" x="30" y="146">GPU 1  RTX 3080     [ok]</text><text class="mono" x="30" y="162">69°C · 104.9 TH/s · 201 W</text><text class="m" x="180" y="196" text-anchor="middle">sample bot reply (illustrative values)</text></svg></figure>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block" id="how">
+    <h2>How it works</h2>
+    <p class="sub">What the bot does with a card from the first start to a working preset.</p>
+    <figure class="fig"><svg viewBox="0 0 360 190" role="img" aria-label="How the bot works"><defs><marker id="a5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="10" y="14" width="96" height="52" rx="8"/><text class="t" x="58" y="36" text-anchor="middle">Search</text><text class="m" x="58" y="54" text-anchor="middle">core · mem · PL</text><rect class="bx" x="132" y="14" width="96" height="52" rx="8"/><text class="t" x="180" y="36" text-anchor="middle">Verify</text><text class="m" x="180" y="54" text-anchor="middle">2 hours</text><rect class="bx" x="254" y="14" width="96" height="52" rx="8"/><text class="t" x="302" y="36" text-anchor="middle">Preset</text><text class="m" x="302" y="54" text-anchor="middle">saved to the DB</text><line class="ln" x1="108" y1="40" x2="130" y2="40" marker-end="url(#a5)"/><line class="ln" x1="230" y1="40" x2="252" y2="40" marker-end="url(#a5)"/><path class="lw" d="M180 70 V102 H58 V70" marker-end="url(#a5)"/><text class="w" x="119" y="118" text-anchor="middle">failed: search again</text><rect class="bw" x="10" y="132" width="340" height="46" rx="8"/><text class="t" x="180" y="152" text-anchor="middle">A card drops</text><text class="m" x="180" y="169" text-anchor="middle">safe profile, reboot, the point becomes a limit</text></svg></figure>
+    <div class="grid">
+      <article class="card"><h3>Search <span class="badge">core · mem · PL</span></h3><p>The bot looks for the core offset, the memory offset and the power limit. Every point is measured in a window; a drop turns the point into a boundary and the rig reboots.</p></article>
+      <article class="card"><h3>Verification <span class="badge">2 hours</span></h3><p>The best preset found runs under load for two hours. If it fails, a spare one is taken and the search continues with a larger safety margin.</p></article>
+      <article class="card"><h3>Goal <span class="badge">/mode</span></h3><p><b>efficiency</b>: maximum hashrate per watt. <b>compromise</b>: maximum hashrate while efficiency stays within the given tolerance of the best. <b>hashrate</b>: maximum hashrate, power is split within the PSU budget.</p></article>
+      <article class="card"><h3>4 parameters <span class="badge">/params</span></h3><p>On top of the offsets, core and memory clocks are locked. It is enabled per card and tuned on a ready preset. With the <b>hashrate</b> goal and a PSU-limited rig the lock usually gives no gain; with <b>efficiency</b> and <b>compromise</b> the gain is noticeable. For rgminer the bot then raises the core offset under the lock.</p></article>
+      <article class="card"><h3>Card drops</h3><p>A drop at the overclock boundary: safe profile and reboot. A drop on mild settings: a ladder of reboots, then the card is marked <code>suspect</code> or <code>faulty</code>.</p></article>
+      <article class="card"><h3>Power supply <span class="badge">/psu</span></h3><p>The sum of the cards' PL limits stays within the PSU budget. With several PSUs you can say which slots sit on which. The hashrate goal splits the limit by the cards' potential.</p></article>
+    </div>
+    <div class="callout"><b>Note.</b> Presets are tied to a specific card, algorithm, miner and miner version. If you change the miner or the algorithm, the bot tunes again; old presets stay in the database.</div>
+  </section>
+
+  <section class="block" id="telegram">
+    <h2>Telegram commands</h2>
+    <p class="sub">A card can be given by slot number, label or the last characters of its UUID: <code>/card 3</code>. The full list is always available through <code>/help</code>. The bot's messages are in Russian.</p>
+    <div class="tg"><section class="grp"><h3>1. Status</h3><ul class="cmds"><li><code>/status</code><span>State of all cards and presets</span></li><li><code>/card</code><span>One card in detail: /card 3</span></li><li><code>/profiles</code><span>Ready presets</span></li><li><code>/history</code><span>Card history: /history 3</span></li><li><code>/slots</code><span>Per-slot statistics</span></li><li><code>/table</code><span>Rig summary table (max, min, best efficiency), CSV file</span></li></ul></section><section class="grp"><h3>2. Tuning and verification</h3><ul class="cmds"><li><code>/tune</code><span>Re-tune one card: /tune 3</span></li><li><code>/newsearch</code><span>New search: /newsearch 3 (one card) or /newsearch all (whole rig)</span></li><li><code>/restore</code><span>Restore the previous preset without a new search: /restore 3 or /restore all</span></li><li><code>/verify</code><span>Two-hour verification of a card: /verify 3</span></li><li><code>/optimize</code><span>Detailed search around a ready preset: /optimize 3, /optimize all, /optimize cancel</span></li></ul></section><section class="grp"><h3>3. Goal and modes</h3><ul class="cmds"><li><code>/mode</code><span>Tuning goal: efficiency, compromise, hashrate; one card: /mode 3 hashrate</span></li><li><code>/params</code><span>Card mode: /params 3 4 (adds core and memory clock locks), /params all 4, /params 3 2</span></li></ul></section><section class="grp"><h3>4. Control</h3><ul class="cmds"><li><code>/safe</code><span>Apply safe settings to the cards</span></li><li><code>/stop</code><span>Stop the automation</span></li><li><code>/resume</code><span>Resume the automation</span></li><li><code>/faulty</code><span>Mark a card as faulty: /faulty 3 [off]</span></li></ul></section><section class="grp"><h3>5. Power</h3><ul class="cmds"><li><code>/pl</code><span>Power lock: /pl 3 150 or /pl 3 off</span></li><li><code>/psu</code><span>PSU load; change inputs: /psu 1400 1200 [base]</span></li><li><code>/balance</code><span>Power limit split: /balance (show), /balance run (distribute), /balance deep (dense search)</span></li></ul></section><section class="grp"><h3>6. Catalog and sharing</h3><ul class="cmds"><li><code>/export</code><span>Export presets as a file</span></li><li><code>/models</code><span>Catalog of best presets by card model</span></li><li><code>/model</code><span>Presets of one model: /model 3070</span></li><li><code>/catalog</code><span>Catalog file to share (no UUIDs or rig names)</span></li></ul></section><section class="grp"><h3>7. Help</h3><ul class="cmds"><li><code>/help</code><span>List of commands</span></li></ul></section></div>
+  </section>
+
+  <section class="block" id="console">
+    <h2>Console commands</h2>
+    <p class="sub">The same without Telegram. Run each command from the bot folder:</p>
+    <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+    <div class="tablewrap"><table><tbody><tr><td><code>--service install</code></td><td>install autostart and start the bot; stop / start / restart / status / remove to manage it</td></tr><tr><td><code>--mode compromise --tolerance 3</code></td><td>change the goal: efficiency, compromise (tolerance in %), hashrate; show prints the current one</td></tr><tr><td><code>--mode hashrate --card 3</code></td><td>goal for one card; --mode rig returns it to the common goal</td></tr><tr><td><code>--params all 4</code></td><td>&quot;4 parameters&quot; mode (core and memory clock lock); --params 3 2 returns to two parameters</td></tr><tr><td><code>--table</code></td><td>rig summary table: max, min and best efficiency of every card</td></tr><tr><td><code>--restore 3</code></td><td>restore the previous verified preset of a card without a new search (no argument: all cards)</td></tr><tr><td><code>--optimize 3</code></td><td>detailed search around a ready preset; --opt-gain 2 sets the gain threshold in %</td></tr><tr><td><code>--balance show</code></td><td>how cards hit the PSU limit; run distributes the limit, deep searches denser</td></tr><tr><td><code>--telegram-set &#x27;TOKEN&#x27; 123456789</code></td><td>store the bot token and your Telegram ID (never paste the token in a chat)</td></tr><tr><td><code>--telegram-proxy http://192.168.3.5:8080</code></td><td>proxy for Telegram if it is blocked; &#x27;&#x27; disables it</td></tr><tr><td><code>--fix-external-gpus</code></td><td>Thunderbolt cards invisible to X: add AllowExternalGpus to the Hive script (then reboot)</td></tr><tr><td><code>--catalog 3070</code></td><td>catalog of best presets by model; --catalog-export / --catalog-import to share a file</td></tr><tr><td><code>--repair</code></td><td>fix false drops recorded when the bot was restarted (stop the bot first)</td></tr><tr><td><code>--uninstall --yes</code></td><td>remove the bot from the rig completely; --keep-data keeps configs, database and log</td></tr></tbody></table></div>
+  </section>
+
+  <section class="block" id="update">
+    <h2>Update and removal</h2>
+    <p class="sub">The config, the database and the presets are not touched by an update. Do not update a rig during a two-hour verification: restarting the bot interrupts it.</p>
+    <div class="grid one">
+      <article class="card"><h3>Update</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop &amp;&amp; cd /root &amp;&amp; wget -qO hive-oc-bot.zip https://github.com/makar2186/ocbot-dist/raw/main/hive-oc-bot.zip &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; cd /root/hive-oc-bot &amp;&amp; python3 -m unittest discover -s tests &gt; /tmp/t.log 2&gt;&amp;1 &amp;&amp; tail -n 3 /tmp/t.log &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service install</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p>The output should end with <code>OK</code>.</p></article>
+      <article class="card"><h3>Stop and resume</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p>After <code>stop</code> the bot does not start after a reboot either.</p></article>
+      <article class="card"><h3>Remove completely</h3>
+        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p>Removes the service, the autostart and the folder. Add <code>--keep-data</code> to keep the configs and the database.</p></article>
+    </div>
+  </section>
+
+  <section class="block" id="help">
+    <h2>Troubleshooting</h2>
+    <p class="sub">Common cases and what to do.</p>
+    <details><summary>The bot did not start after the rig rebooted</summary>
+      <p>Wait a minute: there is a pause before the start. Then check the service and the autostart.</p>
+      <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 8; crontab -l | grep ocbot</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+      <p>If the service is missing or was stopped with <code>--service stop</code>, run <code>--service install</code>.</p></details>
+    <details><summary>Telegram does not respond from the rig</summary>
+      <p>Telegram may be blocked by your provider. Set a proxy, and read the state from the log until it works.</p>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div></details>
+    <details><summary>A card is marked suspect</summary>
+      <p>The bot could not find a stable preset for it and stopped the automation so as not to torture the card. Check power, riser and temperature, then start the search again with <code>/tune 3</code>.</p></details>
+    <details><summary>Thunderbolt cards are invisible to X, offsets are not applied</summary>
+      <p>X disables external GPUs by default (<code>/var/log/Xorg.0.log</code> says "external GPUs have not been enabled"). The bot can add the needed option to the Hive script. Reboot the rig afterwards.</p>
+      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+      <div class="code"><pre><code>nvidia-smi -L | wc -l; DISPLAY=:0 nvidia-settings -q gpus | grep -c &quot;\[gpu:&quot;</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">The two numbers must match the number of cards.</p>
+      <p>A Hive image update overwrites the script: repeat the command.</p></details>
+    <details><summary>Settings disappeared after the miner restarted</summary>
+      <p>Hive may have applied its own overclock on top. Make sure the overclock is cleared in the panel and check <code>/status</code>.</p></details>
+  </section>
+
+  <section class="block" id="terms">
+    <h2>Disclaimer</h2>
+    <p class="sub">Terms of use. Read before installing.</p>
+    <ol class="terms"><li><b>No warranty.</b> The bot is provided &quot;as is&quot;. The author does not guarantee that it fits your purposes, runs without interruption or is free of errors.</li><li><b>Risk to hardware.</b> The bot changes clock offsets, clock locks and power limits by itself and reboots the rig. This can cause unstable operation, dropped cards, overheating, accelerated wear or failure of GPUs, power supplies, risers and other hardware, loss of hashrate and income, loss of data, and loss of the manufacturer&#x27;s warranty.</li><li><b>You are responsible for the result.</b> By installing and running the bot you accept all risks and all responsibility for any consequences of its operation, including direct and indirect losses and lost profit. The author and distributors are not liable for them to the extent permitted by law.</li><li><b>What stays with you.</b> Cooling, power, risers, temperatures and supervising the rig. PSU data (the /psu command) is entered by the owner and its accuracy is the owner&#x27;s responsibility. Do the first runs while you are near the rig. Always check any preset before applying it, especially one from the catalog or from other people.</li><li><b>Presets and catalog.</b> During the trial, verified presets from your rig are submitted anonymously (no rig name, card UUIDs or IP) to the shared catalog; this is a condition of the trial and cannot be turned off during it. With a purchased key you can turn sharing off at any time with /share off. Catalog presets are submitted by third-party users. They do not fit every card or rig, are not verified by the author and come without any warranty.</li><li><b>Third-party software.</b> HiveOS, the NVIDIA driver, miners (including rgminer), pools and Telegram are developed by third parties and are not affiliated with the author of the bot. Their names belong to their owners. You comply with their licenses and terms of use yourself.</li><li><b>Access and data.</b> The Telegram token and, if you enable catalog publishing, the GitHub token are stored in the config on your rig. Keeping them safe is on you: do not publish them or paste them into chats. The catalog contains no card UUIDs or rig names, but you are the one who publishes it.</li><li><b>Law.</b> You are responsible for complying with the laws of your country (mining, electricity, taxes, etc.) and for making sure that using the bot does not breach warranty or other obligations to third parties.</li><li><b>Changes.</b> Functionality and these terms may change. The current version is always on this page.</li><li><b>Acceptance.</b> If you do not agree with these terms, do not install the bot; if it is already installed, remove it with --uninstall --yes.</li></ol>
+  </section>
+
+  <footer>Never share tokens or passwords and never paste them into a chat. The bot only tunes the overclock of NVIDIA cards (AMD support is coming): check cooling, risers and power yourself.</footer>
+</main>
+
+<script>
+(function () {
+  var KEY = "ocbot.guide.cfg", input = document.getElementById("cfgname");
+  function safe(fn) { try { return fn(); } catch (e) { return null; } }
+  function apply() {
+    var v = (input.value || "").trim() || "config.json";
+    document.querySelectorAll(".cfg").forEach(function (n) { n.textContent = v; });
+    safe(function () { localStorage.setItem(KEY, input.value); });
+  }
+  var saved = safe(function () { return localStorage.getItem(KEY); });
+  if (saved) input.value = saved;
+  input.addEventListener("input", apply);
+  apply();
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest(".copy");
+    if (!b) return;
+    var text = b.parentNode.querySelector("pre").textContent.replace(/\s+$/, "");
+    function done() { b.textContent = "Copied"; b.classList.add("done"); setTimeout(function () { b.textContent = "Copy"; b.classList.remove("done"); }, 1400); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else { fallback(text, done); }
+  });
+  function fallback(text, done) {
+    var t = document.createElement("textarea"); t.value = text; t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select(); safe(function () { document.execCommand("copy"); }); document.body.removeChild(t); done();
+  }
+})();
+</script>
+<script src="chat.en.js" defer></script>
+</body>
+</html>

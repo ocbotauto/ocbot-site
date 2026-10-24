@@ -1,0 +1,12 @@
+:root { --bg:#f3f6f5; --surface:#fff; --ink:#16211e; --muted:#5c6b66; --line:#d6dfdc; --accent:#0f7a64; --ok:#0f7a64; --bad:#b42318; --warn:#b45309; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0e1816; --surface:#14201d; --ink:#e6efec; --muted:#9ab0a9; --line:#2b3b37; --accent:#46c8af; --ok:#46c8af; --bad:#f97066; --warn:#f5a524; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 0 16px 48px; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  nav { display: flex; gap: 18px; padding: 18px 0; flex-wrap: wrap; } nav a { color: var(--muted); text-decoration: none; } nav a:hover { color: var(--accent); }
+  h1 { font-size: 30px; margin: 12px 0 4px; } .lede { color: var(--muted); margin: 0 0 22px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  .row b { display: block; } .row small { color: var(--muted); }
+  .st { font-weight: 600; white-space: nowrap; } .st.ok { color: var(--ok); } .st.bad { color: var(--bad); } .st.warn { color: var(--warn); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: currentColor; margin-right: 6px; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 18px; }
