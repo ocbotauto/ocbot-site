@@ -30,6 +30,9 @@
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
   .wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  /* Только на странице каталога: таблице с 8 колонками (пресеты, хешрейт, доход и т.д.) нужно больше
+     места, чем остальным страницам на этом же стиле (калькулятор, страницы моделей). */
+  .wrap.wide { max-width: 1240px; }
   header { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: flex-end; }
   h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; text-wrap: balance; }
   .lede { margin: 0; color: var(--muted); max-width: 60ch; }
