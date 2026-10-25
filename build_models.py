@@ -237,11 +237,9 @@ def update_sitemap(site_dir, base, model_slugs):
     except OSError:
         cur = SITEMAP_HEAD + "</urlset>\n"
     blocks = re.findall(r"  <url>.*?</url>\n", cur, re.S)
-    model_prefixes = tuple(base + s for s in model_slugs) if model_slugs else ()
-    kept = [b for b in blocks if not (("loc>" + base + "rtx-") in b.replace(base + "catalog/", base))
-            and "/catalog/" not in b]
-    # вырезаем старые записи о страницах моделей (по известным текущим слагам) и об устаревшем пути catalog/<slug>
-    kept = [b for b in kept if not any(f"loc>{p}.html<" in b or f"loc>{p}.ru.html<" in b for p in model_prefixes)]
+    # вырезаем все старые записи о страницах моделей и об устаревшем пути catalog/<slug> — под ЛЮБЫМ доменом
+    # (не только текущим base), чтобы после смены домена сайта не копились дубли-страницы со старым адресом
+    kept = [b for b in blocks if not re.search(r"loc>https?://[^<]*?/(catalog/|rtx-)", b)]
     fresh = "".join(sitemap_url_block(base + s + ".html", base + s + ".ru.html") for s in sorted(model_slugs))
     with open(path, "w", encoding="utf-8") as f:
         f.write(SITEMAP_HEAD + "".join(kept) + fresh + "</urlset>\n")
