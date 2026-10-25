@@ -160,9 +160,11 @@ python3 -m ocbot --config config.json --self-update</pre>
           var cpd = coinsPerDay(x);
           var coin = coinmap[x.algo];
           var price = coin ? priceByCoin[coin] : null;
-          var revLine = (cpd != null && price) ? '<span class="rev">mines ≈ $' + (cpd * price).toFixed(2) + '/day</span><br>' : "";
-          return "<div><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-            x.efficiency.toFixed(3) + " TH/W</span><br>" + revLine + "<small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " W</small></div>";
+          var revBlock = (!coin || cpd == null) ? '<div class="rev"><span class="na">no network data</span></div>'
+            : !price ? '<div class="rev"><span class="na">loading price…</span></div>'
+            : '<div class="rev"><span>earns per day</span><b>$' + (cpd * price).toFixed(2) + '</b></div>';
+          return "<div><div class=\"meta\"><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
+            x.efficiency.toFixed(3) + " TH/W</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " W</small></div>" + revBlock + "</div>";
         }).join("");
         document.getElementById("live").className = "live on";
       });

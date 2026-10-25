@@ -160,9 +160,11 @@ python3 -m ocbot --config config.json --self-update</pre>
           var cpd = coinsPerDay(x);
           var coin = coinmap[x.algo];
           var price = coin ? priceByCoin[coin] : null;
-          var revLine = (cpd != null && price) ? '<span class="rev">добывает ≈ ' + (cpd * price).toFixed(2) + ' ₽/сутки</span><br>' : "";
-          return "<div><small>№" + (i + 1) + " по эффективности</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-            x.efficiency.toFixed(3) + " TH/Вт</span><br>" + revLine + "<small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " Вт</small></div>";
+          var revBlock = (!coin || cpd == null) ? '<div class="rev"><span class="na">нет сетевых данных</span></div>'
+            : !price ? '<div class="rev"><span class="na">курс загружается…</span></div>'
+            : '<div class="rev"><span>доход, за сутки</span><b>' + (cpd * price).toFixed(2) + ' ₽</b></div>';
+          return "<div><div class=\"meta\"><small>№" + (i + 1) + " по эффективности</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".ru.html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
+            x.efficiency.toFixed(3) + " TH/Вт</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " Вт</small></div>" + revBlock + "</div>";
         }).join("");
         document.getElementById("live").className = "live on";
       });

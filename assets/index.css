@@ -42,12 +42,22 @@
   .live.on{display:block}
   .live h3{margin:0 0 4px;font-size:17px}.live p{margin:0 0 12px;color:var(--muted);font-size:13.5px}
   .live .row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .live .row div{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .live .row>div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .live .meta{min-width:0}
   .live small{color:var(--muted);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
   .live b{display:block;font-size:16px;margin:3px 0}.live .v{font-family:var(--font-num);color:var(--accent);font-size:19px}
-  .live .rev{display:inline-block;margin-top:4px;font-family:var(--font-num);color:var(--ink);font-size:13px}
+  /* Доход — отдельная плашка справа от карточки, а не ещё одна строка в левом столбике:
+     на широком экране там иначе остаётся много пустого места (см. .top .rev в catalog.css). */
+  .live .rev{flex:0 0 auto;text-align:right;padding-left:10px;border-left:1px solid var(--line)}
+  .live .rev span{display:block;color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+  .live .rev b{font-family:var(--font-num);font-size:18px;color:var(--accent);margin:0;white-space:nowrap}
+  .live .rev .na{display:inline-block;color:var(--muted);font-size:11.5px;font-family:inherit;text-transform:none;letter-spacing:0;margin:0}
   .live a{display:inline-block;margin-top:12px;font-weight:500}
   @media (max-width:900px){.live .row{grid-template-columns:1fr}}
+  @media (max-width:480px){
+    .live .row>div{flex-direction:column;align-items:stretch}
+    .live .rev{text-align:left;padding:8px 0 0;border-left:0;border-top:1px solid var(--line);margin-top:2px}
+  }
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
   .stats div{background:var(--surface);padding:18px 20px}
   .stats b{display:block;font-family:var(--font-num);font-size:26px;font-weight:500;color:var(--accent);letter-spacing:-.02em}
