@@ -9,6 +9,7 @@
 <link rel="alternate" hreflang="ru" href="https://ocbot.org/catalog.ru.html">
 <title>Catalog of GPU overclock presets for mining</title>
 <link rel="stylesheet" href="assets/catalog.css">
+<style>.price-na { color: var(--muted); }</style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <meta name="description" content="Verified NVIDIA GPU overclock settings by model (AMD coming soon): core, mem, power limit, hashrate and power draw across three modes. Data is submitted by bots running on rigs.">
 <meta name="theme-color" content="#0f7a64">
@@ -50,6 +51,7 @@
     <input type="file" id="file" accept=".json,application/json" hidden>
   </div>
 
+  <p class="modenote" id="kwhnote"></p>
   <div id="drop">You can also view your own catalog file: drag it here (the bot sends it via /catalog). It isn’t stored on the site.</div>
   <p id="msg" role="status"></p>
 
@@ -88,7 +90,12 @@
     ]
   };
   var $ = function (id) { return document.getElementById(id); };
-  var state = { data: SAMPLE, isSample: true };
+  var state = { data: SAMPLE, isSample: true, coinmap: {}, network: {}, prices: {} };
+  // Average US residential electricity price, 2026 (solar.com: "nearly 19 cents per kWh", an all-time
+  // high) — used whenever the person hasn't entered their own price.
+  var DEFAULT_KWH = 0.19;
+  var GECKO = "https://api.coingecko.com/api/v3";
+  var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // tickers where the CoinGecko symbol doesn't match the expected id
 
   function mname(m) { return String(m || "").replace(/[-_ ]v?\d[\w.\-]*$/i, ""); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -187,7 +194,12 @@
     });
     var maxEff = Math.max.apply(null, d.entries.map(function (e) { return e.efficiency || 0; }).concat([0.0001]));
 
-    var kwh = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
+    var kwhRaw = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
+    var usingDefaultKwh = !kwhRaw;
+    var effKwh = kwhRaw || DEFAULT_KWH;
+    $("kwhnote").textContent = usingDefaultKwh
+      ? "Electricity price not set — using the US residential average: $" + DEFAULT_KWH.toFixed(2) + "/kWh (2026). Enter your own price above for an exact estimate."
+      : "Electricity and profit are calculated at your price: $" + effKwh.toFixed(2) + "/kWh.";
     var ser = {}; d.entries.forEach(function (e) { ser[series(clean(e.model)).title] = series(clean(e.model)).key; });
     var serKeys = Object.keys(ser).sort(function (a, b) { return ser[b] - ser[a]; });
     $("chips").innerHTML = serKeys.length > 1 ? ['All'].concat(serKeys).map(function (t) {
@@ -256,8 +268,23 @@
         }).join("") + '</tbody></table></details>';
     }
     function slugOf(e) { return (clean(e.model) + " " + (e.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
+    function netw(e) { return state.network[e.algo] || null; }
+    function coinsPerDay(e) {
+      var n = netw(e);
+      if (!n || !e.hashrate) return null;
+      return (e.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
+    }
     function tr(e) {
       var eff = e.efficiency ? Math.max(4, Math.round(100 * e.efficiency / maxEff)) : 0;
+      var coin = state.coinmap[e.algo] || null;
+      var price = coin ? state.prices[coin] : undefined;
+      var elDay = e.power_w ? e.power_w * 24 / 1000 * effKwh : null;
+      var cpd = coinsPerDay(e);
+      var revDay = cpd != null && price != null ? cpd * price : null;
+      var profitDay = revDay != null ? revDay - (elDay || 0) : null;
+      var revCell = !coin || cpd == null ? '<span class="price-na">no network data</span>'
+        : price == null ? '<span class="price-na">loading price</span>'
+        : '<b>$' + num(revDay, 2) + '</b><span class="cost">profit ≈ $' + num(profitDay, 2) + '/day</span>';
       return '<tr><td class="mdl"><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(e._m) + '</a></b><small>' + esc(e.mem_vendor ? e.mem_vendor + " memory" : "memory not specified") + '</small>' +
         '<div class="tags"><span class="tag">' + esc(e.algo) + ' / ' + esc(mname(e.miner)) + ' ' + esc(e.miner_version || "") + '</span>' +
         '<span class="tag plain">cards: ' + (e.cards || 1) + '</span>' +
@@ -267,13 +294,14 @@
         '<td data-l="Typical' + ((e.cards || 1) > 1 ? ' (median)' : '') + '">' + pcell(e.median, "typical") + '</td>' +
         '<td class="num" data-l="Hashrate">' + num(e.hashrate, 1) + ' <small>TH/s</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, 'TH/s', true) + '</td>' +
         '<td class="num" data-l="Power">' + num(e.power_w, 0) + ' <small>W</small>' + beforeAfter(e.stock_power_w, e.power_w, 0, 'W', false) +
-        (kwh && e.power_w ? '<span class="cost">≈ ' + num(e.power_w * 24 / 1000 * kwh, 1) + '/day</span>' : '') + '</td>' +
+        (elDay != null ? '<span class="cost">≈ $' + num(elDay, 2) + '/day electricity' + (usingDefaultKwh ? ' <i>(default $' + DEFAULT_KWH.toFixed(2) + '/kWh)</i>' : '') + '</span>' : '') + '</td>' +
         '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/W</small>' +
         '<div class="eff" aria-hidden="true"><i style="width:' + eff + '%"></i></div></td>' +
+        '<td class="num" data-l="Revenue, per day">' + revCell + '</td>' +
         '<td class="num" data-l="Updated">' + (e.updated_at ? esc(dateOf(e.updated_at)) : "—") + '</td></tr>';
     }
     var head = '<thead><tr><th>Model</th><th>Best preset</th><th>Typical preset</th><th class="num">Hashrate</th><th class="num">Power</th>' +
-      '<th class="num">Efficiency</th><th class="num">Updated</th></tr></thead>';
+      '<th class="num">Efficiency</th><th class="num">Revenue, per day</th><th class="num">Updated</th></tr></thead>';
     function table(list) { return '<div class="tw"><table class="tbl">' + head + '<tbody>' + list.map(tr).join("") + '</tbody></table></div>'; }
     var html;
     if (by === "model") {
@@ -335,6 +363,57 @@
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
       .then(function (t) { var d = validate(JSON.parse(t)); return d; });
   }
+  function grabJson(url) {
+    return fetch(url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+  // Full CoinGecko coin list (id/symbol) — cached in localStorage for a day (shared with the calculator).
+  function geckoList() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
+    } catch (e) {}
+    return grabJson(GECKO + "/coins/list").then(function (list) {
+      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
+      return list;
+    });
+  }
+  function resolveCoinIds(tickers, list) {
+    var bySymbol = {};
+    list.forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
+    var out = {};
+    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
+    return out;
+  }
+  function loadPrices(coins) {
+    var tickers = Array.from(new Set(coins.filter(Boolean)));
+    if (!tickers.length) return Promise.resolve({});
+    return geckoList().then(function (list) {
+      var ids = resolveCoinIds(tickers, list);
+      var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
+      if (!idList.length) return {};
+      return grabJson(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+        var out = {};
+        tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].usd : null; });
+        return out;
+      }).catch(function () { return {}; });
+    }).catch(function () { return {}; });
+  }
+  function refreshPrices() {
+    var algos = Array.from(new Set((state.data.entries || []).map(function (e) { return e.algo; })));
+    var coins = algos.map(function (a) { return state.coinmap[a]; }).filter(Boolean);
+    loadPrices(coins).then(function (prices) { state.prices = prices; render(); });
+  }
+  function loadMeta() {
+    Promise.all([
+      grabJson(COMMUNITY_URL.replace(/\/$/, "") + "/coinmap.json").catch(function () { return { map: {} }; }),
+      grabJson("network.json").catch(function () { return { coins: {} }; })
+    ]).then(function (r) {
+      state.coinmap = (r[0] && r[0].map) || {};
+      state.network = (r[1] && r[1].coins) || {};
+      refreshPrices();
+    });
+  }
   function loadRemote(announce) {
     var urls = (COMMUNITY_URL ? [COMMUNITY_URL.replace(/\/$/, "") + "/catalog.json"] : []).concat(["catalog.json"]);
     var chain = Promise.reject(new Error("start"));
@@ -343,6 +422,7 @@
         state.data = d; state.isSample = false; state.remote = true;
         if (announce) say("Showing site data.");
         render();
+        refreshPrices();
       })
       .catch(function () {
         state = { data: SAMPLE, isSample: true };
@@ -362,6 +442,7 @@
   $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh", this.value); } catch (e) {} render(); });
   render();
   loadRemote(false);
+  loadMeta();
 })();
 </script>
 
