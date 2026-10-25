@@ -37,13 +37,16 @@
   .guidelink:hover { text-decoration: underline; }
   .source { font-family: var(--font-num); font-size: 12.5px; color: var(--muted); text-align: right; }
   .source b { color: var(--ink); font-weight: 500; }
-  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .bar input[type=search], .bar input[type=text], .bar select {
-    font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
-    border-radius: 8px; padding: 9px 12px; min-width: 0;
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 11px; min-width: 0;
   }
-  .bar input[type=search] { flex: 1 1 220px; }
-  .spacer { flex: 1 1 0; }
+  /* Компактный вид: поля и кнопки идут подряд без растягивания на всю ширину — раньше невидимый
+     распорный элемент (.spacer) раздвигал кнопки «Вернуть/Загрузить» далеко вправо, оставляя
+     некрасивую пустую полосу посередине панели. */
+  .bar input[type=search] { flex: 1 1 160px; max-width: 240px; }
+  .spacer { flex: 0 0 0; width: 0; }
   button {
     font: inherit; font-weight: 500; cursor: pointer; color: var(--ink); background: var(--surface);
     border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px;
@@ -92,7 +95,7 @@
   .tbl { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .tbl th { text-align: left; font-weight: 500; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
             padding: 10px 14px; background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface)); border-bottom: 1px solid var(--line); white-space: nowrap; }
-  .tbl td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
+  .tbl td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
   .tbl tr:last-child td { border-bottom: 0; }
   .tbl tbody tr:hover td { background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 30%, var(--surface)); }
   .tbl .mdl b { display: block; font-size: 15.5px; font-weight: 600; }
@@ -108,8 +111,8 @@
   .mdl { max-width: 280px; }
   .cmp { max-width: 250px; margin-top: 8px; font-size: 12.5px; } .cmp summary { cursor: pointer; color: var(--accent); }
   .cmp table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 6px; font-family: var(--font-num); } .cmp th, .cmp td { padding: 2px 8px; text-align: right; } .cmp th:first-child, .cmp td:first-child { text-align: left; } .cmp tr.cur td { font-weight: 600; }
-  .cps { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
-  .pre .cp, .cps .cp { display: inline-block; font-family: var(--font-ui); font-size: 11.5px; padding: 2px 8px; border-radius: 6px; }
+  .cps { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
+  .pre .cp, .cps .cp { display: inline-block; font-family: var(--font-ui); font-size: 11px; padding: 2px 6px; border-radius: 6px; line-height: 1.6; }
   .tbl .good { color: var(--accent); font-weight: 500; }
   .effcell { min-width: 120px; }
   .effcell .eff { margin-top: 5px; }
@@ -140,9 +143,7 @@
   .top b { display: block; font-size: 17px; margin: 4px 0 2px; }
   .top .v { font-family: var(--font-num); color: var(--accent); font-size: 20px; }
   .top .p { font-family: var(--font-num); color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-  #kwh { width: 150px; flex: 0 0 150px; }
-  .bar { gap: 10px; }
-  .bar .spacer { flex: 1 1 0; }
+  #kwh { width: 130px; flex: 0 0 130px; }
   .ba b.up { color: var(--accent); } .ba b.down { color: #b45309; }
   .cost { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; font-family: var(--font-ui); }
   .tag.conf-hi { background: var(--accent-soft); color: var(--accent); }

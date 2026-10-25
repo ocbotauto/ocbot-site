@@ -279,6 +279,10 @@
       if (!n || !e.hashrate) return null;
       return (e.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
     }
+    function sameP(a, b) {
+      return a && b && Math.round(a.core) === Math.round(b.core) && Math.round(a.mem) === Math.round(b.mem) &&
+        Math.round(a.pl) === Math.round(b.pl) && !a.core_lock && !a.mem_lock && !b.core_lock && !b.mem_lock;
+    }
     function tr(e) {
       var eff = e.efficiency ? Math.max(4, Math.round(100 * e.efficiency / maxEff)) : 0;
       var coin = state.coinmap[e.algo] || null;
@@ -290,13 +294,18 @@
       var revCell = !coin || cpd == null ? '<span class="price-na">no network data</span>'
         : price == null ? '<span class="price-na">loading price</span>'
         : '<b>$' + num(revDay, 2) + '</b><span class="cost">profit ≈ $' + num(profitDay, 2) + '/day</span>';
+      // When the typical preset matches the best one (usually a single-card entry), don't repeat the same
+      // settings block and three copy buttons a second time — that's extra table width with no new info.
+      var typicalCell = sameP(e.best, e.median)
+        ? '<td data-l="Typical"><span class="cost">same as "Best"</span></td>'
+        : '<td data-l="Typical' + ((e.cards || 1) > 1 ? ' (median)' : '') + '">' + pcell(e.median, "typical") + '</td>';
       return '<tr><td class="mdl"><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(e._m) + '</a></b><small>' + esc(e.mem_vendor ? e.mem_vendor + " memory" : "memory not specified") + '</small>' +
         '<div class="tags"><span class="tag">' + esc(e.algo) + ' / ' + esc(mname(e.miner)) + ' ' + esc(e.miner_version || "") + '</span>' +
         '<span class="tag plain">cards: ' + (e.cards || 1) + '</span>' +
         (e.rigs ? '<span class="tag' + (e.rigs >= 5 ? ' conf-hi' : ' plain') + '" title="How many different rigs submitted this preset, each verified over two hours of work">✓ matched on ' + e.rigs + ' rig' + (e.rigs === 1 ? '' : 's') + ' · ' + (e.rigs >= 5 ? 'reliable' : e.rigs >= 3 ? 'confirmed' : 'limited data') + '</span>' : '') +
         (e.source ? '<span class="tag plain">source: ' + esc(e.source) + '</span>' : '') + '</div>' + compare(e) + '</td>' +
         '<td data-l="Best">' + pcell(e.best, "best") + '</td>' +
-        '<td data-l="Typical' + ((e.cards || 1) > 1 ? ' (median)' : '') + '">' + pcell(e.median, "typical") + '</td>' +
+        typicalCell +
         '<td class="num" data-l="Hashrate">' + num(e.hashrate, 1) + ' <small>TH/s</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, 'TH/s', true) + '</td>' +
         '<td class="num" data-l="Power">' + num(e.power_w, 0) + ' <small>W</small>' + beforeAfter(e.stock_power_w, e.power_w, 0, 'W', false) +
         (elDay != null ? '<span class="cost">≈ $' + num(elDay, 2) + '/day electricity' + (usingDefaultKwh ? ' <i>(default $' + DEFAULT_KWH.toFixed(2) + '/kWh)</i>' : '') + '</span>' : '') + '</td>' +

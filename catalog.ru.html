@@ -279,6 +279,10 @@
       if (!n || !e.hashrate) return null;
       return (e.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
     }
+    function sameP(a, b) {
+      return a && b && Math.round(a.core) === Math.round(b.core) && Math.round(a.mem) === Math.round(b.mem) &&
+        Math.round(a.pl) === Math.round(b.pl) && !a.core_lock && !a.mem_lock && !b.core_lock && !b.mem_lock;
+    }
     function tr(e) {
       var eff = e.efficiency ? Math.max(4, Math.round(100 * e.efficiency / maxEff)) : 0;
       var coin = state.coinmap[e.algo] || null;
@@ -290,13 +294,18 @@
       var revCell = !coin || cpd == null ? '<span class="price-na">нет сетевых данных</span>'
         : price == null ? '<span class="price-na">курс грузится</span>'
         : '<b>' + num(revDay, 2) + ' ₽</b><span class="cost">прибыль ≈ ' + num(profitDay, 2) + ' ₽/сутки</span>';
+      // Когда типичный пресет совпадает с лучшим (обычно при одной карте), не дублируем тот же блок
+      // настроек и три кнопки копирования второй раз — это лишняя ширина таблицы без новой информации.
+      var typicalCell = sameP(e.best, e.median)
+        ? '<td data-l="Типичный"><span class="cost">как «Лучший»</span></td>'
+        : '<td data-l="Типичный' + ((e.cards || 1) > 1 ? ' (медиана)' : '') + '">' + pcell(e.median, "типичный") + '</td>';
       return '<tr><td class="mdl"><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(e._m) + '</a></b><small>' + esc(e.mem_vendor ? "память " + e.mem_vendor : "память не указана") + '</small>' +
         '<div class="tags"><span class="tag">' + esc(e.algo) + ' / ' + esc(mname(e.miner)) + ' ' + esc(e.miner_version || "") + '</span>' +
         '<span class="tag plain">карт: ' + (e.cards || 1) + '</span>' +
         (e.rigs ? '<span class="tag' + (e.rigs >= 5 ? ' conf-hi' : ' plain') + '" title="Сколько разных ригов прислали этот пресет, проверенный двумя часами работы">✓ сработало на ' + e.rigs + ' ' + (e.rigs % 10 === 1 && e.rigs % 100 !== 11 ? 'риге' : 'ригах') + ' · ' + (e.rigs >= 5 ? 'надёжно' : e.rigs >= 3 ? 'подтверждено' : 'мало данных') + '</span>' : '') +
         (e.source ? '<span class="tag plain">источник: ' + esc(e.source) + '</span>' : '') + '</div>' + compare(e) + '</td>' +
         '<td data-l="Лучший">' + pcell(e.best, "лучший") + '</td>' +
-        '<td data-l="Типичный' + ((e.cards || 1) > 1 ? ' (медиана)' : '') + '">' + pcell(e.median, "типичный") + '</td>' +
+        typicalCell +
         '<td class="num" data-l="Хешрейт">' + num(e.hashrate, 1) + ' <small>TH/s</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, 'TH/s', true) + '</td>' +
         '<td class="num" data-l="Потребление">' + num(e.power_w, 0) + ' <small>Вт</small>' + beforeAfter(e.stock_power_w, e.power_w, 0, 'Вт', false) +
         (elDay != null ? '<span class="cost">≈ ' + num(elDay, 1) + ' ₽/сутки эл-во' + (usingDefaultKwh ? ' <i>(по умолч. ' + DEFAULT_KWH.toFixed(1) + ' ₽/кВт·ч)</i>' : '') + '</span>' : '') + '</td>' +
