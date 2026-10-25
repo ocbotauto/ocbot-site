@@ -154,6 +154,17 @@ python3 -m ocbot --config config.json --self-update</pre>
     tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
     return out;
   }
+  // Если CoinGecko недоступен (сбой сети, лимит запросов на мобильном интернете) — берём последнюю удачную цену из кэша, лишь бы не прятать строку дохода.
+  function readPriceCache(cur) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null");
+      if (c && Date.now() - c.t < 7 * 24 * 3600 * 1000) return c.prices || {};
+    } catch (e) {}
+    return {};
+  }
+  function writePriceCache(cur, prices) {
+    try { localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify({ t: Date.now(), prices: prices })); } catch (e) {}
+  }
   Promise.all([
     grabJson(COMMUNITY_URL + "/catalog.json"),
     grabJson(COMMUNITY_URL + "/coinmap.json").catch(function () { return { map: {} }; }),
@@ -177,13 +188,14 @@ python3 -m ocbot --config config.json --self-update</pre>
       (tickers.length ? geckoList().then(function (list) {
         var ids = resolveCoinIds(tickers, list);
         var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
-        if (!idList.length) return {};
+        if (!idList.length) return readPriceCache("rub");
         return grabJson(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=rub").then(function (prices) {
           var out = {};
           tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].rub : null; });
+          writePriceCache("rub", out);
           return out;
-        }).catch(function () { return {}; });
-      }).catch(function () { return {}; }) : Promise.resolve({})).then(function (priceByCoin) {
+        }).catch(function () { return readPriceCache("rub"); });
+      }).catch(function () { return readPriceCache("rub"); }) : Promise.resolve({})).then(function (priceByCoin) {
         document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
           var cpd = coinsPerDay(x);
           var coin = coinmap[x.algo];
