@@ -96,6 +96,9 @@
   var DEFAULT_KWH = 3.6;
   var GECKO = "https://api.coingecko.com/api/v3";
   var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // тикеры, где символ в CoinGecko не совпадает с ожидаемым id
+  // Пары Gate.io проверены вручную: символ на бирже не всегда совпадает с нужной монетой
+  // (например, PRL_USDT на Gate — это другой, не связанный токен; нужная монета Pearl лежит в PEARL_USDT).
+  var GATE_PAIR = { PRL: "PEARL_USDT" };
 
   function mname(m) { return String(m || "").replace(/[-_ ]v?\d[\w.\-]*$/i, ""); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -399,9 +402,47 @@
     tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
     return out;
   }
+  // Если CoinGecko недоступен (сбой сети, лимит запросов) — пробуем Gate.io напрямую, а если и это
+  // не вышло — берём последнюю удачную цену из кэша (на тикер), лишь бы не оставлять каталог без цен.
+  function readPriceCache(cur, ticker) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null");
+      var p = c && c[ticker];
+      if (p && Date.now() - p.t < 7 * 24 * 3600 * 1000) return p.v;
+    } catch (e) {}
+    return null;
+  }
+  function writePriceCache(cur, ticker, v) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null") || {};
+      c[ticker] = { v: v, t: Date.now() };
+      localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify(c));
+    } catch (e) {}
+  }
+  function gatePriceUsd(ticker) {
+    var pair = GATE_PAIR[ticker];
+    if (!pair) return Promise.resolve(null);
+    return grabJson("https://api.gateio.ws/api/v4/spot/tickers?currency_pair=" + pair).then(function (arr) {
+      var p = arr && arr[0] && parseFloat(arr[0].last);
+      return (p > 0) ? p : null;
+    }).catch(function () { return null; });
+  }
+  // Курс доллара к рублю — для конвертации цены с Gate.io (там только пары к USDT). Кэш на сутки.
+  function usdToRub() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-fx-usdrub") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.rate);
+    } catch (e) {}
+    return grabJson("https://open.er-api.com/v6/latest/USD").then(function (d) {
+      var rate = d && d.rates && d.rates.RUB;
+      if (rate) { try { localStorage.setItem("ocbot-fx-usdrub", JSON.stringify({ t: Date.now(), rate: rate })); } catch (e) {} }
+      return rate || null;
+    }).catch(function () { return null; });
+  }
   function loadPrices(coins) {
     var tickers = Array.from(new Set(coins.filter(Boolean)));
     if (!tickers.length) return Promise.resolve({});
+    // 1) CoinGecko (основной источник) → 2) Gate.io напрямую → 3) последняя известная цена из кэша.
     return geckoList().then(function (list) {
       var ids = resolveCoinIds(tickers, list);
       var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
@@ -411,7 +452,25 @@
         tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].rub : null; });
         return out;
       }).catch(function () { return {}; });
-    }).catch(function () { return {}; });
+    }).catch(function () { return {}; }).then(function (primary) {
+      var missing = tickers.filter(function (t) { return !primary[t]; });
+      if (!missing.length) return primary;
+      return usdToRub().then(function (fx) {
+        return Promise.all(missing.map(function (t) {
+          return gatePriceUsd(t).then(function (usd) { return (usd != null && fx) ? usd * fx : null; });
+        })).then(function (fromGate) {
+          var merged = Object.assign({}, primary);
+          missing.forEach(function (t, i) { if (fromGate[i] != null) merged[t] = fromGate[i]; });
+          return merged;
+        });
+      });
+    }).then(function (priceByCoin) {
+      tickers.forEach(function (t) {
+        if (priceByCoin[t] != null) writePriceCache("rub", t, priceByCoin[t]);
+        else priceByCoin[t] = readPriceCache("rub", t);
+      });
+      return priceByCoin;
+    });
   }
   function refreshPrices() {
     var algos = Array.from(new Set((state.data.entries || []).map(function (e) { return e.algo; })));

@@ -96,6 +96,9 @@
   var DEFAULT_KWH = 0.19;
   var GECKO = "https://api.coingecko.com/api/v3";
   var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // tickers where the CoinGecko symbol doesn't match the expected id
+  // Gate.io pairs are verified by hand: the exchange's own symbol doesn't always match the right coin
+  // (e.g. PRL_USDT on Gate is an unrelated token; the real Pearl coin is PEARL_USDT).
+  var GATE_PAIR = { PRL: "PEARL_USDT" };
 
   function mname(m) { return String(m || "").replace(/[-_ ]v?\d[\w.\-]*$/i, ""); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -399,9 +402,35 @@
     tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
     return out;
   }
+  // If CoinGecko is unreachable (network hiccup, rate limit) try Gate.io directly, and if that fails
+  // too, fall back to the last known-good price per ticker instead of leaving the catalog with no prices.
+  function readPriceCache(cur, ticker) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null");
+      var p = c && c[ticker];
+      if (p && Date.now() - p.t < 7 * 24 * 3600 * 1000) return p.v;
+    } catch (e) {}
+    return null;
+  }
+  function writePriceCache(cur, ticker, v) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null") || {};
+      c[ticker] = { v: v, t: Date.now() };
+      localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify(c));
+    } catch (e) {}
+  }
+  function gatePriceUsd(ticker) {
+    var pair = GATE_PAIR[ticker];
+    if (!pair) return Promise.resolve(null);
+    return grabJson("https://api.gateio.ws/api/v4/spot/tickers?currency_pair=" + pair).then(function (arr) {
+      var p = arr && arr[0] && parseFloat(arr[0].last);
+      return (p > 0) ? p : null;
+    }).catch(function () { return null; });
+  }
   function loadPrices(coins) {
     var tickers = Array.from(new Set(coins.filter(Boolean)));
     if (!tickers.length) return Promise.resolve({});
+    // 1) CoinGecko (primary) → 2) Gate.io directly → 3) last known-good price from cache.
     return geckoList().then(function (list) {
       var ids = resolveCoinIds(tickers, list);
       var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
@@ -411,7 +440,21 @@
         tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].usd : null; });
         return out;
       }).catch(function () { return {}; });
-    }).catch(function () { return {}; });
+    }).catch(function () { return {}; }).then(function (primary) {
+      var missing = tickers.filter(function (t) { return !primary[t]; });
+      if (!missing.length) return primary;
+      return Promise.all(missing.map(function (t) { return gatePriceUsd(t); })).then(function (fromGate) {
+        var merged = Object.assign({}, primary);
+        missing.forEach(function (t, i) { if (fromGate[i] != null) merged[t] = fromGate[i]; });
+        return merged;
+      });
+    }).then(function (priceByCoin) {
+      tickers.forEach(function (t) {
+        if (priceByCoin[t] != null) writePriceCache("usd", t, priceByCoin[t]);
+        else priceByCoin[t] = readPriceCache("usd", t);
+      });
+      return priceByCoin;
+    });
   }
   function refreshPrices() {
     var algos = Array.from(new Set((state.data.entries || []).map(function (e) { return e.algo; })));
