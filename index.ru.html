@@ -154,16 +154,45 @@ python3 -m ocbot --config config.json --self-update</pre>
     tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
     return out;
   }
-  // Если CoinGecko недоступен (сбой сети, лимит запросов на мобильном интернете) — берём последнюю удачную цену из кэша, лишь бы не прятать строку дохода.
-  function readPriceCache(cur) {
+  // Если CoinGecko недоступен (сбой сети, лимит запросов на мобильном интернете) — пробуем Gate.io напрямую,
+  // а если и это не вышло — берём последнюю удачную цену из кэша (на тикер), лишь бы не прятать строку дохода.
+  function readPriceCache(cur, ticker) {
     try {
       var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null");
-      if (c && Date.now() - c.t < 7 * 24 * 3600 * 1000) return c.prices || {};
+      var p = c && c[ticker];
+      if (p && Date.now() - p.t < 7 * 24 * 3600 * 1000) return p.v;
     } catch (e) {}
-    return {};
+    return null;
   }
-  function writePriceCache(cur, prices) {
-    try { localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify({ t: Date.now(), prices: prices })); } catch (e) {}
+  function writePriceCache(cur, ticker, v) {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null") || {};
+      c[ticker] = { v: v, t: Date.now() };
+      localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify(c));
+    } catch (e) {}
+  }
+  // Пары Gate.io проверены вручную: символ на бирже не всегда совпадает с нужной монетой
+  // (например, PRL_USDT на Gate — это другой, не связанный токен; нужная монета Pearl лежит в PEARL_USDT).
+  var GATE_PAIR = { PRL: "PEARL_USDT" };
+  function gatePriceUsd(ticker) {
+    var pair = GATE_PAIR[ticker];
+    if (!pair) return Promise.resolve(null);
+    return grabJson("https://api.gateio.ws/api/v4/spot/tickers?currency_pair=" + pair).then(function (arr) {
+      var p = arr && arr[0] && parseFloat(arr[0].last);
+      return (p > 0) ? p : null;
+    }).catch(function () { return null; });
+  }
+  // Курс доллара к рублю — для конвертации цены с Gate.io (там только пары к USDT). Кэш на сутки: курс валют меняется куда медленнее крипты.
+  function usdToRub() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-fx-usdrub") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.rate);
+    } catch (e) {}
+    return grabJson("https://open.er-api.com/v6/latest/USD").then(function (d) {
+      var rate = d && d.rates && d.rates.RUB;
+      if (rate) { try { localStorage.setItem("ocbot-fx-usdrub", JSON.stringify({ t: Date.now(), rate: rate })); } catch (e) {} }
+      return rate || null;
+    }).catch(function () { return null; });
   }
   Promise.all([
     grabJson(COMMUNITY_URL + "/catalog.json"),
@@ -185,17 +214,35 @@ python3 -m ocbot --config config.json --self-update</pre>
         return (x.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
       }
       var tickers = Array.from(new Set(top3.map(function (x) { return coinmap[x.algo]; }).filter(Boolean)));
+      // 1) CoinGecko (основной источник) → 2) Gate.io напрямую (резерв на случай лимита/сбоя CoinGecko) → 3) последняя известная цена из кэша.
       (tickers.length ? geckoList().then(function (list) {
         var ids = resolveCoinIds(tickers, list);
         var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
-        if (!idList.length) return readPriceCache("rub");
+        if (!idList.length) return {};
         return grabJson(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=rub").then(function (prices) {
           var out = {};
           tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].rub : null; });
-          writePriceCache("rub", out);
           return out;
-        }).catch(function () { return readPriceCache("rub"); });
-      }).catch(function () { return readPriceCache("rub"); }) : Promise.resolve({})).then(function (priceByCoin) {
+        }).catch(function () { return {}; });
+      }).catch(function () { return {}; }) : Promise.resolve({})).then(function (primary) {
+        var missing = tickers.filter(function (t) { return !primary[t]; });
+        if (!missing.length) return primary;
+        return usdToRub().then(function (fx) {
+          return Promise.all(missing.map(function (t) {
+            return gatePriceUsd(t).then(function (usd) { return (usd != null && fx) ? usd * fx : null; });
+          })).then(function (fromGate) {
+            var merged = Object.assign({}, primary);
+            missing.forEach(function (t, i) { if (fromGate[i] != null) merged[t] = fromGate[i]; });
+            return merged;
+          });
+        });
+      }).then(function (priceByCoin) {
+        tickers.forEach(function (t) {
+          if (priceByCoin[t] != null) writePriceCache("rub", t, priceByCoin[t]);
+          else priceByCoin[t] = readPriceCache("rub", t);
+        });
+        return priceByCoin;
+      }).then(function (priceByCoin) {
         document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
           var cpd = coinsPerDay(x);
           var coin = coinmap[x.algo];
