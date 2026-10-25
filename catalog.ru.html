@@ -222,12 +222,12 @@
       var coin = state.coinmap[e.algo] || null;
       var price = coin ? state.prices[coin] : undefined;
       var cpd = coinsPerDay(e);
-      var revLine = !coin || cpd == null ? '<div class="p">нет сетевых данных</div>'
-        : price == null ? '<div class="p">курс загружается…</div>'
-        : '<div class="p">доход ≈ <b>' + num(cpd * price, 2) + ' ₽</b>/сутки</div>';
-      return '<div><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/Вт</span>' +
-        revLine +
-        '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' Вт</div></div>';
+      var revBlock = !coin || cpd == null ? '<div class="rev"><span class="na">нет сетевых данных</span></div>'
+        : price == null ? '<div class="rev"><span class="na">курс загружается…</span></div>'
+        : '<div class="rev"><span>доход, за сутки</span><b>' + num(cpd * price, 2) + ' ₽</b></div>';
+      return '<div><div class="meta"><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/Вт</span>' +
+        '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' Вт</div></div>' +
+        revBlock + '</div>';
     }).join("");
     $("source").innerHTML = (state.isSample ? "<b>Пример</b>" : state.remote ? "<b>Данные сайта</b>" : "<b>Ваш файл</b>") + (d.label ? " · " + esc(d.label) : "") +
       "<br>записей: " + all.entries.length + (d.created_at ? " · " + esc(dateOf(d.created_at)) : "");

@@ -222,12 +222,12 @@
       var coin = state.coinmap[e.algo] || null;
       var price = coin ? state.prices[coin] : undefined;
       var cpd = coinsPerDay(e);
-      var revLine = !coin || cpd == null ? '<div class="p">no network data</div>'
-        : price == null ? '<div class="p">loading price…</div>'
-        : '<div class="p">earns ≈ <b>$' + num(cpd * price, 2) + '</b>/day</div>';
-      return '<div><small>#' + (i + 1) + ' by efficiency</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/W</span>' +
-        revLine +
-        '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' W</div></div>';
+      var revBlock = !coin || cpd == null ? '<div class="rev"><span class="na">no network data</span></div>'
+        : price == null ? '<div class="rev"><span class="na">loading price…</span></div>'
+        : '<div class="rev"><span>earns per day</span><b>$' + num(cpd * price, 2) + '</b></div>';
+      return '<div><div class="meta"><small>#' + (i + 1) + ' by efficiency</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/W</span>' +
+        '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' W</div></div>' +
+        revBlock + '</div>';
     }).join("");
     $("source").innerHTML = (state.isSample ? "<b>Example</b>" : state.remote ? "<b>Site data</b>" : "<b>Your file</b>") + (d.label ? " · " + esc(d.label) : "") +
       "<br>entries: " + all.entries.length + (d.created_at ? " · " + esc(dateOf(d.created_at)) : "");

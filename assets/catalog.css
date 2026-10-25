@@ -100,10 +100,15 @@
             padding: 10px 14px; background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface)); border-bottom: 1px solid var(--line); white-space: nowrap; }
   .tbl td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
   /* Когда "Типичный" пресет совпадает с "Лучшим", ячейка содержит только короткую подпись
-     («как «Лучший»»), а ширина колонки задаётся другими строками с полным блоком пресета —
-     из-за vertical-align: middle эта подпись зависала одна в большой пустой области посреди
-     высокой строки. Прижимаем её к верху ячейки, как и остальной контент строки. */
-  .tbl td[data-l^="Типичный"], .tbl td[data-l^="Typical"] { vertical-align: top; }
+     («как «Лучший»»), а высота и ширина колонки задаются другими строками с полным блоком
+     пресета — подпись болталась одна в большой пустой области. Вместо того чтобы просто
+     прижать её к краю, оформляем как отдельную плашку, растянутую на всю высоту и ширину
+     ячейки — пустая область превращается в заметный, но аккуратный блок, а не в "дыру". */
+  .tbl td[data-l^="Типичный"], .tbl td[data-l^="Typical"] { position: relative; vertical-align: top; }
+  .tbl td[data-l^="Типичный"] > .cost:only-child, .tbl td[data-l^="Typical"] > .cost:only-child {
+    position: absolute; inset: 6px; margin: 0; display: flex; align-items: center; justify-content: center;
+    text-align: center; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: 12.5px;
+  }
   .tbl tr:last-child td { border-bottom: 0; }
   .tbl tbody tr:hover td { background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 30%, var(--surface)); }
   .tbl .mdl b { display: block; font-size: 15.5px; font-weight: 600; }
@@ -131,6 +136,12 @@
     .tbl tr { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
               display: grid; grid-template-columns: 1fr; gap: 6px; }
     .tbl td { border: 0; padding: 0; }
+    /* На мобильной раскладке каждая ячейка и так на всю ширину своей карточки — плашка из
+       десктопного фикса (position: absolute, растянутая на всю высоту колонки) здесь не нужна
+       и только схлопнула бы пустую ячейку: возвращаем обычный блочный текст. */
+    .tbl td[data-l^="Типичный"] > .cost:only-child, .tbl td[data-l^="Typical"] > .cost:only-child {
+      position: static; display: block; border: 0; padding: 0; text-align: left;
+    }
     .tbl td.mdl { grid-column: 1 / -1; }
     .tbl td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
     .tbl .num { text-align: left; white-space: normal; }
@@ -146,11 +157,19 @@
   .chips button { border-radius: 999px; padding: 6px 14px; font-size: 13.5px; }
   .chips button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
   .top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 8px; }
-  .top > div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .top > div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+               display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .top .meta { min-width: 0; }
   .top small { color: var(--muted); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; }
   .top b { display: block; font-size: 17px; margin: 4px 0 2px; }
   .top .v { font-family: var(--font-num); color: var(--accent); font-size: 20px; }
   .top .p { font-family: var(--font-num); color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  /* Справа от текста карточки оставалось много пустого места — переносим туда доход,
+     оформленный отдельной плашкой, а не очередной строкой в общем столбике слева. */
+  .top .rev { flex: 0 0 auto; text-align: right; padding-left: 12px; border-left: 1px solid var(--line); }
+  .top .rev span { display: block; color: var(--muted); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+  .top .rev b { font-family: var(--font-num); font-size: 21px; color: var(--accent); margin: 0; white-space: nowrap; }
+  .top .rev .na { display: inline-block; color: var(--muted); font-size: 12px; font-family: var(--font-ui); text-transform: none; letter-spacing: 0; margin: 0; }
   #kwh { width: 130px; flex: 0 0 130px; }
   .ba b.up { color: var(--accent); } .ba b.down { color: #b45309; }
   .cost { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; font-family: var(--font-ui); }
@@ -164,6 +183,10 @@
   .modenote { color: var(--muted); font-size: 13.5px; margin: 0 0 14px; }
   @media (max-width: 900px) { .tabs { grid-template-columns: 1fr; } }
   @media (max-width: 900px) { .kpi { grid-template-columns: 1fr 1fr; } .top { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) {
+    .top > div { flex-direction: column; align-items: stretch; }
+    .top .rev { text-align: left; padding: 8px 0 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 2px; }
+  }
   footer { color: var(--muted); font-size: 13px; }
   @media (max-width: 860px) {
     .card { grid-template-columns: 1fr 1fr; }
