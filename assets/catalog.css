@@ -100,14 +100,15 @@
             padding: 10px 14px; background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface)); border-bottom: 1px solid var(--line); white-space: nowrap; }
   .tbl td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
   /* Когда "Типичный" пресет совпадает с "Лучшим", ячейка содержит только короткую подпись
-     («как «Лучший»»), а высота и ширина колонки задаются другими строками с полным блоком
-     пресета — подпись болталась одна в большой пустой области. Вместо того чтобы просто
-     прижать её к краю, оформляем как отдельную плашку, растянутую на всю высоту и ширину
-     ячейки — пустая область превращается в заметный, но аккуратный блок, а не в "дыру". */
-  .tbl td[data-l^="Типичный"], .tbl td[data-l^="Typical"] { position: relative; vertical-align: top; }
+     («как «Лучший»»), а ширина колонки задаётся другими строками с полным блоком пресета —
+     пустая область справа неизбежна (ширину колонки делят все строки). Вместо того чтобы
+     обводить эту пустоту рамкой, просто показываем компактную неброскую плашку у верхнего
+     края ячейки — она не претендует на то, что заполняет собой всё пустое место. */
+  .tbl td[data-l^="Типичный"], .tbl td[data-l^="Typical"] { vertical-align: top; }
   .tbl td[data-l^="Типичный"] > .cost:only-child, .tbl td[data-l^="Typical"] > .cost:only-child {
-    position: absolute; inset: 6px; margin: 0; display: flex; align-items: center; justify-content: center;
-    text-align: center; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: 12.5px;
+    display: inline-block; margin: 0; padding: 4px 10px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+    color: var(--muted); font-size: 12px; white-space: nowrap;
   }
   .tbl tr:last-child td { border-bottom: 0; }
   .tbl tbody tr:hover td { background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 30%, var(--surface)); }
@@ -136,12 +137,6 @@
     .tbl tr { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
               display: grid; grid-template-columns: 1fr; gap: 6px; }
     .tbl td { border: 0; padding: 0; }
-    /* На мобильной раскладке каждая ячейка и так на всю ширину своей карточки — плашка из
-       десктопного фикса (position: absolute, растянутая на всю высоту колонки) здесь не нужна
-       и только схлопнула бы пустую ячейку: возвращаем обычный блочный текст. */
-    .tbl td[data-l^="Типичный"] > .cost:only-child, .tbl td[data-l^="Typical"] > .cost:only-child {
-      position: static; display: block; border: 0; padding: 0; text-align: left;
-    }
     .tbl td.mdl { grid-column: 1 / -1; }
     .tbl td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
     .tbl .num { text-align: left; white-space: normal; }
