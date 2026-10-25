@@ -23,6 +23,9 @@
   .qty:focus-visible { border-color: var(--accent); }
   .tbl .sel { background: color-mix(in srgb, var(--accent-soft) 40%, var(--surface)); }
   .price-na { color: var(--muted); }
+  .cur { font: inherit; font-family: var(--font-num); color: var(--ink); background: var(--surface);
+         border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; }
+  .cur:focus-visible { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -42,7 +45,12 @@
 
   <div class="bar">
     <input type="search" id="q" placeholder="Model, e.g. 3070" aria-label="Search by model" autocomplete="off">
-    <input type="text" id="kwh" inputmode="decimal" placeholder="Electricity price, $/kWh" aria-label="Electricity price per kWh" autocomplete="off">
+    <input type="text" id="kwh" inputmode="decimal" placeholder="Electricity price" aria-label="Electricity price per kWh" autocomplete="off">
+    <select id="cur" class="cur" aria-label="Currency">
+      <option value="usd">$ USD</option>
+      <option value="eur">€ EUR</option>
+      <option value="rub">₽ RUB</option>
+    </select>
     <span class="spacer"></span>
     <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);"><input type="checkbox" id="onlysel"> selected only</label>
   </div>
@@ -54,9 +62,9 @@
     <div role="listitem"><b id="t-cards">0</b><span>cards selected</span></div>
     <div role="listitem"><b id="t-hash">—</b><span>total hashrate</span></div>
     <div role="listitem"><b id="t-pow">—</b><span>total power draw</span></div>
-    <div role="listitem"><b id="t-el">—</b><span>electricity, $/day</span></div>
-    <div role="listitem"><b id="t-rev">—</b><span>revenue total, $/day</span></div>
-    <div role="listitem"><b id="t-profit">—</b><span>profit total, $/day</span></div>
+    <div role="listitem"><b id="t-el">—</b><span>electricity, per day</span></div>
+    <div role="listitem"><b id="t-rev">—</b><span>revenue total, per day</span></div>
+    <div role="listitem"><b id="t-profit">—</b><span>profit total, per day</span></div>
   </div>
 
   <p class="modenote">Dollar revenue is calculated where network data (difficulty, block reward — from whattomine.com) is available for that card's algorithm; for other algorithms the column shows "no network data" instead of a guess. This is a point-in-time estimate: network difficulty and coin price keep moving, so real revenue can differ by a few percent either way. Don't use these numbers as the sole basis for a financial decision.</p>
@@ -71,11 +79,19 @@
   var GECKO = "https://api.coingecko.com/api/v3";
   var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // tickers where the CoinGecko symbol doesn't match the expected id
 
-  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false };
+  var CUR_SYM = { usd: "$", eur: "€", rub: "₽" };
+  function curOf() { try { return localStorage.getItem("ocbot-cur") || "usd"; } catch (e) { return "usd"; } }
+  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false, cur: curOf() };
 
   function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function num(n, d) { return n == null || !isFinite(n) ? "—" : Number(n).toFixed(d); }
+  function fmtCur(n, d) {
+    if (n == null || !isFinite(n)) return "—";
+    var v = Number(n).toFixed(d);
+    return state.cur === "rub" ? v + " ₽" : CUR_SYM[state.cur] + v;
+  }
+  function kwhKey() { return "ocbot-kwh-" + state.cur; }
   function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
   function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
 
@@ -118,11 +134,11 @@
       var ids = resolveCoinIds(tickers, list);
       var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
       if (!idList.length) return {};
-      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd,eur,rub").then(function (prices) {
         var out = {};
         tickers.forEach(function (t) {
           var id = ids[t];
-          out[t] = id && prices[id] ? prices[id].usd : null;
+          out[t] = id && prices[id] ? { usd: prices[id].usd, eur: prices[id].eur, rub: prices[id].rub } : null;
         });
         return out;
       }).catch(function () { return {}; });
@@ -177,7 +193,7 @@
     function tr(e) {
       var k = keyOf(e), qty = state.qty[k] || 0;
       var coin = state.coinmap[e.algo] || null;
-      var price = coin ? state.prices[coin] : undefined;
+      var price = coin && state.prices[coin] ? state.prices[coin][state.cur] : undefined;
       var elDay = kwh && e.power_w ? e.power_w * 24 / 1000 * kwh : null;
       var cpd = coinsPerDay(e, 1);
       var revDay = cpd != null && price != null ? cpd * price : null;
@@ -187,31 +203,31 @@
         if (revDay != null) { anyRev = true; tRev = (tRev || 0) + revDay * qty; tProfit = (tProfit || 0) + profitDay * qty; }
       }
       var priceCell = !coin ? '<span class="price-na">coin unknown</span>'
-        : price == null ? '<span class="price-na">' + esc(coin) + ', loading price</span>'
-        : esc(coin) + ' <b>$' + num(price, price < 1 ? 4 : 2) + '</b>';
+        : !state.prices[coin] || price == null ? '<span class="price-na">' + esc(coin) + ', loading price</span>'
+        : esc(coin) + ' <b>' + fmtCur(price, price < 1 ? 4 : 2) + '</b>';
       var revCell = cpd == null ? '<span class="price-na">no network data</span>'
         : revDay == null ? '<span class="price-na">loading price</span>'
-        : '<b>$' + num(revDay, 2) + '</b>' + (profitDay != null ? '<span class="cost">profit ≈ $' + num(profitDay, 2) + '/day per card</span>' : '');
+        : '<b>' + fmtCur(revDay, 2) + '</b>' + (profitDay != null ? '<span class="cost">profit ≈ ' + fmtCur(profitDay, 2) + '/day per card</span>' : '');
       return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
         '<td class="num" data-l="Hashrate, per card">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
         '<td class="num" data-l="Power draw, per card">' + num(e.power_w, 0) + ' <small>W</small>' +
-        (elDay != null ? '<span class="cost">≈ $' + num(elDay, 2) + '/day per card</span>' : '') + '</td>' +
+        (elDay != null ? '<span class="cost">≈ ' + fmtCur(elDay, 2) + '/day per card</span>' : '') + '</td>' +
         '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/W</small></td>' +
         '<td class="num" data-l="Coin price">' + priceCell + '</td>' +
-        '<td class="num" data-l="Revenue, $/day per card">' + revCell + '</td>' +
+        '<td class="num" data-l="Revenue, per day per card">' + revCell + '</td>' +
         '<td class="num" data-l="Cards you have"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Number of ' + esc(clean(e.model)) + ' cards"></td>' +
         '</tr>';
     }
-    var head = '<thead><tr><th>Model</th><th class="num">Hashrate</th><th class="num">Power draw</th><th class="num">Efficiency</th><th class="num">Coin price</th><th class="num">Revenue, $/day</th><th class="num">Cards you have</th></tr></thead>';
+    var head = '<thead><tr><th>Model</th><th class="num">Hashrate</th><th class="num">Power draw</th><th class="num">Efficiency</th><th class="num">Coin price</th><th class="num">Revenue, per day</th><th class="num">Cards you have</th></tr></thead>';
     $("list").innerHTML = '<div class="tw"><table class="tbl">' + head + '<tbody>' + rows.map(tr).join("") + '</tbody></table></div>';
 
     $("totals").hidden = tCards === 0;
     $("t-cards").textContent = tCards;
     $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
     $("t-pow").textContent = tCards ? num(tPow, 0) + " W" : "—";
-    $("t-el").textContent = tCards && kwh ? num(tPow * 24 / 1000 * kwh, 2) : "—";
-    $("t-rev").textContent = anyRev ? "$" + num(tRev, 2) : "—";
-    $("t-profit").textContent = anyRev ? "$" + num(tProfit, 2) : "—";
+    $("t-el").textContent = tCards && kwh ? fmtCur(tPow * 24 / 1000 * kwh, 2) : "—";
+    $("t-rev").textContent = anyRev ? fmtCur(tRev, 2) : "—";
+    $("t-profit").textContent = anyRev ? fmtCur(tProfit, 2) : "—";
     $("source").innerHTML = "<b>Community catalog</b><br>models: " + Object.keys(byModel).length;
   }
 
@@ -258,8 +274,19 @@
     var b = ev.target.closest("button[data-mode]"); if (!b) return;
     state.mode = b.getAttribute("data-mode"); render();
   });
-  try { var sk = localStorage.getItem("ocbot-kwh-usd"); if (sk) $("kwh").value = sk; } catch (e) {}
-  $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh-usd", this.value); } catch (e) {} render(); });
+  function syncCurUI() {
+    $("cur").value = state.cur;
+    $("kwh").placeholder = "Electricity price, " + CUR_SYM[state.cur] + "/kWh";
+    try { $("kwh").value = localStorage.getItem(kwhKey()) || ""; } catch (e) { $("kwh").value = ""; }
+  }
+  $("kwh").addEventListener("input", function () { try { localStorage.setItem(kwhKey(), this.value); } catch (e) {} render(); });
+  $("cur").addEventListener("change", function () {
+    state.cur = this.value;
+    try { localStorage.setItem("ocbot-cur", state.cur); } catch (e) {}
+    syncCurUI();
+    render();
+  });
+  syncCurUI();
 
   render();
   loadAll();

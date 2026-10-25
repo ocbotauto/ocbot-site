@@ -23,6 +23,9 @@
   .qty:focus-visible { border-color: var(--accent); }
   .tbl .sel { background: color-mix(in srgb, var(--accent-soft) 40%, var(--surface)); }
   .price-na { color: var(--muted); }
+  .cur { font: inherit; font-family: var(--font-num); color: var(--ink); background: var(--surface);
+         border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; }
+  .cur:focus-visible { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -42,7 +45,12 @@
 
   <div class="bar">
     <input type="search" id="q" placeholder="Модель, например 3070" aria-label="Поиск по модели" autocomplete="off">
-    <input type="text" id="kwh" inputmode="decimal" placeholder="Цена кВт·ч, ₽" aria-label="Цена электричества за кВт·ч" autocomplete="off">
+    <input type="text" id="kwh" inputmode="decimal" placeholder="Цена кВт·ч" aria-label="Цена электричества за кВт·ч" autocomplete="off">
+    <select id="cur" class="cur" aria-label="Валюта расчёта">
+      <option value="usd">$ USD</option>
+      <option value="eur">€ EUR</option>
+      <option value="rub">₽ RUB</option>
+    </select>
     <span class="spacer"></span>
     <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);"><input type="checkbox" id="onlysel"> только выбранные</label>
   </div>
@@ -54,9 +62,9 @@
     <div role="listitem"><b id="t-cards">0</b><span>карт выбрано</span></div>
     <div role="listitem"><b id="t-hash">—</b><span>хешрейт итого</span></div>
     <div role="listitem"><b id="t-pow">—</b><span>потребление итого</span></div>
-    <div role="listitem"><b id="t-el">—</b><span>электричество, ₽/сутки</span></div>
-    <div role="listitem"><b id="t-rev">—</b><span>доход итого, ₽/сутки</span></div>
-    <div role="listitem"><b id="t-profit">—</b><span>прибыль итого, ₽/сутки</span></div>
+    <div role="listitem"><b id="t-el">—</b><span>электричество, за сутки</span></div>
+    <div role="listitem"><b id="t-rev">—</b><span>доход итого, за сутки</span></div>
+    <div role="listitem"><b id="t-profit">—</b><span>прибыль итого, за сутки</span></div>
   </div>
 
   <p class="modenote">Доход в деньгах считается там, где есть сетевые данные (сложность сети, награда за блок — с whattomine.com) для алгоритма карты; для остальных алгоритмов в колонке будет «нет сетевых данных» вместо гадания на глаз. Это оценка по текущему моменту: сложность сети и курс монеты постоянно меняются, поэтому реальный доход может отличаться на несколько процентов в любую сторону. Не используйте эти цифры как единственное основание для финансовых решений.</p>
@@ -71,11 +79,19 @@
   var GECKO = "https://api.coingecko.com/api/v3";
   var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // тикеры, где символ в CoinGecko не совпадает с ожидаемым id
 
-  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false };
+  var CUR_SYM = { usd: "$", eur: "€", rub: "₽" };
+  function curOf() { try { return localStorage.getItem("ocbot-cur") || "usd"; } catch (e) { return "usd"; } }
+  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false, cur: curOf() };
 
   function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function num(n, d) { return n == null || !isFinite(n) ? "—" : Number(n).toFixed(d); }
+  function fmtCur(n, d) {
+    if (n == null || !isFinite(n)) return "—";
+    var v = Number(n).toFixed(d);
+    return state.cur === "rub" ? v + " ₽" : CUR_SYM[state.cur] + v;
+  }
+  function kwhKey() { return "ocbot-kwh-" + state.cur; }
   function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
   function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
 
@@ -118,11 +134,11 @@
       var ids = resolveCoinIds(tickers, list);
       var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
       if (!idList.length) return {};
-      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd,rub").then(function (prices) {
+      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd,eur,rub").then(function (prices) {
         var out = {};
         tickers.forEach(function (t) {
           var id = ids[t];
-          out[t] = id && prices[id] ? { usd: prices[id].usd, rub: prices[id].rub } : null;
+          out[t] = id && prices[id] ? { usd: prices[id].usd, eur: prices[id].eur, rub: prices[id].rub } : null;
         });
         return out;
       }).catch(function () { return {}; });
@@ -177,7 +193,7 @@
     function tr(e) {
       var k = keyOf(e), qty = state.qty[k] || 0;
       var coin = state.coinmap[e.algo] || null;
-      var price = coin && state.prices[coin] ? state.prices[coin].rub : undefined;
+      var price = coin && state.prices[coin] ? state.prices[coin][state.cur] : undefined;
       var elDay = kwh && e.power_w ? e.power_w * 24 / 1000 * kwh : null;
       var cpd = coinsPerDay(e, 1);
       var revDay = cpd != null && price != null ? cpd * price : null;
@@ -187,31 +203,31 @@
         if (revDay != null) { anyRev = true; tRev = (tRev || 0) + revDay * qty; tProfit = (tProfit || 0) + profitDay * qty; }
       }
       var priceCell = !coin ? '<span class="price-na">монета неизв.</span>'
-        : !state.prices[coin] ? '<span class="price-na">' + esc(coin) + ', курс грузится</span>'
-        : esc(coin) + ' <b>$' + num(state.prices[coin].usd, state.prices[coin].usd < 1 ? 4 : 2) + '</b>';
+        : !state.prices[coin] || price == null ? '<span class="price-na">' + esc(coin) + ', курс грузится</span>'
+        : esc(coin) + ' <b>' + fmtCur(price, price < 1 ? 4 : 2) + '</b>';
       var revCell = cpd == null ? '<span class="price-na">нет сетевых данных</span>'
         : revDay == null ? '<span class="price-na">курс грузится</span>'
-        : '<b>' + num(revDay, 2) + ' ₽</b>' + (profitDay != null ? '<span class="cost">прибыль ≈ ' + num(profitDay, 2) + ' ₽/сутки за карту</span>' : '');
+        : '<b>' + fmtCur(revDay, 2) + '</b>' + (profitDay != null ? '<span class="cost">прибыль ≈ ' + fmtCur(profitDay, 2) + '/сутки за карту</span>' : '');
       return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
         '<td class="num" data-l="Хешрейт, за карту">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
         '<td class="num" data-l="Потребление, за карту">' + num(e.power_w, 0) + ' <small>Вт</small>' +
-        (elDay != null ? '<span class="cost">≈ ' + num(elDay, 1) + ' ₽/сутки за карту</span>' : '') + '</td>' +
+        (elDay != null ? '<span class="cost">≈ ' + fmtCur(elDay, 2) + '/сутки за карту</span>' : '') + '</td>' +
         '<td class="num effcell" data-l="Эффективность"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/Вт</small></td>' +
         '<td class="num" data-l="Курс монеты">' + priceCell + '</td>' +
-        '<td class="num" data-l="Доход, ₽/сутки за карту">' + revCell + '</td>' +
+        '<td class="num" data-l="Доход, за сутки за карту">' + revCell + '</td>' +
         '<td class="num" data-l="Карт у вас"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Количество карт ' + esc(clean(e.model)) + '"></td>' +
         '</tr>';
     }
-    var head = '<thead><tr><th>Модель</th><th class="num">Хешрейт</th><th class="num">Потребление</th><th class="num">Эффективность</th><th class="num">Курс монеты</th><th class="num">Доход, ₽/сутки</th><th class="num">Карт у вас</th></tr></thead>';
+    var head = '<thead><tr><th>Модель</th><th class="num">Хешрейт</th><th class="num">Потребление</th><th class="num">Эффективность</th><th class="num">Курс монеты</th><th class="num">Доход, за сутки</th><th class="num">Карт у вас</th></tr></thead>';
     $("list").innerHTML = '<div class="tw"><table class="tbl">' + head + '<tbody>' + rows.map(tr).join("") + '</tbody></table></div>';
 
     $("totals").hidden = tCards === 0;
     $("t-cards").textContent = tCards;
     $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
     $("t-pow").textContent = tCards ? num(tPow, 0) + " Вт" : "—";
-    $("t-el").textContent = tCards && kwh ? num(tPow * 24 / 1000 * kwh, 1) : "—";
-    $("t-rev").textContent = anyRev ? num(tRev, 2) + " ₽" : "—";
-    $("t-profit").textContent = anyRev ? num(tProfit, 2) + " ₽" : "—";
+    $("t-el").textContent = tCards && kwh ? fmtCur(tPow * 24 / 1000 * kwh, 2) : "—";
+    $("t-rev").textContent = anyRev ? fmtCur(tRev, 2) : "—";
+    $("t-profit").textContent = anyRev ? fmtCur(tProfit, 2) : "—";
     $("source").innerHTML = "<b>Общий каталог</b><br>моделей: " + Object.keys(byModel).length;
   }
 
@@ -258,8 +274,19 @@
     var b = ev.target.closest("button[data-mode]"); if (!b) return;
     state.mode = b.getAttribute("data-mode"); render();
   });
-  try { var sk = localStorage.getItem("ocbot-kwh"); if (sk) $("kwh").value = sk; } catch (e) {}
-  $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh", this.value); } catch (e) {} render(); });
+  function syncCurUI() {
+    $("cur").value = state.cur;
+    $("kwh").placeholder = "Цена кВт·ч, " + CUR_SYM[state.cur];
+    try { $("kwh").value = localStorage.getItem(kwhKey()) || ""; } catch (e) { $("kwh").value = ""; }
+  }
+  $("kwh").addEventListener("input", function () { try { localStorage.setItem(kwhKey(), this.value); } catch (e) {} render(); });
+  $("cur").addEventListener("change", function () {
+    state.cur = this.value;
+    try { localStorage.setItem("ocbot-cur", state.cur); } catch (e) {}
+    syncCurUI();
+    render();
+  });
+  syncCurUI();
 
   render();
   loadAll();
