@@ -111,11 +111,11 @@
     .tbl thead { display: none; }
     .tbl { background: transparent; border: 0; border-radius: 0; }
     .tbl tr { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
-              display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; }
-    .tbl td { border: 0; padding: 4px 0; }
+              display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .tbl td { border: 0; padding: 0; }
     .tbl td.mdl { grid-column: 1 / -1; }
     .tbl td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-    .tbl .num { text-align: left; }
+    .tbl .num { text-align: left; white-space: normal; }
     .tbl tbody tr:hover td { background: transparent; }
   }
 

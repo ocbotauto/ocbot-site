@@ -219,7 +219,14 @@
       '<div role="listitem"><b>' + (best ? num(best.efficiency, 3) : "—") + '</b><span>лучшая эффективность, TH/Вт</span></div>';
     var topL = d.entries.slice().sort(function (a, b) { return (b.efficiency || 0) - (a.efficiency || 0); }).slice(0, 3);
     $("top").innerHTML = topL.map(function (e, i) {
+      var coin = state.coinmap[e.algo] || null;
+      var price = coin ? state.prices[coin] : undefined;
+      var cpd = coinsPerDay(e);
+      var revLine = !coin || cpd == null ? '<div class="p">нет сетевых данных</div>'
+        : price == null ? '<div class="p">курс загружается…</div>'
+        : '<div class="p">доход ≈ <b>' + num(cpd * price, 2) + ' ₽</b>/сутки</div>';
       return '<div><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/Вт</span>' +
+        revLine +
         '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' Вт</div></div>';
     }).join("");
     $("source").innerHTML = (state.isSample ? "<b>Пример</b>" : state.remote ? "<b>Данные сайта</b>" : "<b>Ваш файл</b>") + (d.label ? " · " + esc(d.label) : "") +
