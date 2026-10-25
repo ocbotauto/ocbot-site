@@ -425,12 +425,16 @@
     urls.forEach(function (u) { chain = chain.catch(function () { return grab(u); }); });
     chain.then(function (d) {
         state.data = d; state.isSample = false; state.remote = true;
+        // Самый первый render() прошёл по SAMPLE (4 записи, все без objective → "Компромисс"), и state.mode
+        // уже выставился под неё. Реальные данные почти всегда другие по составу режимов — пересчитываем
+        // режим по умолчанию заново, если пользователь ещё не выбрал его сам явным кликом по вкладке.
+        if (state.modeAuto !== false) state.mode = null;
         if (announce) say("Показаны данные сайта.");
         render();
         refreshPrices();
       })
       .catch(function () {
-        state = { data: SAMPLE, isSample: true };
+        state.data = SAMPLE; state.isSample = true; state.remote = false;
         say("Общий каталог пока пуст: запись появляется, когда пресеты для модели прислали минимум 3 разных рига. Пока показан пример.");
         render();
       });

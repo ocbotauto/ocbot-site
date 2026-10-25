@@ -425,12 +425,16 @@
     urls.forEach(function (u) { chain = chain.catch(function () { return grab(u); }); });
     chain.then(function (d) {
         state.data = d; state.isSample = false; state.remote = true;
+        // The very first render() ran against SAMPLE (4 entries, all with no objective → "Compromise"), and
+        // state.mode got set from that. Real data almost always has a different mode mix — recompute the
+        // default mode once real data arrives, unless the person already picked one by clicking a tab.
+        if (state.modeAuto !== false) state.mode = null;
         if (announce) say("Showing site data.");
         render();
         refreshPrices();
       })
       .catch(function () {
-        state = { data: SAMPLE, isSample: true };
+        state.data = SAMPLE; state.isSample = true; state.remote = false;
         say("The shared catalog is still empty: an entry appears once at least 3 different rigs submit presets for a model. Showing an example for now.");
         render();
       });
