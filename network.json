@@ -1,0 +1,22 @@
+{
+ "format": "ocbot-network",
+ "version": 1,
+ "coins": {
+  "pearl": {
+   "coin": "PRL",
+   "hashrate_to_hs": 1000000000000.0,
+   "nethash_hs": 7.920523456266482e+19,
+   "block_time_s": 164.0,
+   "block_reward": 2223.434740008684,
+   "source": "whattomine.com"
+  },
+  "pearlhash": {
+   "coin": "PRL",
+   "hashrate_to_hs": 1000000000000.0,
+   "nethash_hs": 7.920523456266482e+19,
+   "block_time_s": 164.0,
+   "block_reward": 2223.434740008684,
+   "source": "whattomine.com"
+  }
+ }
+}
