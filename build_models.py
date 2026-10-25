@@ -256,7 +256,8 @@ def main():
     a = ap.parse_args()
     base = a.base if a.base.endswith("/") else a.base + "/"
     if a.url:
-        with urllib.request.urlopen(a.url, timeout=30) as r:
+        req = urllib.request.Request(a.url, headers={"User-Agent": "ocbot-site-build/1.0 (+https://ocbot.org)"})
+        with urllib.request.urlopen(req, timeout=30) as r:
             data = json.load(r)
     else:
         with open(a.file, encoding="utf-8") as f:
