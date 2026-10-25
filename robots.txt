@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://makar2186.github.io/ocbot-site/sitemap.xml
+Disallow: /calculator.html
+Disallow: /calculator.ru.html
+Sitemap: https://ocbot.org/sitemap.xml

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://ocbot.org/calculator.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/calculator.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/calculator.ru.html">
+<meta name="robots" content="noindex, nofollow">
+<title>Калькулятор доходности майнинга</title>
+<link rel="stylesheet" href="assets/catalog.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<meta name="description" content="Посчитайте доходность майнинга по реальным проверенным данным каталога OCBot: хешрейт, потребление и текущий курс монеты для любой видеокарты.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Калькулятор доходности майнинга">
+<meta property="og:description" content="Посчитайте доходность майнинга по реальным проверенным данным каталога OCBot: хешрейт, потребление и текущий курс монеты для любой видеокарты.">
+<meta property="og:locale" content="ru_RU">
+<style>
+  .qty { width: 60px; font: inherit; font-family: var(--font-num); text-align: center; color: var(--ink); background: var(--surface);
+         border: 1px solid var(--line); border-radius: 7px; padding: 5px 4px; }
+  .qty:focus-visible { border-color: var(--accent); }
+  .tbl .sel { background: color-mix(in srgb, var(--accent-soft) 40%, var(--surface)); }
+  .price-na { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="navtop" aria-label="Разделы сайта"><a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a><a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html" aria-current="page">Калькулятор</a><a href="guide.ru.html">Инструкция</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='calculator.html';}catch(e){}return false;">EN</a></nav>
+  <header class="hero">
+    <div>
+      <h1>Калькулятор доходности</h1>
+      <p class="lede">Хешрейт и потребление — из проверенного общего каталога (не теория, а реальные пресеты с ригов). Выберите карты и их количество — ниже сложится итог.</p>
+      <p class="lede" style="margin-top:4px"><b>Курс монеты — ориентировочный:</b> берётся с биржи раз в несколько минут и может на эту же пару минут отставать от реального. Не используйте цифры этой страницы как единственное основание для финансовых решений.</p>
+    </div>
+    <div class="source" id="source"></div>
+  </header>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Режим подбора"></div>
+  <p class="modenote" id="modenote"></p>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Модель, например 3070" aria-label="Поиск по модели" autocomplete="off">
+    <input type="text" id="kwh" inputmode="decimal" placeholder="Цена кВт·ч, ₽" aria-label="Цена электричества за кВт·ч" autocomplete="off">
+    <span class="spacer"></span>
+    <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);"><input type="checkbox" id="onlysel"> только выбранные</label>
+  </div>
+  <p id="msg" role="status"></p>
+
+  <div id="list"></div>
+
+  <div class="kpi" id="totals" hidden role="list">
+    <div role="listitem"><b id="t-cards">0</b><span>карт выбрано</span></div>
+    <div role="listitem"><b id="t-hash">—</b><span>хешрейт итого</span></div>
+    <div role="listitem"><b id="t-pow">—</b><span>потребление итого</span></div>
+    <div role="listitem"><b id="t-el">—</b><span>электричество, ₽/сутки</span></div>
+  </div>
+
+  <p class="modenote">Доход в деньгах пока не считается: кроме курса монеты, для этого нужны ещё сетевые данные (сложность сети, награда за блок), а они не для всех алгоритмов есть в открытом виде. Хешрейт, потребление и курс монеты — уже настоящие и живые; доход появится здесь же, когда определимся с методикой.</p>
+
+  <footer>Хешрейт и потребление — лучшие проверенные пресеты из <a href="catalog.ru.html">общего каталога</a> (минимум подтверждения — 1 риг). Курс монет может на минуту-две отставать от биржи. Цифры ориентировочные, использование — на ваш риск.<br>Powered by CoinGecko.</footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
+  var GECKO = "https://api.coingecko.com/api/v3";
+  var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // тикеры, где символ в CoinGecko не совпадает с ожидаемым id
+
+  var state = { entries: [], coinmap: {}, prices: {}, mode: null, qty: {}, loaded: false };
+
+  function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function num(n, d) { return n == null || !isFinite(n) ? "—" : Number(n).toFixed(d); }
+  function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
+  function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
+
+  var MODES = [
+    { id: "efficiency", name: "Эффективность", note: "максимум хешрейта на ватт." },
+    { id: "compromise", name: "Компромисс", note: "золотая середина (по умолчанию на ригах)." },
+    { id: "hashrate", name: "Хешрейт", note: "максимум хешрейта, выше потребление." }
+  ];
+  function obj(e) { return e.objective || "compromise"; }
+
+  function grab(url) {
+    return fetch(url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+
+  // Список всех монет CoinGecko (id/symbol) — кэшируется в localStorage на сутки, чтобы не тянуть заново на каждом визите.
+  function geckoList() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
+    } catch (e) {}
+    return grab(GECKO + "/coins/list").then(function (list) {
+      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
+      return list;
+    });
+  }
+
+  function resolveCoinIds(tickers, list) {
+    var bySymbol = {};
+    list.forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
+    var out = {};
+    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
+    return out;
+  }
+
+  function loadPrices(coins) {
+    var tickers = Array.from(new Set(coins.filter(Boolean)));
+    if (!tickers.length) return Promise.resolve({});
+    return geckoList().then(function (list) {
+      var ids = resolveCoinIds(tickers, list);
+      var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
+      if (!idList.length) return {};
+      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+        var out = {};
+        tickers.forEach(function (t) {
+          var id = ids[t];
+          out[t] = id && prices[id] ? prices[id].usd : null;
+        });
+        return out;
+      }).catch(function () { return {}; });
+    }).catch(function () { return {}; });
+  }
+
+  function render() {
+    var byMode = {}; state.entries.forEach(function (e) { byMode[obj(e)] = (byMode[obj(e)] || 0) + 1; });
+    if (!state.mode || !byMode[state.mode]) {
+      state.mode = byMode.compromise ? "compromise" : (byMode.hashrate ? "hashrate" : "efficiency");
+    }
+    var curMode = MODES.filter(function (m) { return m.id === state.mode; })[0];
+    $("tabs").innerHTML = MODES.map(function (m) {
+      return '<button type="button" data-mode="' + m.id + '" aria-pressed="' + (m.id === state.mode) + '"><small>' + (byMode[m.id] || 0) + '</small><b>' + m.name + '</b><span>' + esc(m.note) + '</span></button>';
+    }).join("");
+    $("modenote").textContent = curMode ? "Режим «" + curMode.name + "»: " + curMode.note : "";
+
+    var q = $("q").value.trim().toLowerCase().replace(/\s+/g, "");
+    var onlySel = $("onlysel").checked;
+    var kwh = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
+
+    // по одной лучшей записи на модель в текущем режиме (если для модели их несколько — берём с большим числом подтвердивших ригов)
+    var byModel = {};
+    state.entries.filter(function (e) { return obj(e) === state.mode; }).forEach(function (e) {
+      var m = clean(e.model);
+      if (!byModel[m] || (e.rigs || 0) > (byModel[m].rigs || 0)) byModel[m] = e;
+    });
+    var rows = Object.keys(byModel).map(function (m) { return byModel[m]; }).filter(function (e) {
+      var m = clean(e.model).toLowerCase().replace(/\s+/g, "");
+      var qty = state.qty[keyOf(e)] || 0;
+      if (q && m.indexOf(q) < 0) return false;
+      if (onlySel && !qty) return false;
+      return true;
+    });
+    rows.sort(function (a, b) { return (b.hashrate || 0) - (a.hashrate || 0); });
+
+    if (!rows.length) {
+      $("list").innerHTML = '<div class="empty">' + (state.loaded ? 'Ничего не найдено — измените запрос или снимите «только выбранные».' : 'Загрузка каталога…') + '</div>';
+      $("totals").hidden = true;
+      return;
+    }
+
+    var tCards = 0, tHash = 0, tPow = 0;
+    function tr(e) {
+      var k = keyOf(e), qty = state.qty[k] || 0;
+      var coin = state.coinmap[e.algo] || null;
+      var price = coin ? state.prices[coin] : undefined;
+      var elDay = kwh && e.power_w ? e.power_w * 24 / 1000 * kwh : null;
+      if (qty > 0) { tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty; }
+      var priceCell = !coin ? '<span class="price-na">монета неизв.</span>'
+        : price == null ? '<span class="price-na">' + esc(coin) + ', курс грузится</span>'
+        : esc(coin) + ' <b>$' + num(price, price < 1 ? 4 : 2) + '</b>';
+      return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
+        '<td class="num" data-l="Хешрейт, за карту">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
+        '<td class="num" data-l="Потребление, за карту">' + num(e.power_w, 0) + ' <small>Вт</small>' +
+        (elDay != null ? '<span class="cost">≈ ' + num(elDay, 1) + ' ₽/сутки за карту</span>' : '') + '</td>' +
+        '<td class="num effcell" data-l="Эффективность"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/Вт</small></td>' +
+        '<td class="num" data-l="Курс монеты">' + priceCell + '</td>' +
+        '<td class="num" data-l="Карт у вас"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Количество карт ' + esc(clean(e.model)) + '"></td>' +
+        '</tr>';
+    }
+    var head = '<thead><tr><th>Модель</th><th class="num">Хешрейт</th><th class="num">Потребление</th><th class="num">Эффективность</th><th class="num">Курс монеты</th><th class="num">Карт у вас</th></tr></thead>';
+    $("list").innerHTML = '<div class="tw"><table class="tbl">' + head + '<tbody>' + rows.map(tr).join("") + '</tbody></table></div>';
+
+    $("totals").hidden = tCards === 0;
+    $("t-cards").textContent = tCards;
+    $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
+    $("t-pow").textContent = tCards ? num(tPow, 0) + " Вт" : "—";
+    $("t-el").textContent = tCards && kwh ? num(tPow * 24 / 1000 * kwh, 1) : "—";
+    $("source").innerHTML = "<b>Общий каталог</b><br>моделей: " + Object.keys(byModel).length;
+  }
+
+  function refreshPrices() {
+    var algos = Array.from(new Set(state.entries.map(function (e) { return e.algo; })));
+    var coins = algos.map(function (a) { return state.coinmap[a]; }).filter(Boolean);
+    loadPrices(coins).then(function (prices) { state.prices = prices; render(); });
+  }
+
+  function loadAll() {
+    Promise.all([grab(COMMUNITY_URL + "/catalog.json"), grab(COMMUNITY_URL + "/coinmap.json")])
+      .then(function (r) {
+        var cat = r[0], map = r[1];
+        if (cat.format !== "ocbot-catalog" || !Array.isArray(cat.entries)) throw new Error("плохой формат catalog.json");
+        state.entries = cat.entries;
+        state.coinmap = (map && map.map) || {};
+        state.loaded = true;
+        say("Загружено моделей: " + new Set(cat.entries.map(function (e) { return clean(e.model); })).size + ".");
+        render();
+        refreshPrices();
+      })
+      .catch(function (e) {
+        say("Не удалось загрузить общий каталог: " + e.message + ". Попробуйте обновить страницу позже.", true);
+        state.loaded = true;
+        render();
+      });
+  }
+
+  document.addEventListener("input", function (ev) {
+    var t = ev.target;
+    if (t.classList && t.classList.contains("qty")) {
+      var k = t.getAttribute("data-key"), v = Math.max(0, parseInt(t.value, 10) || 0);
+      state.qty[k] = v;
+      render();
+      // фокус/значение количества вводятся часто — не даём перерисовке сбрасывать фокус поля
+      var again = document.querySelector('.qty[data-key="' + CSS.escape(k) + '"]');
+      if (again) { again.focus(); again.value = v; }
+    }
+  });
+  $("q").addEventListener("input", render);
+  $("onlysel").addEventListener("change", render);
+  $("tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-mode]"); if (!b) return;
+    state.mode = b.getAttribute("data-mode"); render();
+  });
+  try { var sk = localStorage.getItem("ocbot-kwh"); if (sk) $("kwh").value = sk; } catch (e) {}
+  $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh", this.value); } catch (e) {} render(); });
+
+  render();
+  loadAll();
+})();
+</script>
+
+<script src="chat.js" defer></script>
+</html>
