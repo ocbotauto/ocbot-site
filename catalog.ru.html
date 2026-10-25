@@ -165,9 +165,14 @@
     var algos = {};
     d.entries.forEach(function (e) { algos[e.algo + " / " + mname(e.miner) + " " + (e.miner_version || "")] = 1; });
     var keys = Object.keys(algos), sel = $("algo"), cur = sel.value;
-    sel.innerHTML = keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + '</option>'; }).join("");
+    // Пока фильтр был скрыт (<2 вариантов), его значение — не осознанный выбор пользователя, а техническое
+    // значение единственного пункта. Если не сбросить его при появлении новых вариантов (смена режима),
+    // он молча отфильтрует таблицу по старому значению и скроет почти все карточки.
+    var wasHidden = state.algoHidden !== false;
+    sel.innerHTML = '<option value="">Все</option>' + keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + '</option>'; }).join("");
     sel.hidden = keys.length < 2;
-    sel.value = keys.indexOf(cur) >= 0 ? cur : (keys[0] || "");
+    sel.value = (!wasHidden && keys.indexOf(cur) >= 0) ? cur : "";
+    state.algoHidden = sel.hidden;
     algo = sel.hidden ? "" : sel.value;
 
     var rows = d.entries.filter(function (e) {

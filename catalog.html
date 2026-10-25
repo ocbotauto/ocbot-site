@@ -165,9 +165,14 @@
     var algos = {};
     d.entries.forEach(function (e) { algos[e.algo + " / " + mname(e.miner) + " " + (e.miner_version || "")] = 1; });
     var keys = Object.keys(algos), sel = $("algo"), cur = sel.value;
-    sel.innerHTML = keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + '</option>'; }).join("");
+    // While the filter was hidden (<2 options), its value wasn't a deliberate user choice — just the
+    // technical value of the single option. If we don't reset it when new options appear (mode switch),
+    // it silently filters the table by the old value and hides almost every card.
+    var wasHidden = state.algoHidden !== false;
+    sel.innerHTML = '<option value="">All</option>' + keys.map(function (k) { return '<option value="' + esc(k) + '">' + esc(k) + '</option>'; }).join("");
     sel.hidden = keys.length < 2;
-    sel.value = keys.indexOf(cur) >= 0 ? cur : (keys[0] || "");
+    sel.value = (!wasHidden && keys.indexOf(cur) >= 0) ? cur : "";
+    state.algoHidden = sel.hidden;
     algo = sel.hidden ? "" : sel.value;
 
     var rows = d.entries.filter(function (e) {
