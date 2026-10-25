@@ -23,12 +23,12 @@
   <header class="hero"><div><h1>RTX 3090 Ti (Micron)</h1>
   <a class="guidelink" href="https://ocbot.org/catalog.ru.html">&larr; весь каталог</a>
   <p class="lede">Проверенные пресеты: каждый прошёл двухчасовую проверку на риге. Эффективность, компромисс и хешрейт показаны рядом.</p></div></header>
-  <div class="tw"><table class="tbl"><thead><tr><th>Режим</th><th>Пресет</th><th class="num">Хешрейт</th><th class="num">Потребл.</th><th class="num">Эффективность</th></tr></thead>
+  <div class="tw"><table class="tbl"><thead><tr><th>Режим</th><th>Пресет</th><th class="num">Хешрейт</th><th class="num">Потребл.</th><th class="num">Эффективность</th><th class="num">Доход</th></tr></thead>
   <tbody><tr><td><b>Хешрейт</b><small>pearl / rgminer 1.1.3b</small><small>✓ сработало на 1 рига(х)</small></td><td><div class="pre"><i>core</i> +125 &nbsp;<i>mem</i> −400<br><i>PL</i> 234 Вт</div><span class="cps"><button type="button" class="cp" data-copy="Core clock: 125
 Memory clock: -400
 Power limit: 234 W">Hive</button><button type="button" class="cp" data-copy="GPU=0   # номер карты
 nvidia-smi -i $GPU -pl 234
-DISPLAY=:0 nvidia-settings -a &quot;[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=125&quot; -a &quot;[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=-400&quot;">Консоль</button></span></td><td class="num">132.6 <small>TH/s</small></td><td class="num">193 <small>Вт</small></td><td class="num"><span class="good">0.707</span> <small>TH/Вт</small></td></tr></tbody></table></div>
+DISPLAY=:0 nvidia-settings -a &quot;[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=125&quot; -a &quot;[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=-400&quot;">Консоль</button></span></td><td class="num">132.6 <small>TH/s</small></td><td class="num">193 <small>Вт</small></td><td class="num"><span class="good">0.707</span> <small>TH/Вт</small></td><td class="num rev-cell" data-cpd="1.9661118487584144" data-coin="PRL">&mdash;</td></tr></tbody></table></div>
   <p class="others"><b>Другие модели:</b> <a class="mlink" href="rtx-3060.ru.html">RTX 3060</a> <a class="mlink" href="rtx-3060-ti.ru.html">RTX 3060 Ti</a> <a class="mlink" href="rtx-3070-samsung.ru.html">RTX 3070 (Samsung)</a> <a class="mlink" href="rtx-3070-ti.ru.html">RTX 3070 Ti</a> <a class="mlink" href="rtx-3080.ru.html">RTX 3080</a> <a class="mlink" href="rtx-3080-ti-micron.ru.html">RTX 3080 Ti (Micron)</a> <a class="mlink" href="rtx-3090.ru.html">RTX 3090</a> <a class="mlink" href="rtx-3090-micron.ru.html">RTX 3090 (Micron)</a> <a class="mlink" href="rtx-4060.ru.html">RTX 4060</a> <a class="mlink" href="rtx-4070-micron.ru.html">RTX 4070 (Micron)</a> <a class="mlink" href="rtx-4070-ti.ru.html">RTX 4070 Ti</a> <a class="mlink" href="rtx-4080.ru.html">RTX 4080</a> </p>
   <footer>Пресет подходит одной модели с той же памятью, майнером и версией. Перед использованием проверьте охлаждение, райзеры и питание. Данные предоставляются «как есть», использование на ваш риск: <a href="https://ocbot.org/guide.ru.html#terms">отказ от ответственности</a>.</footer>
 </div>
@@ -39,6 +39,21 @@ document.addEventListener("click", function (ev) {
   function ok() { b.textContent = "Скопировано"; setTimeout(function () { b.textContent = old; }, 1400); }
   if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () {}); else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); ok(); } catch (x) {} a.remove(); }
 });
+</script>
+<script src="assets/revenue.js"></script>
+<script>
+(function () {
+  var cells = Array.prototype.slice.call(document.querySelectorAll(".rev-cell"));
+  var tickers = Array.from(new Set(cells.map(function (c) { return c.getAttribute("data-coin"); }).filter(Boolean)));
+  if (!tickers.length || typeof OCBotRevenue === "undefined") return;
+  OCBotRevenue.resolvePrices(tickers, "rub").then(function (priceByCoin) {
+    cells.forEach(function (c) {
+      var coin = c.getAttribute("data-coin"), cpdRaw = c.getAttribute("data-cpd"), cpd = cpdRaw ? parseFloat(cpdRaw) : null;
+      var price = coin ? priceByCoin[coin] : null;
+      c.textContent = (cpd && price) ? "" + (cpd * price).toFixed(2) + " ₽/сутки" : "—";
+    });
+  });
+})();
 </script>
 <script src="chat.js" defer></script>
 </body>

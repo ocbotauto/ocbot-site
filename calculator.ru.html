@@ -72,15 +72,11 @@
   <footer>Хешрейт и потребление — лучшие проверенные пресеты из <a href="catalog.ru.html">общего каталога</a> (минимум подтверждения — 1 риг). Курс монет может на минуту-две отставать от биржи. Цифры ориентировочные, использование — на ваш риск.<br>Powered by CoinGecko.</footer>
 </div>
 
+<script src="assets/revenue.js"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
-  var GECKO = "https://api.coingecko.com/api/v3";
-  var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // тикеры, где символ в CoinGecko не совпадает с ожидаемым id
-  // Пары Gate.io проверены вручную: символ на бирже не всегда совпадает с нужной монетой
-  // (например, PRL_USDT на Gate — это другой, не связанный токен; нужная монета Pearl лежит в PEARL_USDT).
-  var GATE_PAIR = { PRL: "PEARL_USDT" };
 
   var CUR_SYM = { usd: "$", eur: "€", rub: "₽" };
   function curOf() { try { return localStorage.getItem("ocbot-cur") || "usd"; } catch (e) { return "usd"; } }
@@ -110,103 +106,20 @@
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
   }
 
-  // Список всех монет CoinGecko (id/symbol) — кэшируется в localStorage на сутки, чтобы не тянуть заново на каждом визите.
-  function geckoList() {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
-      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
-    } catch (e) {}
-    return grab(GECKO + "/coins/list").then(function (list) {
-      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
-      return list;
-    });
-  }
-
-  function resolveCoinIds(tickers, list) {
-    var bySymbol = {};
-    list.forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
-    var out = {};
-    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
-    return out;
-  }
-
-  // Если CoinGecko недоступен (сбой сети, лимит запросов) — пробуем Gate.io напрямую (курс там только
-  // к USDT, остальные валюты считаем по курсу с открытого API), а если и это не вышло — берём последнюю
-  // удачную цену из кэша (на тикер), лишь бы не оставлять калькулятор без цен.
-  function readPriceCache(ticker) {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-multi") || "null");
-      var p = c && c[ticker];
-      if (p && Date.now() - p.t < 7 * 24 * 3600 * 1000) return p.v;
-    } catch (e) {}
-    return null;
-  }
-  function writePriceCache(ticker, v) {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-multi") || "null") || {};
-      c[ticker] = { v: v, t: Date.now() };
-      localStorage.setItem("ocbot-price-cache-multi", JSON.stringify(c));
-    } catch (e) {}
-  }
-  function gatePriceUsd(ticker) {
-    var pair = GATE_PAIR[ticker];
-    if (!pair) return Promise.resolve(null);
-    return grab("https://api.gateio.ws/api/v4/spot/tickers?currency_pair=" + pair).then(function (arr) {
-      var p = arr && arr[0] && parseFloat(arr[0].last);
-      return (p > 0) ? p : null;
-    }).catch(function () { return null; });
-  }
-  // Курсы доллара к евро/рублю — для конвертации цены с Gate.io (там только пары к USDT). Кэш на сутки.
-  function usdFx() {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-fx-usd") || "null");
-      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.rates);
-    } catch (e) {}
-    return grab("https://open.er-api.com/v6/latest/USD").then(function (d) {
-      var rates = d && d.rates;
-      if (rates) { try { localStorage.setItem("ocbot-fx-usd", JSON.stringify({ t: Date.now(), rates: rates })); } catch (e) {} }
-      return rates || null;
-    }).catch(function () { return null; });
-  }
-
+  // Цена монеты по всем трём валютам сразу — общий модуль assets/revenue.js (воркер → CoinGecko →
+  // Gate.io → кэш на тикер, см. его комментарий); здесь только сводим usd/eur/rub в одну запись на тикер.
   function loadPrices(coins) {
     var tickers = Array.from(new Set(coins.filter(Boolean)));
     if (!tickers.length) return Promise.resolve({});
-    // 1) CoinGecko (основной источник) → 2) Gate.io напрямую → 3) последняя известная цена из кэша.
-    return geckoList().then(function (list) {
-      var ids = resolveCoinIds(tickers, list);
-      var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
-      if (!idList.length) return {};
-      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd,eur,rub").then(function (prices) {
+    return Promise.all(["usd", "eur", "rub"].map(function (cur) { return OCBotRevenue.resolvePrices(tickers, cur); }))
+      .then(function (res) {
         var out = {};
         tickers.forEach(function (t) {
-          var id = ids[t];
-          out[t] = id && prices[id] ? { usd: prices[id].usd, eur: prices[id].eur, rub: prices[id].rub } : null;
+          var usd = res[0][t], eur = res[1][t], rub = res[2][t];
+          out[t] = (usd != null || eur != null || rub != null) ? { usd: usd, eur: eur, rub: rub } : null;
         });
         return out;
-      }).catch(function () { return {}; });
-    }).catch(function () { return {}; }).then(function (primary) {
-      var missing = tickers.filter(function (t) { return !primary[t]; });
-      if (!missing.length) return primary;
-      return usdFx().then(function (rates) {
-        return Promise.all(missing.map(function (t) {
-          return gatePriceUsd(t).then(function (usd) {
-            if (usd == null) return null;
-            return { usd: usd, eur: rates ? usd * rates.EUR : null, rub: rates ? usd * rates.RUB : null };
-          });
-        })).then(function (fromGate) {
-          var merged = Object.assign({}, primary);
-          missing.forEach(function (t, i) { if (fromGate[i] != null) merged[t] = fromGate[i]; });
-          return merged;
-        });
       });
-    }).then(function (priceByCoin) {
-      tickers.forEach(function (t) {
-        if (priceByCoin[t] != null) writePriceCache(t, priceByCoin[t]);
-        else priceByCoin[t] = readPriceCache(t);
-      });
-      return priceByCoin;
-    });
   }
 
   function render() {

@@ -64,9 +64,19 @@ def num(v, d):
     return "—" if v is None else f"{float(v):.{d}f}"
 
 
-def row(en, lang):
+def coins_per_day(en, network):
+    n = network.get(en.get("algo"))
+    if not n or not en.get("hashrate"):
+        return None, None
+    cpd = (en["hashrate"] * n["hashrate_to_hs"] / n["nethash_hs"]) * (86400 / n["block_time_s"]) * n["block_reward"]
+    return cpd, n.get("coin")
+
+
+def row(en, lang, network):
     mode = MODES.get(en.get("objective") or "compromise", MODES["compromise"])[0 if lang == "ru" else 1]
     b = en["best"]
+    cpd, coin = coins_per_day(en, network)
+    rev_cell = f'<td class="num rev-cell" data-cpd="{cpd if cpd is not None else ""}" data-coin="{e(coin or "")}">&mdash;</td>'
     if b.get("core_lock") or b.get("mem_lock"):
         word = "фикс." if lang == "ru" else "lock"
         unit_mhz = "МГц" if lang == "ru" else "MHz"
@@ -94,7 +104,8 @@ def row(en, lang):
             f'<button type="button" class="cp" data-copy="{e(console_text(b, lang))}">{console_btn}</button></span></td>'
             f'<td class="num">{num(en.get("hashrate"), 1)} <small>{unit_h}</small>{was.split("</span>")[0] + "</span>" if en.get("stock_hashrate") else ""}</td>'
             f'<td class="num">{num(en.get("power_w"), 0)} <small>{unit_w}</small></td>'
-            f'<td class="num"><span class="good">{num(en.get("efficiency"), 3)}</span> <small>{unit_h.split("/")[0]}/{unit_w}</small></td></tr>'), copied, power_label
+            f'<td class="num"><span class="good">{num(en.get("efficiency"), 3)}</span> <small>{unit_h.split("/")[0]}/{unit_w}</small></td>'
+            f'{rev_cell}</tr>'), copied, power_label
 
 
 NAV = {
@@ -128,7 +139,7 @@ def others_links(model, mem, all_models, lang):
     return " ".join(out)
 
 
-def page(model, mem, entries, all_models, base, lang):
+def page(model, mem, entries, all_models, base, lang, network):
     rows_out = sorted(entries, key=lambda x: (x["algo"], mname(x["miner"]), MODES.get(x.get("objective") or "compromise", MODES["compromise"])[2]))
     name = clean(model) + (f" ({mem})" if mem else "")
     slg = slug(model, mem)
@@ -146,8 +157,9 @@ def page(model, mem, entries, all_models, base, lang):
         footer = ('Пресет подходит одной модели с той же памятью, майнером и версией. Перед использованием проверьте '
                    'охлаждение, райзеры и питание. Данные предоставляются «как есть», использование на ваш риск: '
                    f'<a href="{base}guide.ru.html#terms">отказ от ответственности</a>.')
-        head_cols = "<th>Режим</th><th>Пресет</th><th class=\"num\">Хешрейт</th><th class=\"num\">Потребл.</th><th class=\"num\">Эффективность</th>"
+        head_cols = "<th>Режим</th><th>Пресет</th><th class=\"num\">Хешрейт</th><th class=\"num\">Потребл.</th><th class=\"num\">Эффективность</th><th class=\"num\">Доход</th>"
         script_src, og_locale = "chat.js", "ru_RU"
+        rev_cur, rev_prefix, rev_suffix = "rub", "", " ₽/сутки"
     else:
         title = f"{name}: mining overclock presets"
         desc = (f"Verified overclock presets for {name}: core, mem, power limit, hashrate and power draw across three "
@@ -158,13 +170,14 @@ def page(model, mem, entries, all_models, base, lang):
         footer = ('A preset fits one model with the same memory, miner and version. Before using it, check cooling, '
                    'risers and power delivery. Data is provided “as is”, use at your own risk: '
                    f'<a href="{base}guide.html#terms">disclaimer</a>.')
-        head_cols = "<th>Mode</th><th>Preset</th><th class=\"num\">Hashrate</th><th class=\"num\">Power</th><th class=\"num\">Efficiency</th>"
+        head_cols = "<th>Mode</th><th>Preset</th><th class=\"num\">Hashrate</th><th class=\"num\">Power</th><th class=\"num\">Efficiency</th><th class=\"num\">Revenue</th>"
         script_src, og_locale = "chat.en.js", "en_US"
+        rev_cur, rev_prefix, rev_suffix = "usd", "$", "/day"
 
     body_rows, copied, _ = "", "Copied", ""
     rows_html = []
     for x in rows_out:
-        r, copied, _pw = row(x, lang)
+        r, copied, _pw = row(x, lang, network)
         rows_html.append(r)
 
     redirect = ("if(L==='en')return;if(L==='ru'||(!L&&/^ru\\b/i.test(navigator.language||''))){"
@@ -214,6 +227,21 @@ document.addEventListener("click", function (ev) {{
   if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () {{}}); else {{ var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try {{ document.execCommand("copy"); ok(); }} catch (x) {{}} a.remove(); }}
 }});
 </script>
+<script src="assets/revenue.js"></script>
+<script>
+(function () {{
+  var cells = Array.prototype.slice.call(document.querySelectorAll(".rev-cell"));
+  var tickers = Array.from(new Set(cells.map(function (c) {{ return c.getAttribute("data-coin"); }}).filter(Boolean)));
+  if (!tickers.length || typeof OCBotRevenue === "undefined") return;
+  OCBotRevenue.resolvePrices(tickers, "{rev_cur}").then(function (priceByCoin) {{
+    cells.forEach(function (c) {{
+      var coin = c.getAttribute("data-coin"), cpdRaw = c.getAttribute("data-cpd"), cpd = cpdRaw ? parseFloat(cpdRaw) : null;
+      var price = coin ? priceByCoin[coin] : null;
+      c.textContent = (cpd && price) ? "{rev_prefix}" + (cpd * price).toFixed(2) + "{rev_suffix}" : "—";
+    }});
+  }});
+}})();
+</script>
 <script src="{script_src}" defer></script>
 </body>
 </html>
@@ -261,6 +289,13 @@ def main():
         with open(a.file, encoding="utf-8") as f:
             data = json.load(f)
     entries = [x for x in data.get("entries", []) if x.get("best") and x.get("hashrate")]
+    # network.json (сетевые данные hashrate_to_hs/nethash/block_time/reward на алгоритм) живёт рядом с сайтом
+    # и обновляется отдельно скриптом build_network.py; используем то, что уже лежит на диске, без похода в сеть.
+    try:
+        with open(os.path.join(a.site, "network.json"), encoding="utf-8") as f:
+            network = json.load(f).get("coins", {})
+    except (OSError, json.JSONDecodeError):
+        network = {}
     groups = {}
     for x in entries:
         groups.setdefault((clean(x["model"]), x.get("mem_vendor") or ""), []).append(x)
@@ -276,9 +311,9 @@ def main():
     for (model, mem), es in groups.items():
         slg = slug(model, mem)
         with open(os.path.join(a.site, slg + ".html"), "w", encoding="utf-8") as f:
-            f.write(page(model, mem, es, all_models, base, "en"))
+            f.write(page(model, mem, es, all_models, base, "en", network))
         with open(os.path.join(a.site, slg + ".ru.html"), "w", encoding="utf-8") as f:
-            f.write(page(model, mem, es, all_models, base, "ru"))
+            f.write(page(model, mem, es, all_models, base, "ru", network))
 
     update_sitemap(a.site, base, new_slugs)
     print(f"страниц моделей: {len(groups)} (x2 языка)")

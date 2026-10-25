@@ -126,61 +126,14 @@ python3 -m ocbot --config config.json --self-update</pre>
     <span>Independent project: not affiliated with, endorsed or sponsored by Hiveon or HiveOS. HiveOS, NVIDIA, Telegram and other names belong to their owners and are mentioned only to describe compatibility.</span>
   </footer>
 </main>
+<script src="assets/revenue.js"></script>
 <script>
 (function () {
   function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function sg(n) { n = Math.round(n); return n > 0 ? "+" + n : String(n); }
-  var GECKO = "https://api.coingecko.com/api/v3";
-  var COIN_ID_OVERRIDE = { PRL: "pearl-2" };
   var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
   function grabJson(url) {
     return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
-  }
-  // Full CoinGecko coin list (id/symbol) — cached in localStorage for a day (shared with the calculator and catalog pages).
-  function geckoList() {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
-      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
-    } catch (e) {}
-    return grabJson(GECKO + "/coins/list").then(function (list) {
-      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
-      return list;
-    }).catch(function () { return []; });
-  }
-  function resolveCoinIds(tickers, list) {
-    var bySymbol = {};
-    (list || []).forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
-    var out = {};
-    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
-    return out;
-  }
-  // If CoinGecko is unreachable (network hiccup, rate limit on mobile carriers) try Gate.io directly,
-  // and if that fails too, fall back to the last known-good price per ticker instead of hiding the revenue line.
-  function readPriceCache(cur, ticker) {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null");
-      var p = c && c[ticker];
-      if (p && Date.now() - p.t < 7 * 24 * 3600 * 1000) return p.v;
-    } catch (e) {}
-    return null;
-  }
-  function writePriceCache(cur, ticker, v) {
-    try {
-      var c = JSON.parse(localStorage.getItem("ocbot-price-cache-" + cur) || "null") || {};
-      c[ticker] = { v: v, t: Date.now() };
-      localStorage.setItem("ocbot-price-cache-" + cur, JSON.stringify(c));
-    } catch (e) {}
-  }
-  // Gate.io pairs are verified by hand: the exchange's own symbol doesn't always match the right coin
-  // (e.g. PRL_USDT on Gate is an unrelated token; the real Pearl coin is PEARL_USDT).
-  var GATE_PAIR = { PRL: "PEARL_USDT" };
-  function gatePriceUsd(ticker) {
-    var pair = GATE_PAIR[ticker];
-    if (!pair) return Promise.resolve(null);
-    return grabJson("https://api.gateio.ws/api/v4/spot/tickers?currency_pair=" + pair).then(function (arr) {
-      var p = arr && arr[0] && parseFloat(arr[0].last);
-      return (p > 0) ? p : null;
-    }).catch(function () { return null; });
   }
   Promise.all([
     grabJson(COMMUNITY_URL + "/catalog.json"),
@@ -202,31 +155,7 @@ python3 -m ocbot --config config.json --self-update</pre>
         return (x.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
       }
       var tickers = Array.from(new Set(top3.map(function (x) { return coinmap[x.algo]; }).filter(Boolean)));
-      // 1) CoinGecko (primary) → 2) Gate.io directly (backup if CoinGecko is rate-limited/down) → 3) last known-good price from cache.
-      (tickers.length ? geckoList().then(function (list) {
-        var ids = resolveCoinIds(tickers, list);
-        var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
-        if (!idList.length) return {};
-        return grabJson(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
-          var out = {};
-          tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].usd : null; });
-          return out;
-        }).catch(function () { return {}; });
-      }).catch(function () { return {}; }) : Promise.resolve({})).then(function (primary) {
-        var missing = tickers.filter(function (t) { return !primary[t]; });
-        if (!missing.length) return primary;
-        return Promise.all(missing.map(function (t) { return gatePriceUsd(t); })).then(function (fromGate) {
-          var merged = Object.assign({}, primary);
-          missing.forEach(function (t, i) { if (fromGate[i] != null) merged[t] = fromGate[i]; });
-          return merged;
-        });
-      }).then(function (priceByCoin) {
-        tickers.forEach(function (t) {
-          if (priceByCoin[t] != null) writePriceCache("usd", t, priceByCoin[t]);
-          else priceByCoin[t] = readPriceCache("usd", t);
-        });
-        return priceByCoin;
-      }).then(function (priceByCoin) {
+      OCBotRevenue.resolvePrices(tickers, "usd").then(function (priceByCoin) {
         document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
           var cpd = coinsPerDay(x);
           var coin = coinmap[x.algo];
