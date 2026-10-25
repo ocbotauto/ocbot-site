@@ -130,9 +130,36 @@ python3 -m ocbot --config config.json --self-update</pre>
 (function () {
   function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function sg(n) { n = Math.round(n); return n > 0 ? "+" + n : String(n); }
-  fetch("https://ocbot-catalog.ocbotauto.workers.dev/catalog.json", { cache: "no-store" })
-    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function (d) {
+  var GECKO = "https://api.coingecko.com/api/v3";
+  var COIN_ID_OVERRIDE = { PRL: "pearl-2" };
+  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
+  function grabJson(url) {
+    return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+  // Full CoinGecko coin list (id/symbol) — cached in localStorage for a day (shared with the calculator and catalog pages).
+  function geckoList() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
+    } catch (e) {}
+    return grabJson(GECKO + "/coins/list").then(function (list) {
+      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
+      return list;
+    }).catch(function () { return []; });
+  }
+  function resolveCoinIds(tickers, list) {
+    var bySymbol = {};
+    (list || []).forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
+    var out = {};
+    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
+    return out;
+  }
+  Promise.all([
+    grabJson(COMMUNITY_URL + "/catalog.json"),
+    grabJson(COMMUNITY_URL + "/coinmap.json").catch(function () { return { map: {} }; }),
+    grabJson("network.json").catch(function () { return { coins: {} }; })
+  ]).then(function (res) {
+      var d = res[0], coinmap = (res[1] && res[1].map) || {}, network = (res[2] && res[2].coins) || {};
       var e = (d.entries || []).filter(function (x) { return x && x.best && x.efficiency > 0; });
       if (!e.length) return;
       var models = {}, cards = 0;
@@ -140,11 +167,33 @@ python3 -m ocbot --config config.json --self-update</pre>
       e.forEach(function (x) { models[String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")] = 1; cards += x.cards || 1; });
       e.sort(function (a, b) { return b.efficiency - a.efficiency; });
       document.getElementById("liveSub").textContent = "Models: " + Object.keys(models).length + " · cards in the data: " + cards + " · submitted by bots running on rigs, no UUIDs or rig names.";
-      document.getElementById("liveRow").innerHTML = e.slice(0, 3).map(function (x, i) {
-        return "<div><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-          x.efficiency.toFixed(3) + " TH/W</span><br><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " W</small></div>";
-      }).join("");
-      document.getElementById("live").className = "live on";
+      var top3 = e.slice(0, 3);
+      function coinsPerDay(x) {
+        var n = network[x.algo];
+        if (!n || !x.hashrate) return null;
+        return (x.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
+      }
+      var tickers = Array.from(new Set(top3.map(function (x) { return coinmap[x.algo]; }).filter(Boolean)));
+      (tickers.length ? geckoList().then(function (list) {
+        var ids = resolveCoinIds(tickers, list);
+        var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
+        if (!idList.length) return {};
+        return grabJson(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+          var out = {};
+          tickers.forEach(function (t) { var id = ids[t]; out[t] = id && prices[id] ? prices[id].usd : null; });
+          return out;
+        }).catch(function () { return {}; });
+      }).catch(function () { return {}; }) : Promise.resolve({})).then(function (priceByCoin) {
+        document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
+          var cpd = coinsPerDay(x);
+          var coin = coinmap[x.algo];
+          var price = coin ? priceByCoin[coin] : null;
+          var revLine = (cpd != null && price) ? '<span class="rev">mines ≈ $' + (cpd * price).toFixed(2) + '/day</span><br>' : "";
+          return "<div><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
+            x.efficiency.toFixed(3) + " TH/W</span><br>" + revLine + "<small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " W</small></div>";
+        }).join("");
+        document.getElementById("live").className = "live on";
+      });
     }).catch(function () {});
 })();
 </script>

@@ -45,6 +45,7 @@
   .live .row div{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .live small{color:var(--muted);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
   .live b{display:block;font-size:16px;margin:3px 0}.live .v{font-family:var(--font-num);color:var(--accent);font-size:19px}
+  .live .rev{display:inline-block;margin-top:4px;font-family:var(--font-num);color:var(--ink);font-size:13px}
   .live a{display:inline-block;margin-top:12px;font-weight:500}
   @media (max-width:900px){.live .row{grid-template-columns:1fr}}
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
