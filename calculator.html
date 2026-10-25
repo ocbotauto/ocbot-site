@@ -253,7 +253,7 @@
   });
   function syncCurUI() {
     $("cur").value = state.cur;
-    $("kwh").placeholder = "Electricity price, " + CUR_SYM[state.cur] + "/kWh";
+    $("kwh").placeholder = CUR_SYM[state.cur] + "/kWh — your price";
     try { $("kwh").value = localStorage.getItem(kwhKey()) || ""; } catch (e) { $("kwh").value = ""; }
   }
   $("kwh").addEventListener("input", function () { try { localStorage.setItem(kwhKey(), this.value); } catch (e) {} render(); });
