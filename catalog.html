@@ -4,9 +4,9 @@
 <script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){var p=location.pathname;var t=/\.html$/.test(p)?p.replace(/\.html$/,'.ru.html'):p.replace(/\/$/,'')+'/index.ru.html';if(t!==p)location.replace(t+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="canonical" href="https://makar2186.github.io/ocbot-site/catalog.html">
-<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/catalog.html">
-<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/catalog.ru.html">
+<link rel="canonical" href="https://ocbot.org/catalog.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/catalog.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/catalog.ru.html">
 <title>Catalog of GPU overclock presets for mining</title>
 <link rel="stylesheet" href="assets/catalog.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
@@ -58,7 +58,7 @@
   <details>
     <summary>How to get your own catalog file</summary>
     <p>In Telegram: send the bot <code>/catalog</code> and it will send you the file. Without Telegram, on the rig itself:</p>
-    <pre id="cmd">cd /root/hive-oc-bot && python3 -m ocbot --config config.json --catalog-export catalog.json</pre>
+    <pre id="cmd">cd /root/ocbot && python3 -m ocbot --config config.json --catalog-export catalog.json</pre>
     <button id="copycmd" type="button">Copy command</button>
     <p>Someone else’s file can be fed back into the bot: <code>--catalog-import catalog.json</code>, or just send the file to the bot in Telegram. Those presets become a starting point for cards with no history of their own; the 2-hour verification still applies.</p>
   </details>

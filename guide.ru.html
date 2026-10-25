@@ -14,9 +14,9 @@
 <meta property="og:title" content="Инструкция OCBot: авторазгон">
 <meta property="og:description" content="Как установить и использовать бота OCBot для авторазгона видеокарт NVIDIA (поддержка AMD готовится): установка, команды Telegram, консоль, обновление и частые проблемы.">
 <meta property="og:locale" content="ru_RU">
-<link rel="canonical" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
-<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/guide.html">
-<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
+<link rel="canonical" href="https://ocbot.org/guide.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/guide.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/guide.ru.html">
 </head>
 <body>
 <nav class="top" aria-label="Разделы сайта"><div class="wrap">
@@ -57,7 +57,7 @@
       <li>
         <h3>Поставьте бота</h3>
         <p>Никаких файлов скачивать на свой компьютер и заливать на риг не нужно. Откройте Hive Shell рига (значок <code>&gt;_</code>) и вставьте одну команду — она сама скачает бота, распакует и запустит мастер установки. Мастер сам найдёт карты, майнер и имя рига и спросит блок питания, цель подбора и данные Telegram.</p>
-        <div class="code"><pre><code>cd /root &amp;&amp; wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip &amp;&amp; unzip -qo ocbot.zip -d /root &amp;&amp; cd /root/ocbot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <div class="code"><pre><code>mkdir -p /root/ocbot &amp;&amp; cd /root/ocbot &amp;&amp; wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip &amp;&amp; unzip -qo ocbot.zip &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
         <figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="Установка одной командой"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Hive Shell рига</text><text class="m" x="180" y="43" text-anchor="middle">одна команда, значок &gt;_</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">скачивание и распаковка</text><rect class="bs" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. Мастер установки</text><text class="m" x="180" y="123" text-anchor="middle">сам найдёт карты, спросит про блок питания</text></svg></figure>
       </li>
       <li>
@@ -71,13 +71,13 @@
       <li>
         <h3>Подключите Telegram</h3>
         <p>Создайте бота у @BotFather, возьмите токен и узнайте свой числовой ID у @userinfobot. Мастер спросит их сам; позже их можно задать командой. Токен никому не отправляйте и в чат не вставляйте.</p>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;ТОКЕН&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Подставьте свой токен и ID. Если Telegram недоступен с рига, см. «Если что-то не так».</p>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;ТОКЕН&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Подставьте свой токен и ID. Если Telegram недоступен с рига, см. «Если что-то не так».</p>
         <figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="Подключение Telegram"><defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><circle class="ac" cx="30" cy="28" r="14"/><text class="w2" x="30" y="33" text-anchor="middle">1</text><rect class="bs" x="56" y="6" width="290" height="44" rx="8"/><text class="t" x="70" y="25">@BotFather</text><text class="m" x="70" y="42">создайте бота, получите токен</text><line class="ln" x1="30" y1="44" x2="30" y2="68" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="86" r="14"/><text class="w2" x="30" y="91" text-anchor="middle">2</text><rect class="bs" x="56" y="64" width="290" height="44" rx="8"/><text class="t" x="70" y="83">@userinfobot</text><text class="m" x="70" y="100">узнайте свой числовой ID</text><line class="ln" x1="30" y1="102" x2="30" y2="126" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="144" r="14"/><text class="w2" x="30" y="149" text-anchor="middle">3</text><rect class="bs" x="56" y="122" width="290" height="44" rx="8"/><text class="t" x="70" y="141">Hive Shell</text><text class="m" x="70" y="158">вставьте токен и ID в мастер</text><text class="m" x="56" y="190">Токен никому не отправляйте.</text></svg></figure>
       </li>
       <li>
         <h3>Посмотрите, что бот делает</h3>
         <p>Бот стартует примерно через минуту (пауза после загрузки) и пишет в Telegram о каждом шаге. Отправьте <code>/status</code>: там видно, чем занята каждая карта. Подбор разгона занимает несколько часов, после каждого найденного пресета идёт двухчасовая проверка.</p>
-        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/hive-oc-bot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Если Telegram не работает, состояние видно здесь.</p>
+        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/ocbot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Если Telegram не работает, состояние видно здесь.</p>
         <figure class="fig"><svg viewBox="0 0 360 206" role="img" aria-label="Пример ответа бота на /status"><defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="220" y="6" width="124" height="28" rx="14"/><text class="t" x="282" y="25" text-anchor="middle">/status</text><rect class="bs" x="16" y="42" width="320" height="136" rx="12"/><text class="t" x="30" y="64">Риг rig01 · цель compromise</text><text class="m" x="30" y="82">автоматика: работает</text><text class="mono" x="30" y="106">GPU 0  RTX 3070 Ti  [ok]</text><text class="mono" x="30" y="122">68°C · 85.4 TH/s · 222 W</text><text class="mono" x="30" y="146">GPU 1  RTX 3080     [ok]</text><text class="mono" x="30" y="162">69°C · 104.9 TH/s · 201 W</text><text class="m" x="180" y="196" text-anchor="middle">пример ответа бота (значения условные)</text></svg></figure>
       </li>
     </ol>
@@ -107,23 +107,23 @@
   <section class="block" id="console">
     <h2>Команды консоли</h2>
     <p class="sub">То же самое без Telegram. Каждая команда запускается так, из папки бота:</p>
-    <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+    <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
     <div class="tablewrap"><table><tbody><tr><td><code>--service install</code></td><td>поставить автозапуск и запустить; stop / start / restart / status / remove для управления</td></tr><tr><td><code>--mode compromise --tolerance 3</code></td><td>сменить цель: efficiency, compromise (допуск в %), hashrate; show покажет текущую</td></tr><tr><td><code>--mode hashrate --card 3</code></td><td>цель для одной карты; --mode rig вернёт её под общую</td></tr><tr><td><code>--params all 4</code></td><td>режим «4 параметра» (фиксация частот ядра и памяти); --params 3 2 вернёт два параметра</td></tr><tr><td><code>--table</code></td><td>сводная таблица по ригу: максимум, минимум и лучшая эффективность каждой карты</td></tr><tr><td><code>--restore 3</code></td><td>вернуть прежний проверенный пресет карты без нового подбора (без аргумента: все карты)</td></tr><tr><td><code>--optimize 3</code></td><td>подробный поиск лучшего вокруг готового пресета; --opt-gain 2 задаёт порог выигрыша в %</td></tr><tr><td><code>--balance show</code></td><td>как карты упираются в лимит блока питания; run раздаёт лимит, deep ищет плотнее</td></tr><tr><td><code>--telegram-set &#x27;ТОКЕН&#x27; 123456789</code></td><td>записать токен бота и ваш Telegram ID (токен в чат не вставляйте)</td></tr><tr><td><code>--telegram-proxy http://192.168.3.5:8080</code></td><td>прокси для Telegram, если он недоступен напрямую; &#x27;&#x27; отключает</td></tr><tr><td><code>--fix-external-gpus</code></td><td>карты в Thunderbolt не видны иксам: добавить AllowExternalGpus в скрипт Hive (затем reboot)</td></tr><tr><td><code>--catalog 3070</code></td><td>каталог лучших пресетов по моделям; --catalog-export / --catalog-import для обмена файлом</td></tr><tr><td><code>--repair</code></td><td>исправить ложные отвалы, записанные при перезапуске бота (бота сначала остановить)</td></tr><tr><td><code>--uninstall --yes</code></td><td>полностью удалить бота с рига; --keep-data оставит конфиги, базу и лог</td></tr></tbody></table></div>
   </section>
 
   <section class="block" id="update">
     <h2>Обновление и удаление</h2>
-    <p class="sub">Конфиг, база и пресеты при обновлении не затрагиваются. Не обновляйте риг во время двухчасовой проверки: перезапуск бота её оборвёт.</p>
+    <p class="sub">Конфиг, база и пресеты при обновлении не затрагиваются. Во время двухчасовой проверки карты обновление само откажется запускаться, чтобы не оборвать её (кроме <code>--force</code>).</p>
     <div class="grid one">
       <article class="card"><h3>Обновить</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop &amp;&amp; cd /root &amp;&amp; wget -qO hive-oc-bot.zip https://github.com/makar2186/ocbot-dist/raw/main/hive-oc-bot.zip &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; cd /root/hive-oc-bot &amp;&amp; python3 -m unittest discover -s tests &gt; /tmp/t.log 2&gt;&amp;1 &amp;&amp; tail -n 3 /tmp/t.log &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service install</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
-        <p>В конце должно быть <code>OK</code>.</p></article>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --self-update</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <p>Одна команда: сама скачает код, заменит его (конфиг, база и лог не трогаются — прежний код останется в <code>ocbot.prev</code>, откат — <code>--self-update rollback</code>) и перезапустит службу. Если прямо сейчас идёт двухчасовая проверка карты, команда откажется и ничего не сделает — повторите позже или добавьте <code>--force</code>, если точно хотите прервать проверку.</p></article>
       <article class="card"><h3>Остановить и вернуть</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
         <p>После <code>stop</code> бот не запустится и после перезагрузки.</p></article>
       <article class="card"><h3>Удалить совсем</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
         <p>Уберёт службу, автозапуск и папку. Чтобы оставить конфиги и базу, добавьте <code>--keep-data</code>.</p></article>
     </div>
   </section>
@@ -137,13 +137,13 @@
       <p>Если службы нет или она остановлена командой <code>--service stop</code>, выполните <code>--service install</code>.</p></details>
     <details><summary>Telegram не отвечает с рига</summary>
       <p>Telegram может быть недоступен у провайдера. Укажите прокси, а состояние смотрите в логе, пока он не заработает.</p>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div></details>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div></details>
     <details><summary>Карта помечена suspect</summary>
       <p>Бот не нашёл для неё стабильный пресет и остановил автоматику, чтобы не мучить карту. Проверьте питание, райзер и температуру, потом запустите подбор заново командой <code>/tune 3</code>.</p></details>
     <details><summary>Карты в Thunderbolt не видны иксам, оффсеты не применяются</summary>
       <p>Иксы по умолчанию отключают внешние карты (в <code>/var/log/Xorg.0.log</code> есть «external GPUs have not been enabled»). Бот умеет добавить нужный параметр в скрипт Hive. После этого перезагрузите риг.</p>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div>
       <div class="code"><pre><code>nvidia-smi -L | wc -l; DISPLAY=:0 nvidia-settings -q gpus | grep -c &quot;\[gpu:&quot;</code></pre><button type="button" class="copy" aria-label="Скопировать команду">Копировать</button></div><p class="note">Два числа должны совпасть с числом карт.</p>
       <p>При обновлении образа Hive скрипт перезаписывается: команду повторите.</p></details>
     <details><summary>Пропали настройки после перезапуска майнера</summary>

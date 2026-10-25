@@ -4,9 +4,9 @@
 <script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="canonical" href="https://makar2186.github.io/ocbot-site/status.ru.html">
-<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/status.html">
-<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/status.ru.html">
+<link rel="canonical" href="https://ocbot.org/status.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/status.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/status.ru.html">
 <title>Статус сервисов</title>
 <meta name="description" content="Работают ли приём заказов, поддержка и каталог пресетов.">
 <link rel="stylesheet" href="assets/status.css">
@@ -30,7 +30,7 @@
   // Адреса воркеров. Пока адрес пуст, сервис показывается как «не подключён».
   var SALES_URL = "";
   var SUPPORT_URL = "";
-  var CATALOG_URL = "https://ocbot-catalog.makar2186.workers.dev";
+  var CATALOG_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
   var S = [
     { name: "Приём заказов и выдача ключей", note: "Если здесь сбой, оплата не потеряется: ключ придёт после восстановления.", url: SALES_URL, path: "/config", ok: function (j) { return !!(j && j.address && j.prices); } },
     { name: "Поддержка (чат и Telegram)", note: "Ответы по базе знаний и пересылка владельцу.", url: SUPPORT_URL, path: "/health", ok: function (j) { return !!(j && j.ok); },

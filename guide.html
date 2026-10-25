@@ -14,9 +14,9 @@
 <meta property="og:title" content="OCBot guide: auto-overclock">
 <meta property="og:description" content="How to install and use OCBot, the bot that tunes NVIDIA GPU overclock automatically (AMD support is coming): setup, Telegram commands, console, updates and troubleshooting.">
 <meta property="og:locale" content="en_US">
-<link rel="canonical" href="https://makar2186.github.io/ocbot-site/guide.html">
-<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/guide.html">
-<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/guide.ru.html">
+<link rel="canonical" href="https://ocbot.org/guide.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/guide.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/guide.ru.html">
 </head>
 <body>
 <nav class="top" aria-label="Site sections"><div class="wrap">
@@ -57,7 +57,7 @@
       <li>
         <h3>Install the bot</h3>
         <p>No files to download to your computer and upload to the rig. Open the rig's Hive Shell (the <code>&gt;_</code> icon) and paste one command — it downloads the bot, unpacks it and starts the setup wizard itself. The wizard finds the cards, the miner and the rig name itself and asks about the power supply, the tuning goal and Telegram.</p>
-        <div class="code"><pre><code>cd /root &amp;&amp; wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip &amp;&amp; unzip -qo ocbot.zip -d /root &amp;&amp; cd /root/ocbot &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <div class="code"><pre><code>mkdir -p /root/ocbot &amp;&amp; cd /root/ocbot &amp;&amp; wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip &amp;&amp; unzip -qo ocbot.zip &amp;&amp; bash install.sh</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
         <figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="One-command install"><defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bs" x="20" y="6" width="320" height="46" rx="8"/><text class="t" x="180" y="26" text-anchor="middle">1. Rig's Hive Shell</text><text class="m" x="180" y="43" text-anchor="middle">one command, the &gt;_ icon</text><line class="ln" x1="180" y1="54" x2="180" y2="82" marker-end="url(#a2)"/><text class="m" x="192" y="72">download and unpack</text><rect class="bs" x="20" y="86" width="320" height="46" rx="8"/><text class="t" x="180" y="106" text-anchor="middle">2. Setup wizard</text><text class="m" x="180" y="123" text-anchor="middle">finds cards itself, asks about the PSU</text></svg></figure>
       </li>
       <li>
@@ -71,13 +71,13 @@
       <li>
         <h3>Connect Telegram</h3>
         <p>Create a bot with @BotFather, take its token, and get your numeric ID from @userinfobot. The wizard asks for both; you can set them later with a command. Never share the token and never paste it into a chat.</p>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;TOKEN&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">Use your own token and ID. If Telegram is unreachable from the rig, see Troubleshooting.</p>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-set &#x27;TOKEN&#x27; 123456789</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">Use your own token and ID. If Telegram is unreachable from the rig, see Troubleshooting.</p>
         <figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="Connecting Telegram"><defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><circle class="ac" cx="30" cy="28" r="14"/><text class="w2" x="30" y="33" text-anchor="middle">1</text><rect class="bs" x="56" y="6" width="290" height="44" rx="8"/><text class="t" x="70" y="25">@BotFather</text><text class="m" x="70" y="42">create a bot, get a token</text><line class="ln" x1="30" y1="44" x2="30" y2="68" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="86" r="14"/><text class="w2" x="30" y="91" text-anchor="middle">2</text><rect class="bs" x="56" y="64" width="290" height="44" rx="8"/><text class="t" x="70" y="83">@userinfobot</text><text class="m" x="70" y="100">get your numeric ID</text><line class="ln" x1="30" y1="102" x2="30" y2="126" marker-end="url(#a3)"/><circle class="ac" cx="30" cy="144" r="14"/><text class="w2" x="30" y="149" text-anchor="middle">3</text><rect class="bs" x="56" y="122" width="290" height="44" rx="8"/><text class="t" x="70" y="141">Hive Shell</text><text class="m" x="70" y="158">enter token and ID in the wizard</text><text class="m" x="56" y="190">Never share the token.</text></svg></figure>
       </li>
       <li>
         <h3>See what the bot is doing</h3>
         <p>The bot starts in about a minute (a pause after boot) and reports every step in Telegram. Send <code>/status</code> to see what each card is doing. Tuning takes several hours, and every preset found goes through a two-hour verification.</p>
-        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/hive-oc-bot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">If Telegram does not work, the state is visible here.</p>
+        <div class="code"><pre><code>systemctl status ocbot --no-pager | head -n 5; tail -n 10 /root/ocbot/ocbot.log</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">If Telegram does not work, the state is visible here.</p>
         <figure class="fig"><svg viewBox="0 0 360 206" role="img" aria-label="Sample bot reply to /status"><defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ac"/></marker></defs><rect class="bx" x="220" y="6" width="124" height="28" rx="14"/><text class="t" x="282" y="25" text-anchor="middle">/status</text><rect class="bs" x="16" y="42" width="320" height="136" rx="12"/><text class="t" x="30" y="64">Rig rig01 · goal compromise</text><text class="m" x="30" y="82">automation: running</text><text class="mono" x="30" y="106">GPU 0  RTX 3070 Ti  [ok]</text><text class="mono" x="30" y="122">68°C · 85.4 TH/s · 222 W</text><text class="mono" x="30" y="146">GPU 1  RTX 3080     [ok]</text><text class="mono" x="30" y="162">69°C · 104.9 TH/s · 201 W</text><text class="m" x="180" y="196" text-anchor="middle">sample bot reply (illustrative values)</text></svg></figure>
       </li>
     </ol>
@@ -107,23 +107,23 @@
   <section class="block" id="console">
     <h2>Console commands</h2>
     <p class="sub">The same without Telegram. Run each command from the bot folder:</p>
-    <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+    <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --table</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
     <div class="tablewrap"><table><tbody><tr><td><code>--service install</code></td><td>install autostart and start the bot; stop / start / restart / status / remove to manage it</td></tr><tr><td><code>--mode compromise --tolerance 3</code></td><td>change the goal: efficiency, compromise (tolerance in %), hashrate; show prints the current one</td></tr><tr><td><code>--mode hashrate --card 3</code></td><td>goal for one card; --mode rig returns it to the common goal</td></tr><tr><td><code>--params all 4</code></td><td>&quot;4 parameters&quot; mode (core and memory clock lock); --params 3 2 returns to two parameters</td></tr><tr><td><code>--table</code></td><td>rig summary table: max, min and best efficiency of every card</td></tr><tr><td><code>--restore 3</code></td><td>restore the previous verified preset of a card without a new search (no argument: all cards)</td></tr><tr><td><code>--optimize 3</code></td><td>detailed search around a ready preset; --opt-gain 2 sets the gain threshold in %</td></tr><tr><td><code>--balance show</code></td><td>how cards hit the PSU limit; run distributes the limit, deep searches denser</td></tr><tr><td><code>--telegram-set &#x27;TOKEN&#x27; 123456789</code></td><td>store the bot token and your Telegram ID (never paste the token in a chat)</td></tr><tr><td><code>--telegram-proxy http://192.168.3.5:8080</code></td><td>proxy for Telegram if it is blocked; &#x27;&#x27; disables it</td></tr><tr><td><code>--fix-external-gpus</code></td><td>Thunderbolt cards invisible to X: add AllowExternalGpus to the Hive script (then reboot)</td></tr><tr><td><code>--catalog 3070</code></td><td>catalog of best presets by model; --catalog-export / --catalog-import to share a file</td></tr><tr><td><code>--repair</code></td><td>fix false drops recorded when the bot was restarted (stop the bot first)</td></tr><tr><td><code>--uninstall --yes</code></td><td>remove the bot from the rig completely; --keep-data keeps configs, database and log</td></tr></tbody></table></div>
   </section>
 
   <section class="block" id="update">
     <h2>Update and removal</h2>
-    <p class="sub">The config, the database and the presets are not touched by an update. Do not update a rig during a two-hour verification: restarting the bot interrupts it.</p>
+    <p class="sub">The config, the database and the presets are not touched by an update. If a card is in the middle of a two-hour verification, the update refuses to run so it does not interrupt it (unless you pass <code>--force</code>).</p>
     <div class="grid one">
       <article class="card"><h3>Update</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop &amp;&amp; cd /root &amp;&amp; wget -qO hive-oc-bot.zip https://github.com/makar2186/ocbot-dist/raw/main/hive-oc-bot.zip &amp;&amp; unzip -qo hive-oc-bot.zip -d /root &amp;&amp; cd /root/hive-oc-bot &amp;&amp; python3 -m unittest discover -s tests &gt; /tmp/t.log 2&gt;&amp;1 &amp;&amp; tail -n 3 /tmp/t.log &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service install</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
-        <p>The output should end with <code>OK</code>.</p></article>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --self-update</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p>One command: it downloads the new code, swaps it in (the config, database and log are untouched — the previous code is kept in <code>ocbot.prev</code>, roll back with <code>--self-update rollback</code>) and restarts the service. If a two-hour verification is running right now, the command refuses and does nothing — try again later, or add <code>--force</code> if you really want to interrupt it.</p></article>
       <article class="card"><h3>Stop and resume</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service stop</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --service start</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
         <p>After <code>stop</code> the bot does not start after a reboot either.</p></article>
       <article class="card"><h3>Remove completely</h3>
-        <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --uninstall --yes</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
         <p>Removes the service, the autostart and the folder. Add <code>--keep-data</code> to keep the configs and the database.</p></article>
     </div>
   </section>
@@ -137,13 +137,13 @@
       <p>If the service is missing or was stopped with <code>--service stop</code>, run <code>--service install</code>.</p></details>
     <details><summary>Telegram does not respond from the rig</summary>
       <p>Telegram may be blocked by your provider. Set a proxy, and read the state from the log until it works.</p>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div></details>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-proxy http://192.168.3.5:8080</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --telegram-test</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div></details>
     <details><summary>A card is marked suspect</summary>
       <p>The bot could not find a stable preset for it and stopped the automation so as not to torture the card. Check power, riser and temperature, then start the search again with <code>/tune 3</code>.</p></details>
     <details><summary>Thunderbolt cards are invisible to X, offsets are not applied</summary>
       <p>X disables external GPUs by default (<code>/var/log/Xorg.0.log</code> says "external GPUs have not been enabled"). The bot can add the needed option to the Hive script. Reboot the rig afterwards.</p>
-      <div class="code"><pre><code>cd /root/hive-oc-bot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+      <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
       <div class="code"><pre><code>nvidia-smi -L | wc -l; DISPLAY=:0 nvidia-settings -q gpus | grep -c &quot;\[gpu:&quot;</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">The two numbers must match the number of cards.</p>
       <p>A Hive image update overwrites the script: repeat the command.</p></details>
     <details><summary>Settings disappeared after the miner restarted</summary>
