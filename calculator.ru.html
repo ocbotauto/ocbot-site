@@ -55,9 +55,11 @@
     <div role="listitem"><b id="t-hash">—</b><span>хешрейт итого</span></div>
     <div role="listitem"><b id="t-pow">—</b><span>потребление итого</span></div>
     <div role="listitem"><b id="t-el">—</b><span>электричество, ₽/сутки</span></div>
+    <div role="listitem"><b id="t-rev">—</b><span>доход итого, ₽/сутки</span></div>
+    <div role="listitem"><b id="t-profit">—</b><span>прибыль итого, ₽/сутки</span></div>
   </div>
 
-  <p class="modenote">Доход в деньгах пока не считается: кроме курса монеты, для этого нужны ещё сетевые данные (сложность сети, награда за блок), а они не для всех алгоритмов есть в открытом виде. Хешрейт, потребление и курс монеты — уже настоящие и живые; доход появится здесь же, когда определимся с методикой.</p>
+  <p class="modenote">Доход в деньгах считается там, где есть сетевые данные (сложность сети, награда за блок — с whattomine.com) для алгоритма карты; для остальных алгоритмов в колонке будет «нет сетевых данных» вместо гадания на глаз. Это оценка по текущему моменту: сложность сети и курс монеты постоянно меняются, поэтому реальный доход может отличаться на несколько процентов в любую сторону. Не используйте эти цифры как единственное основание для финансовых решений.</p>
 
   <footer>Хешрейт и потребление — лучшие проверенные пресеты из <a href="catalog.ru.html">общего каталога</a> (минимум подтверждения — 1 риг). Курс монет может на минуту-две отставать от биржи. Цифры ориентировочные, использование — на ваш риск.<br>Powered by CoinGecko.</footer>
 </div>
@@ -69,7 +71,7 @@
   var GECKO = "https://api.coingecko.com/api/v3";
   var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // тикеры, где символ в CoinGecko не совпадает с ожидаемым id
 
-  var state = { entries: [], coinmap: {}, prices: {}, mode: null, qty: {}, loaded: false };
+  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false };
 
   function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -116,11 +118,11 @@
       var ids = resolveCoinIds(tickers, list);
       var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
       if (!idList.length) return {};
-      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd,rub").then(function (prices) {
         var out = {};
         tickers.forEach(function (t) {
           var id = ids[t];
-          out[t] = id && prices[id] ? prices[id].usd : null;
+          out[t] = id && prices[id] ? { usd: prices[id].usd, rub: prices[id].rub } : null;
         });
         return out;
       }).catch(function () { return {}; });
@@ -163,26 +165,44 @@
       return;
     }
 
-    var tCards = 0, tHash = 0, tPow = 0;
+    function netw(e) { return state.network[e.algo] || null; }
+    function coinsPerDay(e, qty) {
+      var n = netw(e);
+      if (!n || !e.hashrate) return null;
+      var hs = e.hashrate * n.hashrate_to_hs * (qty || 1);
+      return (hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
+    }
+
+    var tCards = 0, tHash = 0, tPow = 0, tRev = null, tProfit = null, anyRev = false;
     function tr(e) {
       var k = keyOf(e), qty = state.qty[k] || 0;
       var coin = state.coinmap[e.algo] || null;
-      var price = coin ? state.prices[coin] : undefined;
+      var price = coin && state.prices[coin] ? state.prices[coin].rub : undefined;
       var elDay = kwh && e.power_w ? e.power_w * 24 / 1000 * kwh : null;
-      if (qty > 0) { tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty; }
+      var cpd = coinsPerDay(e, 1);
+      var revDay = cpd != null && price != null ? cpd * price : null;
+      var profitDay = revDay != null ? revDay - (elDay || 0) : null;
+      if (qty > 0) {
+        tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty;
+        if (revDay != null) { anyRev = true; tRev = (tRev || 0) + revDay * qty; tProfit = (tProfit || 0) + profitDay * qty; }
+      }
       var priceCell = !coin ? '<span class="price-na">монета неизв.</span>'
-        : price == null ? '<span class="price-na">' + esc(coin) + ', курс грузится</span>'
-        : esc(coin) + ' <b>$' + num(price, price < 1 ? 4 : 2) + '</b>';
+        : !state.prices[coin] ? '<span class="price-na">' + esc(coin) + ', курс грузится</span>'
+        : esc(coin) + ' <b>$' + num(state.prices[coin].usd, state.prices[coin].usd < 1 ? 4 : 2) + '</b>';
+      var revCell = cpd == null ? '<span class="price-na">нет сетевых данных</span>'
+        : revDay == null ? '<span class="price-na">курс грузится</span>'
+        : '<b>' + num(revDay, 2) + ' ₽</b>' + (profitDay != null ? '<span class="cost">прибыль ≈ ' + num(profitDay, 2) + ' ₽/сутки за карту</span>' : '');
       return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
         '<td class="num" data-l="Хешрейт, за карту">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
         '<td class="num" data-l="Потребление, за карту">' + num(e.power_w, 0) + ' <small>Вт</small>' +
         (elDay != null ? '<span class="cost">≈ ' + num(elDay, 1) + ' ₽/сутки за карту</span>' : '') + '</td>' +
         '<td class="num effcell" data-l="Эффективность"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/Вт</small></td>' +
         '<td class="num" data-l="Курс монеты">' + priceCell + '</td>' +
+        '<td class="num" data-l="Доход, ₽/сутки за карту">' + revCell + '</td>' +
         '<td class="num" data-l="Карт у вас"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Количество карт ' + esc(clean(e.model)) + '"></td>' +
         '</tr>';
     }
-    var head = '<thead><tr><th>Модель</th><th class="num">Хешрейт</th><th class="num">Потребление</th><th class="num">Эффективность</th><th class="num">Курс монеты</th><th class="num">Карт у вас</th></tr></thead>';
+    var head = '<thead><tr><th>Модель</th><th class="num">Хешрейт</th><th class="num">Потребление</th><th class="num">Эффективность</th><th class="num">Курс монеты</th><th class="num">Доход, ₽/сутки</th><th class="num">Карт у вас</th></tr></thead>';
     $("list").innerHTML = '<div class="tw"><table class="tbl">' + head + '<tbody>' + rows.map(tr).join("") + '</tbody></table></div>';
 
     $("totals").hidden = tCards === 0;
@@ -190,6 +210,8 @@
     $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
     $("t-pow").textContent = tCards ? num(tPow, 0) + " Вт" : "—";
     $("t-el").textContent = tCards && kwh ? num(tPow * 24 / 1000 * kwh, 1) : "—";
+    $("t-rev").textContent = anyRev ? num(tRev, 2) + " ₽" : "—";
+    $("t-profit").textContent = anyRev ? num(tProfit, 2) + " ₽" : "—";
     $("source").innerHTML = "<b>Общий каталог</b><br>моделей: " + Object.keys(byModel).length;
   }
 
@@ -200,12 +222,13 @@
   }
 
   function loadAll() {
-    Promise.all([grab(COMMUNITY_URL + "/catalog.json"), grab(COMMUNITY_URL + "/coinmap.json")])
+    Promise.all([grab(COMMUNITY_URL + "/catalog.json"), grab(COMMUNITY_URL + "/coinmap.json"), grab("network.json").catch(function () { return { coins: {} }; })])
       .then(function (r) {
-        var cat = r[0], map = r[1];
+        var cat = r[0], map = r[1], netw = r[2];
         if (cat.format !== "ocbot-catalog" || !Array.isArray(cat.entries)) throw new Error("плохой формат catalog.json");
         state.entries = cat.entries;
         state.coinmap = (map && map.map) || {};
+        state.network = (netw && netw.coins) || {};
         state.loaded = true;
         say("Загружено моделей: " + new Set(cat.entries.map(function (e) { return clean(e.model); })).size + ".");
         render();

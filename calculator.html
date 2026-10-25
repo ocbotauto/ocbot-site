@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://ocbot.org/calculator.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/calculator.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/calculator.ru.html">
+<meta name="robots" content="noindex, nofollow">
+<title>Mining Profitability Calculator</title>
+<link rel="stylesheet" href="assets/catalog.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<meta name="description" content="Estimate mining profitability from OCBot's real, verified catalog data: hashrate, power draw and the current coin price for any GPU.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mining Profitability Calculator">
+<meta property="og:description" content="Estimate mining profitability from OCBot's real, verified catalog data: hashrate, power draw and the current coin price for any GPU.">
+<meta property="og:locale" content="en_US">
+<style>
+  .qty { width: 60px; font: inherit; font-family: var(--font-num); text-align: center; color: var(--ink); background: var(--surface);
+         border: 1px solid var(--line); border-radius: 7px; padding: 5px 4px; }
+  .qty:focus-visible { border-color: var(--accent); }
+  .tbl .sel { background: color-mix(in srgb, var(--accent-soft) 40%, var(--surface)); }
+  .price-na { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="navtop" aria-label="Site sections"><a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a><a href="catalog.html">Catalog</a><a href="calculator.html" aria-current="page">Calculator</a><a href="guide.html">Guide</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='calculator.ru.html';}catch(e){}return false;">RU</a></nav>
+  <header class="hero">
+    <div>
+      <h1>Profitability Calculator</h1>
+      <p class="lede">Hashrate and power draw come from the verified community catalog — real presets from real rigs, not theory. Pick your cards and quantities, and the totals add up below.</p>
+      <p class="lede" style="margin-top:4px"><b>Coin price is indicative:</b> pulled from an exchange every few minutes and can lag the real price by that long. Don't use the numbers on this page as the sole basis for a financial decision.</p>
+    </div>
+    <div class="source" id="source"></div>
+  </header>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Tuning mode"></div>
+  <p class="modenote" id="modenote"></p>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Model, e.g. 3070" aria-label="Search by model" autocomplete="off">
+    <input type="text" id="kwh" inputmode="decimal" placeholder="Electricity price, $/kWh" aria-label="Electricity price per kWh" autocomplete="off">
+    <span class="spacer"></span>
+    <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted);"><input type="checkbox" id="onlysel"> selected only</label>
+  </div>
+  <p id="msg" role="status"></p>
+
+  <div id="list"></div>
+
+  <div class="kpi" id="totals" hidden role="list">
+    <div role="listitem"><b id="t-cards">0</b><span>cards selected</span></div>
+    <div role="listitem"><b id="t-hash">—</b><span>total hashrate</span></div>
+    <div role="listitem"><b id="t-pow">—</b><span>total power draw</span></div>
+    <div role="listitem"><b id="t-el">—</b><span>electricity, $/day</span></div>
+    <div role="listitem"><b id="t-rev">—</b><span>revenue total, $/day</span></div>
+    <div role="listitem"><b id="t-profit">—</b><span>profit total, $/day</span></div>
+  </div>
+
+  <p class="modenote">Dollar revenue is calculated where network data (difficulty, block reward — from whattomine.com) is available for that card's algorithm; for other algorithms the column shows "no network data" instead of a guess. This is a point-in-time estimate: network difficulty and coin price keep moving, so real revenue can differ by a few percent either way. Don't use these numbers as the sole basis for a financial decision.</p>
+
+  <footer>Hashrate and power draw are the best verified presets from the <a href="catalog.html">community catalog</a> (confirmed by at least 1 rig). Coin prices can lag the exchange by a minute or two. Figures are indicative — use at your own risk.<br>Powered by CoinGecko.</footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
+  var GECKO = "https://api.coingecko.com/api/v3";
+  var COIN_ID_OVERRIDE = { PRL: "pearl-2" }; // tickers where the CoinGecko symbol doesn't match the expected id
+
+  var state = { entries: [], coinmap: {}, prices: {}, network: {}, mode: null, qty: {}, loaded: false };
+
+  function clean(m) { return String(m || "").replace(/^NVIDIA\s+/i, "").replace(/^GeForce\s+/i, "").replace(/\s+/g, " ").trim(); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function num(n, d) { return n == null || !isFinite(n) ? "—" : Number(n).toFixed(d); }
+  function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
+  function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
+
+  var MODES = [
+    { id: "efficiency", name: "Efficiency", note: "max hashrate per watt." },
+    { id: "compromise", name: "Compromise", note: "the sweet spot (default on rigs)." },
+    { id: "hashrate", name: "Hashrate", note: "max hashrate, higher power draw." }
+  ];
+  function obj(e) { return e.objective || "compromise"; }
+
+  function grab(url) {
+    return fetch(url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+
+  // Full CoinGecko coin list (id/symbol) — cached in localStorage for a day so we don't refetch on every visit.
+  function geckoList() {
+    try {
+      var c = JSON.parse(localStorage.getItem("ocbot-gecko-list") || "null");
+      if (c && Date.now() - c.t < 24 * 3600 * 1000) return Promise.resolve(c.list);
+    } catch (e) {}
+    return grab(GECKO + "/coins/list").then(function (list) {
+      try { localStorage.setItem("ocbot-gecko-list", JSON.stringify({ t: Date.now(), list: list })); } catch (e) {}
+      return list;
+    });
+  }
+
+  function resolveCoinIds(tickers, list) {
+    var bySymbol = {};
+    list.forEach(function (c) { var s = (c.symbol || "").toUpperCase(); if (!(s in bySymbol)) bySymbol[s] = c.id; });
+    var out = {};
+    tickers.forEach(function (t) { out[t] = COIN_ID_OVERRIDE[t] || bySymbol[t] || null; });
+    return out;
+  }
+
+  function loadPrices(coins) {
+    var tickers = Array.from(new Set(coins.filter(Boolean)));
+    if (!tickers.length) return Promise.resolve({});
+    return geckoList().then(function (list) {
+      var ids = resolveCoinIds(tickers, list);
+      var idList = Array.from(new Set(Object.values(ids).filter(Boolean)));
+      if (!idList.length) return {};
+      return grab(GECKO + "/simple/price?ids=" + idList.join(",") + "&vs_currencies=usd").then(function (prices) {
+        var out = {};
+        tickers.forEach(function (t) {
+          var id = ids[t];
+          out[t] = id && prices[id] ? prices[id].usd : null;
+        });
+        return out;
+      }).catch(function () { return {}; });
+    }).catch(function () { return {}; });
+  }
+
+  function render() {
+    var byMode = {}; state.entries.forEach(function (e) { byMode[obj(e)] = (byMode[obj(e)] || 0) + 1; });
+    if (!state.mode || !byMode[state.mode]) {
+      state.mode = byMode.compromise ? "compromise" : (byMode.hashrate ? "hashrate" : "efficiency");
+    }
+    var curMode = MODES.filter(function (m) { return m.id === state.mode; })[0];
+    $("tabs").innerHTML = MODES.map(function (m) {
+      return '<button type="button" data-mode="' + m.id + '" aria-pressed="' + (m.id === state.mode) + '"><small>' + (byMode[m.id] || 0) + '</small><b>' + m.name + '</b><span>' + esc(m.note) + '</span></button>';
+    }).join("");
+    $("modenote").textContent = curMode ? "“" + curMode.name + "” mode: " + curMode.note : "";
+
+    var q = $("q").value.trim().toLowerCase().replace(/\s+/g, "");
+    var onlySel = $("onlysel").checked;
+    var kwh = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
+
+    // one best entry per model in the current mode (if a model has several, keep the one confirmed by more rigs)
+    var byModel = {};
+    state.entries.filter(function (e) { return obj(e) === state.mode; }).forEach(function (e) {
+      var m = clean(e.model);
+      if (!byModel[m] || (e.rigs || 0) > (byModel[m].rigs || 0)) byModel[m] = e;
+    });
+    var rows = Object.keys(byModel).map(function (m) { return byModel[m]; }).filter(function (e) {
+      var m = clean(e.model).toLowerCase().replace(/\s+/g, "");
+      var qty = state.qty[keyOf(e)] || 0;
+      if (q && m.indexOf(q) < 0) return false;
+      if (onlySel && !qty) return false;
+      return true;
+    });
+    rows.sort(function (a, b) { return (b.hashrate || 0) - (a.hashrate || 0); });
+
+    if (!rows.length) {
+      $("list").innerHTML = '<div class="empty">' + (state.loaded ? 'Nothing found — adjust the search or clear “selected only”.' : 'Loading the catalog…') + '</div>';
+      $("totals").hidden = true;
+      return;
+    }
+
+    function netw(e) { return state.network[e.algo] || null; }
+    function coinsPerDay(e, qty) {
+      var n = netw(e);
+      if (!n || !e.hashrate) return null;
+      var hs = e.hashrate * n.hashrate_to_hs * (qty || 1);
+      return (hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
+    }
+
+    var tCards = 0, tHash = 0, tPow = 0, tRev = null, tProfit = null, anyRev = false;
+    function tr(e) {
+      var k = keyOf(e), qty = state.qty[k] || 0;
+      var coin = state.coinmap[e.algo] || null;
+      var price = coin ? state.prices[coin] : undefined;
+      var elDay = kwh && e.power_w ? e.power_w * 24 / 1000 * kwh : null;
+      var cpd = coinsPerDay(e, 1);
+      var revDay = cpd != null && price != null ? cpd * price : null;
+      var profitDay = revDay != null ? revDay - (elDay || 0) : null;
+      if (qty > 0) {
+        tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty;
+        if (revDay != null) { anyRev = true; tRev = (tRev || 0) + revDay * qty; tProfit = (tProfit || 0) + profitDay * qty; }
+      }
+      var priceCell = !coin ? '<span class="price-na">coin unknown</span>'
+        : price == null ? '<span class="price-na">' + esc(coin) + ', loading price</span>'
+        : esc(coin) + ' <b>$' + num(price, price < 1 ? 4 : 2) + '</b>';
+      var revCell = cpd == null ? '<span class="price-na">no network data</span>'
+        : revDay == null ? '<span class="price-na">loading price</span>'
+        : '<b>$' + num(revDay, 2) + '</b>' + (profitDay != null ? '<span class="cost">profit ≈ $' + num(profitDay, 2) + '/day per card</span>' : '');
+      return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
+        '<td class="num" data-l="Hashrate, per card">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
+        '<td class="num" data-l="Power draw, per card">' + num(e.power_w, 0) + ' <small>W</small>' +
+        (elDay != null ? '<span class="cost">≈ $' + num(elDay, 2) + '/day per card</span>' : '') + '</td>' +
+        '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/W</small></td>' +
+        '<td class="num" data-l="Coin price">' + priceCell + '</td>' +
+        '<td class="num" data-l="Revenue, $/day per card">' + revCell + '</td>' +
+        '<td class="num" data-l="Cards you have"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Number of ' + esc(clean(e.model)) + ' cards"></td>' +
+        '</tr>';
+    }
+    var head = '<thead><tr><th>Model</th><th class="num">Hashrate</th><th class="num">Power draw</th><th class="num">Efficiency</th><th class="num">Coin price</th><th class="num">Revenue, $/day</th><th class="num">Cards you have</th></tr></thead>';
+    $("list").innerHTML = '<div class="tw"><table class="tbl">' + head + '<tbody>' + rows.map(tr).join("") + '</tbody></table></div>';
+
+    $("totals").hidden = tCards === 0;
+    $("t-cards").textContent = tCards;
+    $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
+    $("t-pow").textContent = tCards ? num(tPow, 0) + " W" : "—";
+    $("t-el").textContent = tCards && kwh ? num(tPow * 24 / 1000 * kwh, 2) : "—";
+    $("t-rev").textContent = anyRev ? "$" + num(tRev, 2) : "—";
+    $("t-profit").textContent = anyRev ? "$" + num(tProfit, 2) : "—";
+    $("source").innerHTML = "<b>Community catalog</b><br>models: " + Object.keys(byModel).length;
+  }
+
+  function refreshPrices() {
+    var algos = Array.from(new Set(state.entries.map(function (e) { return e.algo; })));
+    var coins = algos.map(function (a) { return state.coinmap[a]; }).filter(Boolean);
+    loadPrices(coins).then(function (prices) { state.prices = prices; render(); });
+  }
+
+  function loadAll() {
+    Promise.all([grab(COMMUNITY_URL + "/catalog.json"), grab(COMMUNITY_URL + "/coinmap.json"), grab("network.json").catch(function () { return { coins: {} }; })])
+      .then(function (r) {
+        var cat = r[0], map = r[1], netw = r[2];
+        if (cat.format !== "ocbot-catalog" || !Array.isArray(cat.entries)) throw new Error("bad catalog.json format");
+        state.entries = cat.entries;
+        state.coinmap = (map && map.map) || {};
+        state.network = (netw && netw.coins) || {};
+        state.loaded = true;
+        say("Models loaded: " + new Set(cat.entries.map(function (e) { return clean(e.model); })).size + ".");
+        render();
+        refreshPrices();
+      })
+      .catch(function (e) {
+        say("Couldn't load the community catalog: " + e.message + ". Try reloading the page later.", true);
+        state.loaded = true;
+        render();
+      });
+  }
+
+  document.addEventListener("input", function (ev) {
+    var t = ev.target;
+    if (t.classList && t.classList.contains("qty")) {
+      var k = t.getAttribute("data-key"), v = Math.max(0, parseInt(t.value, 10) || 0);
+      state.qty[k] = v;
+      render();
+      // the quantity field is edited often — don't let the re-render steal focus
+      var again = document.querySelector('.qty[data-key="' + CSS.escape(k) + '"]');
+      if (again) { again.focus(); again.value = v; }
+    }
+  });
+  $("q").addEventListener("input", render);
+  $("onlysel").addEventListener("change", render);
+  $("tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-mode]"); if (!b) return;
+    state.mode = b.getAttribute("data-mode"); render();
+  });
+  try { var sk = localStorage.getItem("ocbot-kwh-usd"); if (sk) $("kwh").value = sk; } catch (e) {}
+  $("kwh").addEventListener("input", function () { try { localStorage.setItem("ocbot-kwh-usd", this.value); } catch (e) {} render(); });
+
+  render();
+  loadAll();
+})();
+</script>
+
+<script src="chat.en.js" defer></script>
+</html>
