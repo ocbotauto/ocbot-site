@@ -65,6 +65,7 @@
         <p>The wizard turns on the free trial by itself at the end of setup (3 days per rig, no card, once) — nothing to run separately, and until then the bot changes nothing in the overclock.</p>
         <p>Bought a key on the <a href="buy.html">purchase page</a>? Activate it with one command — no file to copy anywhere, use your own key instead of OC-...:</p>
         <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
+        <p class="note">If the bot is already connected to Telegram (step 4 below), it's even simpler — no Hive Shell at all: just send the bot <code>/activate OC-XXXXX-XXXXX-XXXXX-XXXXX</code> in the chat, with the same key.</p>
         <p class="note">One key works for one rig: each rig needs its own key and its own activation. If the trial didn't start by itself (the bot was set up outside the wizard, or reinstalled on an already-licensed rig — it won't touch that on purpose, to not overwrite a paid key): <code>--trial</code> instead of <code>--activate ...</code>.</p>
       </li>
       <li>
