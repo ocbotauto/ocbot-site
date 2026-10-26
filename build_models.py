@@ -261,6 +261,7 @@ document.addEventListener("click", function (ev) {{
 }})();
 </script>
 <script src="{script_src}" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "a903b20668564c079d7b7f6a265c0b8d"}}'></script>
 </body>
 </html>
 """
