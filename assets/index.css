@@ -54,9 +54,17 @@
   .live .rev .na{display:inline-block;color:var(--muted);font-size:11.5px;font-family:inherit;text-transform:none;letter-spacing:0;margin:0}
   .live a{display:inline-block;margin-top:12px;font-weight:500}
   @media (max-width:900px){.live .row{grid-template-columns:1fr}}
+  /* Раньше на узких экранах доход переносился под карточку отдельной строкой —
+     выглядело так, будто он "уполз" и отвалился от своей карточки (см. catalog.css).
+     Вместо этого просто сжимаем шрифты и отступы, доход остаётся справа. */
   @media (max-width:480px){
-    .live .row>div{flex-direction:column;align-items:stretch}
-    .live .rev{text-align:left;padding:8px 0 0;border-left:0;border-top:1px solid var(--line);margin-top:2px}
+    .live .row>div{padding:10px 12px;gap:8px}
+    .live b{font-size:14.5px}
+    .live .v{font-size:16px}
+    .live small{font-size:10.5px}
+    .live .rev{padding-left:8px}
+    .live .rev span{font-size:9px}
+    .live .rev b{font-size:16px}
   }
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
   .stats div{background:var(--surface);padding:18px 20px}
