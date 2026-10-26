@@ -93,7 +93,17 @@ def row(en, lang, network):
         pct = round((en["power_w"] - en["stock_power_w"]) / en["stock_power_w"] * 100)
         was += f'<span class="cost">{was_word} {num(en["stock_power_w"], 0)} {unit_w} ({"+" if pct > 0 else ""}{pct}%)</span>'
     rigs = en.get("rigs")
-    matched = (f"✓ сработало на {rigs} рига(х)" if lang == "ru" else f"✓ matched on {rigs} rig(s)") if rigs else ""
+    if rigs:
+        if lang == "ru":
+            # локатив ("на 1 риге" / "на 2 ригах" / "на 21 риге") — падежные формы, в
+            # отличие от именительного, не меняются по правилу 1/2-4/5+, только по тому,
+            # оканчивается ли число на 1 (и не на 11): риг → риге, иначе → ригах.
+            word = "риге" if rigs % 10 == 1 and rigs % 100 != 11 else "ригах"
+            matched = f"✓ сработало на {rigs} {word}"
+        else:
+            matched = f"✓ matched on {rigs} rig{('' if rigs == 1 else 's')}"
+    else:
+        matched = ""
     hive_btn, console_btn = ("Hive", "Консоль") if lang == "ru" else ("Hive", "Console")
     copied = "Скопировано" if lang == "ru" else "Copied"
     power_label = "Потребл." if lang == "ru" else "Power"
