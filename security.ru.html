@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Безопасность — OCBot</title>
+  <meta name="description" content="Как устроена безопасная работа OCBot: что бот не делает, что не запрашивает и почему это безопасно.">
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/catalog.css">
+  <meta property="og:title" content="Безопасность — OCBot">
+  <meta property="og:description" content="Честно про безопасность бота: доступы, данные, деньги.">
+ <link rel="canonical" href="https://ocbot.org/security.ru.html">
+</head>
+<body>
+<main>
+  <nav class="navtop" aria-label="Навигация сайта">
+    <a class="brand" href="index.ru.html">
+      <svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span>OCBot: авторазгон</span>
+    </a>
+    <a href="index.ru.html">Главная</a>
+    <a href="catalog.ru.html">Каталог</a>
+    <a href="guide.ru.html">Установка</a>
+    <a href="security.ru.html" aria-current="page">Безопасность</a>
+    <a href="security.html" onclick="try{localStorage.setItem('ocbot_lang','en');}catch(e){}">EN</a>
+  </nav>
+  <h1>Безопасность</h1>
+  <p class="modenote">Прямой ответ на честный вопрос: «чем это грозит моей ферме и моим деньгам?»</p>
+
+  <div class="kpi">
+    <div><b>0</b><span>запросов паролей и seed-фраз</span></div>
+    <div><b>0</b><span>доступа к кошелькам и выводам</span></div>
+    <div><b>0</b><span>внешних серверов с вашими данными</span></div>
+    <div><b>1</b><span>смысл: упростить вам жизнь</span></div>
+  </div>
+
+  <section style="margin-top:18px">
+    <h2>Чего мы не запрашиваем — никогда</h2>
+    <table class="tbl">
+      <thead><tr><th>Фраза/данные</th><th>Правда об OCBot</th></tr></thead>
+      <tbody>
+        <tr><td>Seed-фраза / ключи от криптокошелька</td><td>Бот не запрашивает их никогда — ему просто нечего там делать: OCBot не подключается к вашим кошелькам и не умеет делать переводы.</td></tr>
+        <tr><td>Пароль от HiveOS / телефона / банка</td><td>Не запрашивается: бот хранит только ваш конфиг-файл и токен Telegram-бота, создаваемого лично вами.</td></tr>
+        <tr><td>Ввод с карты и автоплатежи</td><td>Оплата только вручную, USDT (BE20) на оплату, которую вы сами смотрите на странице покупки.</td></tr>
+        <tr><td>Скрытый майнинг (в краденых сборках)</td><td>Наоборот: OCBot не запускает майнинг — он только настраивает разгон уже работающего у вас майнера (rgminer), который вы сами поставили в HiveOS.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section style="margin-top:18px">
+    <h2>Что реально делает бот</h2>
+    <p>OCBot живёт <b>только на вашей ферме</b> (в вашей HiveOS) и разговаривает <b>только с вами</b> через Telegram-бота:
+    <ul>
+      <li>подбирает и фиксирует пресеты разгона (core / mem / Power Limit в рамках лимитов вашего блока питания), проверяет стабильность перед сохранением, ведёт профиль каждой карты;</li>
+      <li>следит за деградацией: температуры, отвалы, хешрейты; помогает восстановиться после сбоя;</li>
+      <li>присылает вам статус: что изменилось, что сохранилось, что требует вашего внимания.</li>
+    </ul>
+    <p>Эквайринг платежей: адрес кошелька — тот, который вы видите на странице покупки; ключ активации выдаётся автоматически тем же сервером продаж в момент оплаты.</p>
+  </section>
+
+  <section style="margin-top:18px">
+    <h2>Проверяемость и возврат</h2>
+    <p>Код открытой части (агент, мастер установки, модули) лежит в публичном GitHub: <a href="https://github.com/ocbotauto/ocbot-core">ocbot-core</a>. В дистрибутиве есть верификатор сборки — можно проверить, что файл не перекошен перед установкой. Вопросы: Telegram-бот <span class="pre">@ocbot_help_bot</span> — отвечает живой человек (мы), без цепочки посредников.</p>
+    <p>Ключ вернуться можно на странице <a href="buy.ru.html">покупки</a>: ручное продление, никаких автоплатежей нет.</p>
+  </section>
+
+  <p class="modenote">Индивидуальные фермы — деловой опыт: исследуйте, задавайте вопросы прямо в Telegram, читайте код. Ничего скрывать у нас нет.</p>
+
+  <footer>OCBot не аффилирован с HiveOS/Hiveon, NVIDIA, Telegram. HiveOS и NVIDIA — товарные знаки их владельцев, упомянуты по контексту совместимости. <a href="guide.ru.html#terms">Все условия</a>.
+  <span><a href="security.ru.html">Безопасность</a></span>
+</footer>
+</main>
+</body>
+</html>

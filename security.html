@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security — OCBot</title>
+  <meta name="description" content="How OCBot works safely: what it never asks for, what it never touches, and why it exists.">
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/catalog.css">
+  <meta property="og:title" content="Security — OCBot">
+  <meta property="og:description" content="Straight answers about access, data and money.">
+  <link rel="canonical" href="https://ocbot.org/security.html">
+</head>
+<body>
+<main>
+  <nav class="navtop" aria-label="Site navigation">
+    <a class="brand" href="index.html">
+      <svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span>OCBot: auto-overclock</span>
+    </a>
+    <a href="index.html">Home</a>
+    <a href="catalog.html">Catalog</a>
+    <a href="guide.html">Guide</a>
+    <a href="security.html" aria-current="page">Security</a>
+    <a href="security.ru.html" onclick="try{localStorage.setItem('ocbot_lang','ru');}catch(e){}">RU</a>
+  </nav>
+  <h1>Security</h1>
+  <p class="modenote">A straight answer to a fair question: “what does this mean for my farm and my money?”</p>
+
+  <div class="kpi">
+    <div><b>0</b><span>seed phrases or wallet keys asked, ever</span></div>
+    <div><b>0</b><span>wallet access or withdrawals</span></div>
+    <div><b>0</b><span>external servers with your data</span></div>
+    <div><b>1</b><span>purpose: make your rigs easier to run</span></div>
+  </div>
+
+  <section style="margin-top:18px">
+    <h2>What OCBot never asks for</h2>
+    <table class="tbl">
+      <thead><tr><th>Item</th><th>The truth</th></tr></thead>
+      <tbody>
+        <tr><td>Seed phrase / wallet keys</td><td>Never requested — OCBot does not connect to wallets and cannot move funds. There is simply nothing for it there.</td></tr>
+        <tr><td>HiveOS / phone / bank passwords</td><td>Not requested. The bot stores only its local config file and the Telegram bot token that you personally create.</td></tr>
+        <tr><td>Saved cards / auto-payments</td><td>Payments are manual only, USDT (BEP20) to the address you see on the Buy page. No payment profiles, no recurring billing.</td></tr>
+        <tr><td>Hidden miners</td><td>The reverse: OCBot does not mine at all. It only tunes the overclock of the miner you installed yourself in HiveOS.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section style="margin-top:18px">
+    <h2>What it actually does</h2>
+    <p>OCBot lives <b>on your farm</b> (in your HiveOS) and talks <b>only to you</b> through your own Telegram bot:
+    <ul>
+      <li>finds and locks per-card overclock presets (core / mem / Power Limit within your PSU limits), verifies stability before saving, keeps a profile per card;</li>
+      <li>watches for degradation: temperatures, dead cards, hashrate drops; helps recover after faults;</li>
+      <li>reports: what changed, what was saved, what needs your attention.</li>
+    </ul>
+    <p>Payments go to the wallet address shown on the Buy page; the license key is issued by the same sales worker at the moment of payment.</p>
+  </section>
+
+  <section style="margin-top:18px">
+    <h2>Verifiability</h2>
+    <p>The open part of the product (agent, install wizard, modules) is public on GitHub: <a href="https://github.com/ocbotauto/ocbot-core">ocbot-core</a>. The distribution includes a build verifier so you can check the file before installing. Questions: Telegram support bot — answered by a human (us), no middle-bots.</p>
+    <p>Licenses renew manually on the <a href="buy.html">Buy</a> page. No subscriptions, no auto-charges.</p>
+  </section>
+
+  <p class="modenote">Independent project: inspect, question, read the code. Nothing hidden.</p>
+
+  <footer>OCBot is not affiliated with HiveOS/Hiveon, NVIDIA or Telegram. Their names belong to their owners and are mentioned only to describe compatibility. <a href="guide.html#terms">Terms</a>.
+  <span><a href="security.html">Security</a></span>
+</footer>
+</main>
+</body>
+</html>
