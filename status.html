@@ -26,17 +26,14 @@
 </head>
 <body>
 <div class="wrap">
-  <nav aria-label="Site navigation"><a href="index.html">OCBot: auto-overclock</a><a href="catalog.html">Catalog</a><a href="buy.html">Buy</a><a href="guide.html">Guide</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='status.ru.html';}catch(e){}return false;">RU</a></nav>
+  <nav aria-label="Site navigation"><a href="index.html">OCBot: auto-overclock</a><a href="catalog.html">Catalog</a><a href="buy.html">Buy</a><a href="guide.html">Guide</a> · <a href="security.html">Security</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='status.ru.html';}catch(e){}return false;">RU</a></nav>
   <h1>Service status</h1>
   <p class="lede">The check runs from your browser; the page refreshes once a minute.</p>
   <div id="list" aria-live="polite"></div>
   <footer id="foot">
   <span></span>
 
-  <span></span>
-
-  <span><a href="security.html">Security</a></span>
-</footer>
+  <span></span></footer>
 </div>
 <script>
 (function () {

@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="wrap">
-  <nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a><a href="catalog.html">Catalog</a><a href="guide.html">Guide</a><a href="#" onclick="try{var u=location.pathname;u=u.replace(/\.html$/,'.ru.html');localStorage.setItem('ocbot_lang','ru');location.href=u;}catch(e){}return false;">RU</a></nav>
+  <nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a><a href="catalog.html">Catalog</a><a href="guide.html">Guide</a> · <a href="security.html">Security</a><a href="#" onclick="try{var u=location.pathname;u=u.replace(/\.html$/,'.ru.html');localStorage.setItem('ocbot_lang','ru');location.href=u;}catch(e){}return false;">RU</a></nav>
   <header class="hero"><div><h1>RTX 3060 Ti</h1>
   <a class="guidelink" href="https://ocbot.org/catalog.html">&larr; full catalog</a>
   <p class="lede">Verified presets: each one passed a two-hour test run on a rig. Efficiency, compromise and hashrate modes are shown side by side.</p></div></header>
@@ -38,7 +38,14 @@ Power limit: 120 W">Hive</button><button type="button" class="cp" data-copy="GPU
 nvidia-smi -i $GPU -pl 120
 DISPLAY=:0 nvidia-settings -a &quot;[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=150&quot; -a &quot;[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=-450&quot;">Console</button></span></td><td class="num">64.8 <small>TH/s</small></td><td class="num">120 <small>W</small></td><td class="num"><span class="good">0.541</span> <small>TH/W</small></td><td class="num rev-cell" data-cpd="0.896529297466856" data-coin="PRL">&mdash;</td></tr></tbody></table></div>
   <p class="others"><b>Other models:</b> <a class="mlink" href="rtx-3060.html">RTX 3060</a> <a class="mlink" href="rtx-3070-samsung.html">RTX 3070 (Samsung)</a> <a class="mlink" href="rtx-3070-ti.html">RTX 3070 Ti</a> <a class="mlink" href="rtx-3080.html">RTX 3080</a> <a class="mlink" href="rtx-3080-ti-micron.html">RTX 3080 Ti (Micron)</a> <a class="mlink" href="rtx-3090.html">RTX 3090</a> <a class="mlink" href="rtx-3090-micron.html">RTX 3090 (Micron)</a> <a class="mlink" href="rtx-3090-ti-micron.html">RTX 3090 Ti (Micron)</a> <a class="mlink" href="rtx-4060.html">RTX 4060</a> <a class="mlink" href="rtx-4070-micron.html">RTX 4070 (Micron)</a> <a class="mlink" href="rtx-4070-ti.html">RTX 4070 Ti</a> <a class="mlink" href="rtx-4080.html">RTX 4080</a> </p>
+<<<<<<< HEAD
   <footer>A preset fits one model with the same memory, miner and version. Before using it, check cooling, risers and power delivery. Data is provided “as is”, use at your own risk: <a href="https://ocbot.org/guide.html#terms">disclaimer</a>.</footer>
+=======
+  <footer>A preset fits one model with the same memory, miner and version. Before using it, check cooling, risers and power delivery. Data is provided “as is”, use at your own risk: <a href="https://ocbot.org/guide.html#terms">disclaimer</a>.
+  <span></span>
+
+  <span></span></footer>
+>>>>>>> 362cae5 (footer: Безопасность в общий строку навигации (одной строкой, не отдельным блоком))
 </div>
 <script>
 document.addEventListener("click", function (ev) {
