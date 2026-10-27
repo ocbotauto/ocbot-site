@@ -138,6 +138,7 @@ python3 -m ocbot --config config.json --self-update</pre>
     <details><summary>Do I need an external server?</summary><p>No. The bot runs on the rig itself, data is stored in a local SQLite database. Telegram is only needed for control and reports.</p></details>
     <details><summary>What if the rig drops during the search?</summary><p>The bot records that point as a boundary, restores a safe profile, and continues with some headroom from it.</p></details>
     <details><summary>Is it safe to update?</summary><p>Yes. Configs and the database are untouched; the archive is verified before the code is replaced, and a rollback is available if something goes wrong.</p></details>
+    <details><summary>Is it safe? What does the bot never do?</summary><p><a href="security.html">Full breakdown — here</a>. In short: the bot never asks for seed phrases or private keys, never connects to wallets, cannot spend anything; payment is manual USDT only — no auto-charges or subscriptions. The build is obfuscated and protected by a license key; integrity is verified before install.</p></details>
   </section>
 
   <footer>
