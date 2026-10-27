@@ -120,11 +120,11 @@ def row(en, lang, network):
 
 NAV = {
     "en": ('<nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html">{logo}<span>OCBot: auto-overclock</span></a>'
-           '<a href="catalog.html">Catalog</a><a href="guide.html">Guide</a>'
+           '<a href="catalog.html">Catalog</a><a href="security.html">Security</a>'
            '<a href="#" onclick="try{{var u=location.pathname;u=u.replace(/\\.html$/,\'.ru.html\');'
            'localStorage.setItem(\'ocbot_lang\',\'ru\');location.href=u;}}catch(e){{}}return false;">RU</a></nav>'),
     "ru": ('<nav class="navtop" aria-label="Разделы сайта"><a class="brand" href="index.ru.html">{logo}<span>OCBot: авторазгон</span></a>'
-           '<a href="catalog.ru.html">Каталог</a><a href="guide.ru.html">Инструкция</a>'
+           '<a href="catalog.ru.html">Каталог</a><a href="security.ru.html">Безопасность</a>'
            '<a href="#" onclick="try{{var u=location.pathname;u=u.replace(/\\.ru\\.html$/,\'.html\');'
            'localStorage.setItem(\'ocbot_lang\',\'en\');location.href=u;}}catch(e){{}}return false;">EN</a></nav>'),
 }
