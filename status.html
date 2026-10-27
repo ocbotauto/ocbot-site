@@ -35,8 +35,8 @@
 <script>
 (function () {
   // Worker addresses. While an address is empty, the service shows as “not connected”.
-  var SALES_URL = "";
-  var SUPPORT_URL = "";
+  var SALES_URL = "https://ocbot-sales.ocbotauto.workers.dev";
+  var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";
   var CATALOG_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
   var S = [
     { name: "Order processing and key delivery", note: "If this is down, payment isn’t lost: the key arrives once it’s back up.", url: SALES_URL, path: "/config", ok: function (j) { return !!(j && j.address && j.prices); } },

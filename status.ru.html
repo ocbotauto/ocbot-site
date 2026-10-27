@@ -35,8 +35,8 @@
 <script>
 (function () {
   // Адреса воркеров. Пока адрес пуст, сервис показывается как «не подключён».
-  var SALES_URL = "";
-  var SUPPORT_URL = "";
+  var SALES_URL = "https://ocbot-sales.ocbotauto.workers.dev";
+  var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";
   var CATALOG_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
   var S = [
     { name: "Приём заказов и выдача ключей", note: "Если здесь сбой, оплата не потеряется: ключ придёт после восстановления.", url: SALES_URL, path: "/config", ok: function (j) { return !!(j && j.address && j.prices); } },
