@@ -1,7 +1,7 @@
 // Support chat widget. While SUPPORT_URL is empty, the button is hidden.
 (function () {
-  var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";  // support worker address
-  var TG_LINK = "";              // Telegram support bot link, e.g. https://t.me/xxx_bot
+  var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";
+  var TG_LINK = "https://t.me/OCBotSupport_bot";
   if (!SUPPORT_URL) return;
   var css = ".ocw-b{position:fixed;right:16px;bottom:16px;z-index:50;padding:12px 16px;border-radius:999px;border:0;background:#0f7a64;color:#fff;font:600 14px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2)}" +
     ".ocw-p{position:fixed;right:16px;bottom:68px;z-index:50;width:min(360px,calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;background:#fff;color:#16211e;border:1px solid #d6dfdc;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.22);font:14px/1.45 system-ui,sans-serif}" +

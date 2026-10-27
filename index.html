@@ -1,12 +1,12 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
-<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){var p=location.pathname;var t=/\.html$/.test(p)?p.replace(/\.html$/,'.ru.html'):p.replace(/\/$/,'')+'/index.ru.html';if(t!==p)location.replace(t+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="canonical" href="https://makar2186.github.io/ocbot-site/">
-<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/">
-<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/index.ru.html">
+<link rel="canonical" href="https://ocbot.org/">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/index.ru.html">
 <title>OCBot: auto-overclock</title>
 <meta name="description" content="The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming), verifies it for 2 hours, keeps the power supply within limits and reboots the rig after card drops on its own. Controlled from Telegram.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
@@ -16,6 +16,13 @@
 <meta property="og:title" content="OCBot: auto-overclock">
 <meta property="og:description" content="The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming), verifies it for 2 hours, keeps the power supply within limits and reboots the rig after card drops on its own. Controlled from Telegram.">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ocbot.org/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OCBot: auto-overclock">
+<meta name="twitter:description" content="The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming), verifies it for 2 hours, keeps the power supply within limits and reboots the rig after card drops on its own. Controlled from Telegram.">
+<meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
 </head>
 <body>
 <nav class="top" aria-label="Site navigation"><div class="wrap">
@@ -28,19 +35,19 @@
   <header class="hero">
     <div>
       <span class="eyebrow"><i class="dot"></i>For rigs with mixed cards</span>
-      <h1>The bot finds the overclock <em>for every card itself</em></h1>
-      <p class="lede">Especially useful on rigs with many different cards at once: 3070, 3090, 4070 side by side. The bot searches core, memory and power limit separately for each one, verifies the result for two hours and splits the power-supply budget between them. Reports arrive in Telegram.</p>
+      <h1>The bot watches the whole farm <em>and tunes every card itself</em></h1>
+      <p class="lede">Especially useful on rigs with many different cards at once: 3070, 3090, 4070 side by side. The bot searches core, memory and power limit separately for each one, verifies the result for two hours, and keeps watching afterwards — if a card drops, it diagnoses the cause itself, reboots the rig through an escalating sequence of actions, and restores a safe preset without you lifting a finger. Reports arrive in Telegram.</p>
       <div class="cta"><a class="btn primary" href="guide.html#install">Install in a few minutes</a><a class="btn" href="catalog.html">Preset catalog</a></div>
     </div>
     <div class="term" aria-label="Example bot messages">
-      <div class="bar"><i></i><i></i><i></i><span>rig В· ocbot</span></div>
+      <div class="bar"><i></i><i></i><i></i><span>rig · ocbot</span></div>
 <pre><span class="m">$</span> /status
 <span class="g">GPU 0</span>  RTX 3070   core <span class="g">+225</span>  mem <span class="g">-100</span>  PL <span class="g">106</span>
-        <span class="m">67.8 MH/s В· 104.8 W В· 0.650 /W</span>
+        <span class="m">67.8 MH/s · 104.8 W · 0.650 /W</span>
 <span class="g">GPU 1</span>  RTX 3090   core <span class="g">+150</span>  mem <span class="g">0</span>   PL <span class="g">171</span>
-        <span class="m">113.4 MH/s В· 171 W</span>
+        <span class="m">113.4 MH/s · 171 W</span>
 <span class="y">GPU 4</span>  verifying candidate <span class="m">1h 12m of 2h</span>
-<span class="m">PSU 1200 W В· headroom OK</span>
+<span class="m">PSU 1200 W · headroom OK</span>
 <span class="g">preset verified</span> <span class="m">(120 min)</span></pre>
     </div>
   </header>
@@ -56,36 +63,36 @@
     <h3>Live preset catalog</h3>
     <p id="liveSub"></p>
     <div class="row" id="liveRow"></div>
-    <a href="catalog.html">Open full catalog в†’</a>
+    <a href="catalog.html">Open full catalog →</a>
   </div>
 
   <section id="features">
     <p class="kicker">Features</p><h2>Everything a rig needs, in one bot</h2>
     <p class="sub">Plain standard-library Python, no extra dependencies. Runs as a service on the rig itself.</p>
     <div class="grid">
-      <div class="card"><div class="ic">вљ™</div><h3>Per-card tuning</h3><p>Every card is tuned separately; settings are stored by the cardвЂ™s own ID and survive a reinstall.</p></div>
-      <div class="card"><div class="ic">вњ”</div><h3>2-hour verification</h3><p>A preset is accepted only after running stably. A card with repeated drops gets a longer check.</p></div>
-      <div class="card"><div class="ic">вљЎ</div><h3>Power-supply budget</h3><p>Total power limit stays within the PSUвЂ™s capacity. In hashrate mode, power is redistributed between cards.</p></div>
-      <div class="card"><div class="ic">в†»</div><h3>Recovery from drops</h3><p>Parses Xid errors and driver hangs, sets an overclock boundary, and reboots the rig through an escalating sequence of actions.</p></div>
-      <div class="card"><div class="ic">вњ‰</div><h3>Controlled from Telegram</h3><p>Status, modes, limits, pause, update and history, all by command. Only your ID can use it.</p></div>
-      <div class="card"><div class="ic">в–¤</div><h3>Preset catalog</h3><p>The best settings per card model as a starting point for new rigs. No UUIDs or rig names.</p></div>
+      <div class="card"><div class="ic">⚙</div><h3>Per-card tuning</h3><p>Every card is tuned separately; settings are stored by the card’s own ID and survive a reinstall.</p></div>
+      <div class="card"><div class="ic">✔</div><h3>2-hour verification</h3><p>A preset is accepted only after running stably. A card with repeated drops gets a longer check.</p></div>
+      <div class="card"><div class="ic">⚡</div><h3>Power-supply budget</h3><p>Total power limit stays within the PSU’s capacity. In hashrate mode, power is redistributed between cards.</p></div>
+      <div class="card"><div class="ic">↻</div><h3>Recovery from drops</h3><p>Parses Xid errors and driver hangs, sets an overclock boundary, and reboots the rig through an escalating sequence of actions.</p></div>
+      <div class="card"><div class="ic">✉</div><h3>Controlled from Telegram</h3><p>Status, modes, limits, pause, update and history, all by command. Only your ID can use it.</p></div>
+      <div class="card"><div class="ic">▤</div><h3>Preset catalog</h3><p>The best settings per card model as a starting point for new rigs. No UUIDs or rig names.</p></div>
     </div>
   </section>
 
   <section id="mixed">
-    <p class="kicker">Mixed cards in one rig</p><h2>One setting for every card doesnвЂ™t work</h2>
+    <p class="kicker">Mixed cards in one rig</p><h2>One setting for every card doesn’t work</h2>
     <p class="sub">A typical case: 3070, 3080 Ti, 3090 and 4070 in one rig. Each has its own core and memory headroom, its own memory chips, its own efficiency. Tuning such a rig by hand takes weeks, and one shared profile either loses hashrate or crashes the weaker cards.</p>
     <div class="grid">
-      <div class="card"><div class="ic">в–¦</div><h3>Every card on its own</h3><p>Its own core, mem and power limit for each card. Settings are tied to the cardвЂ™s ID, not the slot number, so they donвЂ™t get mixed up when cards are moved.</p></div>
-      <div class="card"><div class="ic">в‡„</div><h3>Power is split smartly</h3><p>In hashrate mode the bot raises one cardвЂ™s power limit at the expense of the others, finds each oneвЂ™s maximum, then picks the best distribution across the whole rig within the PSUвЂ™s budget.</p></div>
-      <div class="card"><div class="ic">в—Ћ</div><h3>A weak card doesnвЂ™t drag the rig down</h3><p>A drop is recorded as a boundary for the exact card that caused it. The rest keep their presets, and the bot leaves that one card some headroom.</p></div>
+      <div class="card"><div class="ic">▦</div><h3>Every card on its own</h3><p>Its own core, mem and power limit for each card. Settings are tied to the card’s ID, not the slot number, so they don’t get mixed up when cards are moved.</p></div>
+      <div class="card"><div class="ic">⇄</div><h3>Power is split smartly</h3><p>In hashrate mode the bot raises one card’s power limit at the expense of the others, finds each one’s maximum, then picks the best distribution across the whole rig within the PSU’s budget.</p></div>
+      <div class="card"><div class="ic">◎</div><h3>A weak card doesn’t drag the rig down</h3><p>A drop is recorded as a boundary for the exact card that caused it. The rest keep their presets, and the bot leaves that one card some headroom.</p></div>
     </div>
   </section>
 
   <section id="how">
     <p class="kicker">How it works</p><h2>From install to a finished preset</h2><p class="sub">The first search takes time; after that the bot just keeps watch.</p>
     <ol class="steps">
-      <li><h3>Install</h3><p>Unpack the archive, run the setup wizard, enter the bot token and your ID.</p></li>
+      <li><h3>Install</h3><p>Unpack the archive, run the setup wizard, enter just the bot token — the wizard finds the rest itself.</p></li>
       <li><h3>Search</h3><p>The bot varies core, mem and power limit, measures hashrate and power draw, and marks boundaries.</p></li>
       <li><h3>Verify</h3><p>The best points run under load for two hours.</p></li>
       <li><h3>Run</h3><p>The preset applies itself; a safe profile kicks in on failure.</p></li>
@@ -105,8 +112,8 @@
     <div class="install">
       <div><p class="kicker">Start</p><h2>Install in five minutes</h2><p class="sub" style="margin:0 0 18px">Detailed steps with ready-to-paste commands, a Telegram setup wizard, and a one-command update.</p><a class="btn primary" href="guide.html#install">Open the guide</a></div>
 <pre><span style="color:#7d948d"># on the rig, as root</span>
-cd /root && unzip -qo hive-oc-bot.zip
-cd hive-oc-bot && bash install.sh
+mkdir -p /root/ocbot && cd /root/ocbot && wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip
+unzip -qo ocbot.zip && bash install.sh
 <span style="color:#7d948d"># update</span>
 python3 -m ocbot --config config.json --self-update</pre>
     </div>
@@ -121,41 +128,59 @@ python3 -m ocbot --config config.json --self-update</pre>
   </section>
 
   <footer>
-    <span>OCBot: auto-overclock. The bot and its presets are provided вЂњas isвЂќ, use at your own risk: <a href="guide.html#terms">disclaimer</a>.</span>
-    <span><a href="catalog.html">Catalog</a> В· <a href="guide.html">Guide</a> В· <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">Р СѓСЃСЃРєРёР№</a></span>
+    <span>OCBot: auto-overclock. The bot and its presets are provided “as is”, use at your own risk: <a href="guide.html#terms">disclaimer</a>.</span>
+    <span><a href="catalog.html">Catalog</a> · <a href="guide.html">Guide</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">Русский</a></span>
     <span>Independent project: not affiliated with, endorsed or sponsored by Hiveon or HiveOS. HiveOS, NVIDIA, Telegram and other names belong to their owners and are mentioned only to describe compatibility.</span>
   </footer>
 </main>
+<script src="assets/revenue.js"></script>
 <script>
 (function () {
   function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function sg(n) { n = Math.round(n); return n > 0 ? "+" + n : String(n); }
-  // Каталог грузится с этого же домена (catalog.json — снимок, обновляется воркфлоу сайта):
-  // у российских покупателей *.workers.dev часто недоступен (блокировка операторов),
-  // поэтому сначала пробуем локальный файл, и только потом внешний воркер.
-  (function () {
-    var community = "https://ocbot-catalog.ocbotauto.workers.dev/catalog.json";
-    function render(d) {
+  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
+  function grabJson(url) {
+    return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+  /* same-origin snapshot first: *.workers.dev is blocked on some RU mobile networks;
+     the snapshot file catalog.json is refreshed by the site workflow */
+  Promise.all([
+    grabJson("catalog.json"),
+    grabJson(COMMUNITY_URL + "/coinmap.json").catch(function () { return { map: {} }; }),
+    grabJson("network.json").catch(function () { return { coins: {} }; })
+  ]).then(function (res) {
+      var d = res[0], coinmap = (res[1] && res[1].map) || {}, network = (res[2] && res[2].coins) || {};
       var e = (d.entries || []).filter(function (x) { return x && x.best && x.efficiency > 0; });
       if (!e.length) return;
       var models = {}, cards = 0;
       function slugOf(x) { return (String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "").replace(/\s+/g, " ").trim() + " " + (x.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
       e.forEach(function (x) { models[String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")] = 1; cards += x.cards || 1; });
       e.sort(function (a, b) { return b.efficiency - a.efficiency; });
-      document.getElementById("liveSub").textContent = "Models: " + Object.keys(models).length + " В· cards in the data: " + cards + " В· submitted by bots running on rigs, no UUIDs or rig names.";
-      document.getElementById("liveRow").innerHTML = e.slice(0, 3).map(function (x, i) {
-        return "<div><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-          x.efficiency.toFixed(3) + " TH/W</span><br><small>core " + sg(x.best.core) + " В· mem " + sg(x.best.mem) + " В· PL " + Math.round(x.best.pl) + " W</small></div>";
-      }).join("");
-      document.getElementById("live").className = "live on";
-    }
-    fetch("catalog.json", { cache: "no-store" })
-      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(render)
-      .catch(function () { return fetch(community, { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(render).catch(function () {}); });
-  })();
+      document.getElementById("liveSub").textContent = "Models: " + Object.keys(models).length + " · cards in the data: " + cards + " · submitted by bots running on rigs, no UUIDs or rig names.";
+      var top3 = e.slice(0, 3);
+      function coinsPerDay(x) {
+        var n = network[x.algo];
+        if (!n || !x.hashrate) return null;
+        return (x.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
+      }
+      var tickers = Array.from(new Set(top3.map(function (x) { return coinmap[x.algo]; }).filter(Boolean)));
+      OCBotRevenue.resolvePrices(tickers, "usd").then(function (priceByCoin) {
+        document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
+          var cpd = coinsPerDay(x);
+          var coin = coinmap[x.algo];
+          var price = coin ? priceByCoin[coin] : null;
+          var revBlock = (!coin || cpd == null) ? '<div class="rev"><span class="na">no network data</span></div>'
+            : !price ? '<div class="rev"><span class="na">loading price…</span></div>'
+            : '<div class="rev"><span>earns per day</span><b>$' + (cpd * price).toFixed(2) + '</b></div>';
+          return "<div><div class=\"meta\"><small>#" + (i + 1) + " by efficiency</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
+            x.efficiency.toFixed(3) + " TH/W</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " W</small></div>" + revBlock + "</div>";
+        }).join("");
+        document.getElementById("live").className = "live on";
+      });
+    }).catch(function () {});
 })();
 </script>
 <script src="chat.en.js" defer></script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a903b20668564c079d7b7f6a265c0b8d"}'></script>
 </body>
 </html>
