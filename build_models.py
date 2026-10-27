@@ -303,7 +303,15 @@ def main():
     if a.url:
         req = urllib.request.Request(a.url, headers={"User-Agent": "ocbot-site-build/1.0 (+https://ocbot.org)"})
         with urllib.request.urlopen(req, timeout=30) as r:
-            data = json.load(r)
+            raw = r.read()
+            data = json.loads(raw.decode("utf-8"))
+        # важный same-origin снапшот: сайт грузит ./catalog.json в первую
+        # очередь (см. catalog.html) — без файла посетители видят устаревший каталог
+        try:
+            with open(os.path.join(a.site, "catalog.json"), "wb") as f:
+                f.write(raw)
+        except OSError:
+            pass
     else:
         with open(a.file, encoding="utf-8") as f:
             data = json.load(f)
