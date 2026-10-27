@@ -30,9 +30,6 @@
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
   .wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-  /* Только на странице каталога: таблице с 8 колонками (пресеты, хешрейт, доход и т.д.) нужно больше
-     места, чем остальным страницам на этом же стиле (калькулятор, страницы моделей). */
-  .wrap.wide { max-width: 1240px; }
   header { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: flex-end; }
   h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; text-wrap: balance; }
   .lede { margin: 0; color: var(--muted); max-width: 60ch; }
@@ -40,16 +37,13 @@
   .guidelink:hover { text-decoration: underline; }
   .source { font-family: var(--font-num); font-size: 12.5px; color: var(--muted); text-align: right; }
   .source b { color: var(--ink); font-weight: 500; }
-  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
   .bar input[type=search], .bar input[type=text], .bar select {
-    font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
-    border-radius: 8px; padding: 8px 11px; min-width: 0;
+    font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 9px 12px; min-width: 0;
   }
-  /* Компактный вид: поля и кнопки идут подряд без растягивания на всю ширину — раньше невидимый
-     распорный элемент (.spacer) раздвигал кнопки «Вернуть/Загрузить» далеко вправо, оставляя
-     некрасивую пустую полосу посередине панели. */
-  .bar input[type=search] { flex: 1 1 160px; max-width: 240px; }
-  .spacer { flex: 0 0 0; width: 0; }
+  .bar input[type=search] { flex: 1 1 220px; }
+  .spacer { flex: 1 1 0; }
   button {
     font: inherit; font-weight: 500; cursor: pointer; color: var(--ink); background: var(--surface);
     border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px;
@@ -98,25 +92,12 @@
   .tbl { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .tbl th { text-align: left; font-weight: 500; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
             padding: 10px 14px; background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface)); border-bottom: 1px solid var(--line); white-space: nowrap; }
-  .tbl td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
-  /* Когда "Типичный" пресет совпадает с "Лучшим", ячейка содержит только короткую подпись
-     («как «Лучший»»), а ширина колонки задаётся другими строками с полным блоком пресета —
-     пустая область справа неизбежна (ширину колонки делят все строки). Вместо того чтобы
-     обводить эту пустоту рамкой, просто показываем компактную неброскую плашку у верхнего
-     края ячейки — она не претендует на то, что заполняет собой всё пустое место.
-     ВАЖНО: vertical-align:top относится ТОЛЬКО к этому короткому случаю (:has сверяет, что
-     внутри ячейки нет ничего, кроме бейджа) — когда у карты два РАЗНЫХ пресета, и "Лучший",
-     и "Типичный" остаются на общем vertical-align:middle, иначе одна колонка в строке
-     подрывалась бы выше другой. */
-  .tbl td[data-l^="Типичный"]:has(> .cost:only-child), .tbl td[data-l^="Typical"]:has(> .cost:only-child) { vertical-align: top; }
-  .tbl td[data-l^="Типичный"] > .cost:only-child, .tbl td[data-l^="Typical"] > .cost:only-child {
-    display: inline-block; margin: 0; padding: 4px 10px; border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
-    color: var(--muted); font-size: 12px; white-space: nowrap;
-  }
+  .tbl td { padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; font-variant-numeric: tabular-nums; }
   .tbl tr:last-child td { border-bottom: 0; }
   .tbl tbody tr:hover td { background: var(--accent-soft); background: color-mix(in srgb, var(--accent-soft) 30%, var(--surface)); }
-  .tbl .mdl b { display: block; font-size: 15.5px; font-weight: 600; }
+  .tbl .mdl { min-width: 150px; }
+  .tbl td .pre { white-space: normal; min-width: 130px; }
+  .tbl td .cost { white-space: normal; }
   .tbl .mdl small { color: var(--muted); font-size: 12.5px; }
   .tbl .tags { margin-top: 6px; }
   .tbl .num { font-family: var(--font-num); text-align: right; white-space: nowrap; }
@@ -129,8 +110,8 @@
   .mdl { max-width: 280px; }
   .cmp { max-width: 250px; margin-top: 8px; font-size: 12.5px; } .cmp summary { cursor: pointer; color: var(--accent); }
   .cmp table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 6px; font-family: var(--font-num); } .cmp th, .cmp td { padding: 2px 8px; text-align: right; } .cmp th:first-child, .cmp td:first-child { text-align: left; } .cmp tr.cur td { font-weight: 600; }
-  .cps { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 5px; }
-  .pre .cp, .cps .cp { display: inline-block; font-family: var(--font-ui); font-size: 11px; padding: 2px 6px; border-radius: 6px; line-height: 1.6; }
+  .cps { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+  .pre .cp, .cps .cp { display: inline-block; font-family: var(--font-ui); font-size: 11.5px; padding: 2px 8px; border-radius: 6px; }
   .tbl .good { color: var(--accent); font-weight: 500; }
   .effcell { min-width: 120px; }
   .effcell .eff { margin-top: 5px; }
@@ -139,19 +120,16 @@
     .tbl thead { display: none; }
     .tbl { background: transparent; border: 0; border-radius: 0; }
     .tbl tr { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
-              display: grid; grid-template-columns: 1fr; gap: 6px; }
-    .tbl td { border: 0; padding: 0; }
+              display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; }
+    .tbl td { border: 0; padding: 4px 0; }
     .tbl td.mdl { grid-column: 1 / -1; }
     .tbl td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-    .tbl .num { text-align: left; white-space: normal; }
+    .tbl .num { text-align: left; }
     .tbl tbody tr:hover td { background: transparent; }
   }
 
   /* summary, series chips, “best right now”, electricity cost */
   .kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin: 18px 0; }
-  /* Итоги калькулятора — 6 плиток, а не 4: на 4-колоночной сетке последняя строка
-     осталась бы наполовину пустой (4 + 2 из 4). При 3 колонках это ровно 2×3, без дыр. */
-  #totals { grid-template-columns: repeat(3, 1fr); }
   .kpi div { background: var(--surface); padding: 14px 18px; }
   .kpi b { display: block; font-family: var(--font-num); font-size: 24px; font-weight: 500; color: var(--accent); letter-spacing: -.02em; }
   .kpi span { color: var(--muted); font-size: 13px; }
@@ -159,20 +137,14 @@
   .chips button { border-radius: 999px; padding: 6px 14px; font-size: 13.5px; }
   .chips button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
   .top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 8px; }
-  .top > div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
-               display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .top .meta { min-width: 0; }
+  .top > div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
   .top small { color: var(--muted); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; }
   .top b { display: block; font-size: 17px; margin: 4px 0 2px; }
   .top .v { font-family: var(--font-num); color: var(--accent); font-size: 20px; }
   .top .p { font-family: var(--font-num); color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-  /* Справа от текста карточки оставалось много пустого места — переносим туда доход,
-     оформленный отдельной плашкой, а не очередной строкой в общем столбике слева. */
-  .top .rev { flex: 0 0 auto; text-align: right; padding-left: 12px; border-left: 1px solid var(--line); }
-  .top .rev span { display: block; color: var(--muted); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
-  .top .rev b { font-family: var(--font-num); font-size: 21px; color: var(--accent); margin: 0; white-space: nowrap; }
-  .top .rev .na { display: inline-block; color: var(--muted); font-size: 12px; font-family: var(--font-ui); text-transform: none; letter-spacing: 0; margin: 0; }
-  #kwh { width: 130px; flex: 0 0 130px; }
+  #kwh { width: 150px; flex: 0 0 150px; }
+  .bar { gap: 10px; }
+  .bar .spacer { flex: 1 1 0; }
   .ba b.up { color: var(--accent); } .ba b.down { color: #b45309; }
   .cost { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; font-family: var(--font-ui); }
   .tag.conf-hi { background: var(--accent-soft); color: var(--accent); }
@@ -184,19 +156,7 @@
   .tabs button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
   .modenote { color: var(--muted); font-size: 13.5px; margin: 0 0 14px; }
   @media (max-width: 900px) { .tabs { grid-template-columns: 1fr; } }
-  @media (max-width: 900px) { .kpi { grid-template-columns: 1fr 1fr; } #totals { grid-template-columns: 1fr 1fr; } .top { grid-template-columns: 1fr; } }
-  /* Раньше на узких экранах доход переносился под карточку отдельной строкой —
-     выглядело так, будто он "уполз" и отвалился от своей карточки. Вместо этого
-     просто сжимаем шрифты и отступы, но оставляем доход справа, как на десктопе. */
-  @media (max-width: 480px) {
-    .top > div { padding: 12px; gap: 8px; }
-    .top b { font-size: 15.5px; }
-    .top .v { font-size: 17px; }
-    .top .p { font-size: 11.5px; }
-    .top .rev { padding-left: 8px; }
-    .top .rev span { font-size: 9.5px; }
-    .top .rev b { font-size: 18px; }
-  }
+  @media (max-width: 900px) { .kpi { grid-template-columns: 1fr 1fr; } .top { grid-template-columns: 1fr; } }
   footer { color: var(--muted); font-size: 13px; }
   @media (max-width: 860px) {
     .card { grid-template-columns: 1fr 1fr; }
