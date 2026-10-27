@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Telegram — OCBot control and notifications</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="How to connect Telegram to the OCBot bot: token via @BotFather, install wizard, automatic owner detection, tg_proxy for restricted networks.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Telegram — OCBot control and notifications">
+<meta property="og:description" content="How to connect Telegram to the OCBot bot: token via @BotFather, install wizard, automatic owner detection, tg_proxy for restricted networks.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/notify-telegram.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/notify-telegram.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/notify-telegram.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="notify-telegram.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Telegram — the main channel</h1>
+  <p class="lede">You control the bot and receive every notification in Telegram: statuses, alerts, reports, command confirmations. Other channels only mirror notifications — control always lives here.</p>
+  </div>
+  <ul class="chips"><li><a href="index.html#notify">← All channels</a></li><li><a href="notify-max.html">MAX</a></li><li><a href="notify-discord.html">Discord</a></li><li><a href="notify-ntfy.html">ntfy</a></li><li><a href="notify-webhook.html">Webhook</a></li><li><a href="notify-roadmap.html">In development …</a></li></ul>
+  <section class="block" id="steps"><h2>How to connect</h2>
+  <ol class="steps">
+  <li><h3>Create a bot with @BotFather</h3><p>In Telegram, find <code>@BotFather</code>, send <code>/newbot</code>, pick a name and username. BotFather returns a token like <code>1234567890:AA…</code> — that is the bot's password.</p></li><li><h3>Give the token to the bot</h3><p>Run the install wizard <code>bash install.sh</code> — it asks for the bot token. For an installed bot: <code>python3 -m ocbot --config config.json --telegram-set 'TOKEN'</code> — the owner ID is detected automatically.</p></li><li><h3>Confirm you are the owner</h3><p>Send your bot any message: it takes your Telegram ID from recent messages (fallback — <span class="pre">@userinfobot</span> shows your ID). Only the owner can command the bot; everyone else is ignored.</p></li><li><h3>Check it</h3><p>Send <code>/status</code> — the bot reports card states and presets. Full command list — <code>/help</code>; commands are autocompleted in Telegram too.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>If Telegram is restricted by your ISP</h2><p>The bot can reach Telegram through a proxy; it speaks HTTP/HTTPS:</p><div class="code"><pre>python3 -m ocbot --config config.json \
+  --telegram-proxy 'http://192.168.3.5:8080'
+<span style="color:#7d948d"># with authentication:</span>
+python3 -m ocbot --config config.json \
+  --telegram-proxy 'http://user:pass@IP:port'
+<span style="color:#7d948d"># to disable the proxy:</span>
+python3 -m ocbot --config config.json --telegram-proxy ''</pre></div><p>The value is stored in <code>config.json</code> as <code>tg_proxy</code>; the wizard asks about the proxy as well, if Telegram is unreachable. SOCKS5 needs extra software and is not supported — use HTTP proxies. If a proxy is not an option — mirror notifications to <a href="notify-max.html">MAX</a>.</p></section>
+  <section class="block" id="x1"><h2>What arrives in Telegram</h2><ul class="cmds"><li><code>Alerts</code><span>card hang, zero hashrate, driver fall-off, rig reboot</span></li><li><code>Reports</code><span>preset updates, search boundaries, per-card efficiency</span></li><li><code>Commands</code><span><code>/status</code>, <code>/mode</code>, <code>/pl</code>, <code>/tune</code>, <code>/update</code> and all the rest — see the <a href="guide.html#telegram">guide</a></span></li><li><code>Update notice</code><span>the bot checks for a new version once a day and offers <code>/update</code> right in the chat</span></li></ul></section>
+  <section class="block" id="faq"><h2>FAQ</h2>
+  <div class="card" style="margin-top:12px"><h3>401 Unauthorized — the bot errors out</h3><p>The token is invalid (re-issued or a typo). Generate a new one with @BotFather and set it again via the wizard or --telegram-set.</p></div><div class="card" style="margin-top:12px"><h3>The bot is silent — Telegram unreachable</h3><p>Your ISP restricts Telegram: set an HTTP proxy (see above) or connect MAX/Discord/ntfy for notifications; control still needs Telegram.</p></div><div class="card" style="margin-top:12px"><h3>"Not the owner"</h3><p>By design: the owner ID is stored in config.json (owner_id), strangers are ignored. To change — message the bot first (the wizard updates it) or set the ID manually.</p></div><div class="card" style="margin-top:12px"><h3>Telegram notifications do not arrive</h3><p>They are always on; check the bot answers /status. Extra channels mirror; test them with /notify test.</p></div><div class="card" style="margin-top:12px"><h3>Can I switch the bot?</h3><p>Yes: set a new token (--telegram-set or the wizard). History, presets and the database belong to the rig — nothing is lost.</p></div>
+  </section>
+  <p class="legal">Terms: connect with <code>/notify …</code>, test with <code>/notify test</code>, disable with <code>/notify off …</code>; full terms and disclaimer are in the <a href="guide.html#terms">guide</a>.</p>
+  <p class="legal">Independent project: not affiliated with Hiveon/HiveOS; their names belong to their owners.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

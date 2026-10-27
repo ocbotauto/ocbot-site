@@ -187,3 +187,9 @@
   :root[data-theme="dark"] { --bgimg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22240%22%20height%3D%22240%22%20viewBox%3D%220%200%20240%20240%22%20fill%3D%22none%22%20stroke%3D%22%2346c8af%22%20stroke-opacity%3D%220.10%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M0%2060h50l20%2020h50M120%2080v40l20%2020h60M40%20200h40l20-20h30M170%200v50l20%2020h50M0%20150h30l15-15%22/%3E%0A%3Ccircle%20cx%3D%2250%22%20cy%3D%2260%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%2280%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%22140%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22180%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2250%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%2245%22%20cy%3D%22135%22%20r%3D%223%22/%3E%0A%3Cpath%20d%3D%22M200%20190l12-7%2012%207v14l-12%207-12-7z%22/%3E%3Cpath%20d%3D%22M20%2020l9-5%209%205v10l-9%205-9-5z%22/%3E%3Cpath%20d%3D%22M96%2020l9-5%209%205v10l-9%205-9-5z%22%20/%3E%0A%3Crect%20x%3D%22150%22%20y%3D%22205%22%20width%3D%2240%22%20height%3D%2222%22%20rx%3D%223%22/%3E%3Cpath%20d%3D%22M158%20227v6M166%20227v6M174%20227v6%22/%3E%0A%3C/svg%3E"); }
   body { background-image: var(--bgimg); background-size: 240px 240px; background-attachment: fixed; }
   .others { margin: 18px 0 0; font-size: 14px; line-height: 2; } .others a { margin-right: 10px; white-space: nowrap; }
+
+
+/* кликабельные карточки каналов */
+a.card { display: block; color: inherit; text-decoration: none; }
+a.card:hover { border-color: var(--accent); }
+a.card .more { margin-top: 10px; color: var(--accent); font-size: 13.5px; font-weight: 500; }

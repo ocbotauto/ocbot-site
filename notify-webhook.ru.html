@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Webhook — свои обработчики уведомлений OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Как подключить свой webhook к OCBot: POST JSON {"rig": "...", "text": "..."}, Home Assistant, n8n, Zapier, свой скрипт, /notify webhook URL.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Webhook — свои обработчики уведомлений OCBot">
+<meta property="og:description" content="Как подключить свой webhook к OCBot: POST JSON {"rig": "...", "text": "..."}, Home Assistant, n8n, Zapier, свой скрипт, /notify webhook URL.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/notify-webhook.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/notify-webhook.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/notify-webhook.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a>
+  <a href="security.ru.html">Безопасность</a>
+  <a href="notify-webhook.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Webhook — своё подключение</h1>
+  <p class="lede">Бот отправляет JSON POST на ваш адрес: <code>{"rig": "…", "text": "…"}</code>. Подходит для Home Assistant, n8n, Zapier и любого скрипта.</p>
+  </div>
+  <ul class="chips"><li><a href="index.ru.html#notify">← Все каналы</a></li><li><a href="notify-telegram.ru.html">Telegram</a></li><li><a href="notify-max.ru.html">MAX</a></li><li><a href="notify-discord.ru.html">Discord</a></li><li><a href="notify-ntfy.ru.html">ntfy</a></li><li><a href="notify-roadmap.ru.html">В разработке …</a></li></ul>
+  <section class="block" id="steps"><h2>Как подключить</h2>
+  <ol class="steps">
+  <li><h3>Подготовьте приёмник</h3><p>HTTP(S) endpoint, доступный с рига (открытый URL). Один POST — одно уведомление.</p></li><li><h3>Подключите бот</h3><p>В Telegram у OCBot: <code>/notify webhook URL</code>.</p></li><li><h3>Проверьте</h3><p><code>/notify test</code> — приёмник получит <code>{"rig":"имя рига","text":"пробное сообщение"}</code>.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>Формат и примеры</h2><p>Content-Type: <code>application/json</code>. Тело запроса:</p><div class="code"><pre>{
+  "rig": "rig1",
+  "text": "Карта 3: отвал, перезагрузка рига"
+}</pre></div><p>Примеры приёмников:</p><ul class="cmds"><li><code>Home Assistant</code><span>триггер «webhook» → действие-уведомление / сценарий</span></li><li><code>n8n / Zapier / Make</code><span>узел Webhook → любые действия</span></li><li><code>Свой скрипт</code><span>любой сервер: POST-эндпойнт, далее — что хотите</span></li><li><code>Проверить вручную</code><span><span class="pre">curl -H 'Content-Type: application/json' -d '{"rig":"t","text":"ok"}' URL</span></span></li></ul></section>
+  <section class="block" id="x1"><h2>Разделение уведомлений</h2><p>В каждом запросе всегда есть <code>rig</code> (имя рига) и <code>text</code> (содержание). Ошибки канала показывает <code>/notify test</code>. Отключение: <code>/notify off webhook</code>. Управление ботом через webhook НЕ доступно — только уведомления.</p></section>
+  <section class="block" id="faq"><h2>Частые вопросы</h2>
+  <div class="card" style="margin-top:12px"><h3>http или https?</h3><p>Любой URL, доступный с рига; для приватных систем крайне желателен https.</p></div><div class="card" style="margin-top:12px"><h3>Endpoint недоступен</h3><p>Бот не роняет процесс: ошибка пишется в лог и показывается в /notify test. На время ремонта отключите канал: /notify off webhook.</p></div><div class="card" style="margin-top:12px"><h3>Пришло не то, что ждал</h3><p>Проверьте обработчик: текст уходит в поле «text», имя рига — в поле «rig» (Content-Type — application/json).</p></div><div class="card" style="margin-top:12px"><h3>Гарантия доставки есть?</h3><p>Нет: одна попытка с таймаутом 8 сек. Повторы настраивайте на стороне приёмника — или используйте ntfy.</p></div>
+  </section>
+  <p class="legal">Правила: подключение — <code>/notify …</code>, проверка — <code>/notify test</code>, отключение — <code>/notify off канал</code>; все условия и отказ от ответственности — в <a href="guide.ru.html#terms">инструкции</a>.</p>
+  <p class="legal">Индивидуальный проект: не связан с Hiveon и HiveOS и не спонсируется ими; их названия принадлежат их владельцам.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

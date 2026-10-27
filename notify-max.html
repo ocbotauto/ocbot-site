@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAX — OCBot notifications for RF users</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="How to connect the MAX (max.ru) channel to OCBot: a business token on business.max.ru, the chat_id via the built-in "Get ID" bot, and the /notify max TOKEN CHAT_ID command.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MAX — OCBot notifications for RF users">
+<meta property="og:description" content="How to connect the MAX (max.ru) channel to OCBot: a business token on business.max.ru, the chat_id via the built-in "Get ID" bot, and the /notify max TOKEN CHAT_ID command.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/notify-max.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/notify-max.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/notify-max.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="notify-max.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>MAX — notifications for RF users</h1>
+  <p class="lede">If Telegram is restricted by your ISP, rig notifications can arrive in the MAX messenger (max.ru). Bot control still lives in Telegram.</p>
+  </div>
+  <ul class="chips"><li><a href="index.html#notify">← All channels</a></li><li><a href="notify-telegram.html">Telegram</a></li><li><a href="notify-discord.html">Discord</a></li><li><a href="notify-ntfy.html">ntfy</a></li><li><a href="notify-webhook.html">Webhook</a></li><li><a href="notify-roadmap.html">In development …</a></li></ul>
+  <section class="block" id="steps"><h2>How to connect</h2>
+  <ol class="steps">
+  <li><h3>Create a MAX business bot</h3><p>Open <span class="pre">business.max.ru</span> → the "Chat bots" section → create a bot. The token is under Chat bots → ⋮ → Settings.</p></li><li><h3>Get the chat_id</h3><p>Find your bot in MAX and message it. Then ask the built-in "Get ID" bot for your ID — that is the chat_id.</p></li><li><h3>Connect the channel</h3><p>In Telegram with OCBot send: <code>/notify max TOKEN CHAT_ID</code>. Internally it is the <code>max://&lt;chat_id&gt;?token=&lt;token&gt;</code> format; the token is masked in /notify listings.</p></li><li><h3>Check it</h3><p><code>/notify test</code> — a test message arrives in MAX with a <code>[rig name]</code> prefix.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>What arrives and how it looks</h2><p>Messages start with the rig name: MAX shows them as one stream — otherwise you cannot tell which rig the event belongs to. Text is limited to 4000 characters by the MAX API; long notices are trimmed with "…".</p><p>Each rig has its own channel: its own token or chat_id. To disable — <code>/notify off max</code>; active channels — <code>/notify</code>.</p></section>
+  <section class="block" id="x1"><h2>No bot control in MAX</h2><p>MAX mirrors notifications only. There are no commands (<code>/status</code> etc.) in it: control stays in Telegram. If Telegram is unreachable for commands too — use the <a href="notify-telegram.html">Telegram proxy</a> option.</p></section>
+  <section class="block" id="faq"><h2>FAQ</h2>
+  <div class="card" style="margin-top:12px"><h3>"not a MAX channel" / format error</h3><p>The MAX channel uses exactly the <code>max://&lt;chat_id&gt;?token=&lt;token&gt;</code> format; /notify builds it from two arguments. Order: token first, then chat_id.</p></div><div class="card" style="margin-top:12px"><h3>Missing token or chat_id</h3><p>One of the arguments is empty. The token is the long string from business.max.ru, the chat_id is a number from "Get ID".</p></div><div class="card" style="margin-top:12px"><h3>Messages do not arrive</h3><p>Message the bot in MAX (the dialog must exist, "Start" button), then repeat /notify test. The chat_id must match the one "Get ID" showed.</p></div><div class="card" style="margin-top:12px"><h3>MAX API error / timeout</h3><p>A one-off issue on the MAX side or in the network: repeat /notify test later. Channel states are visible in /notify.</p></div><div class="card" style="margin-top:12px"><h3>Can anyone see my token?</h3><p>No: the token is masked in /notify lists and stored in full only in config.json on the rig itself.</p></div>
+  </section>
+  <p class="legal">Terms: connect with <code>/notify …</code>, test with <code>/notify test</code>, disable with <code>/notify off …</code>; full terms and disclaimer are in the <a href="guide.html#terms">guide</a>.</p>
+  <p class="legal">Independent project: not affiliated with Hiveon/HiveOS; their names belong to their owners.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
