@@ -1,184 +1,160 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
 <script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="canonical" href="https://ocbot.org/index.ru.html">
-<link rel="alternate" hreflang="en" href="https://ocbot.org/">
-<link rel="alternate" hreflang="ru" href="https://ocbot.org/index.ru.html">
-<title>OCBot: авторазгон</title>
-<meta name="description" content="Бот подбирает разгон каждой карты NVIDIA на HiveOS (поддержка AMD готовится), проверяет его 2 часа, держит блок питания в рамках и сам перезагружает риг при отвалах. Управление из Telegram.">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/index.ru.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/index.ru.html">
+<title>OCBot: Р°РІС‚РѕСЂР°Р·РіРѕРЅ</title>
+<meta name="description" content="Р‘РѕС‚ РїРѕРґР±РёСЂР°РµС‚ СЂР°Р·РіРѕРЅ РєР°Р¶РґРѕР№ РєР°СЂС‚С‹ NVIDIA РЅР° HiveOS (РїРѕРґРґРµСЂР¶РєР° AMD РіРѕС‚РѕРІРёС‚СЃСЏ), РїСЂРѕРІРµСЂСЏРµС‚ РµРіРѕ 2 С‡Р°СЃР°, РґРµСЂР¶РёС‚ Р±Р»РѕРє РїРёС‚Р°РЅРёСЏ РІ СЂР°РјРєР°С… Рё СЃР°Рј РїРµСЂРµР·Р°РіСЂСѓР¶Р°РµС‚ СЂРёРі РїСЂРё РѕС‚РІР°Р»Р°С…. РЈРїСЂР°РІР»РµРЅРёРµ РёР· Telegram.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/index.css">
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="website">
-<meta property="og:title" content="OCBot: авторазгон">
-<meta property="og:description" content="Бот подбирает разгон каждой карты NVIDIA на HiveOS (поддержка AMD готовится), проверяет его 2 часа, держит блок питания в рамках и сам перезагружает риг при отвалах. Управление из Telegram.">
+<meta property="og:title" content="OCBot: Р°РІС‚РѕСЂР°Р·РіРѕРЅ">
+<meta property="og:description" content="Р‘РѕС‚ РїРѕРґР±РёСЂР°РµС‚ СЂР°Р·РіРѕРЅ РєР°Р¶РґРѕР№ РєР°СЂС‚С‹ NVIDIA РЅР° HiveOS (РїРѕРґРґРµСЂР¶РєР° AMD РіРѕС‚РѕРІРёС‚СЃСЏ), РїСЂРѕРІРµСЂСЏРµС‚ РµРіРѕ 2 С‡Р°СЃР°, РґРµСЂР¶РёС‚ Р±Р»РѕРє РїРёС‚Р°РЅРёСЏ РІ СЂР°РјРєР°С… Рё СЃР°Рј РїРµСЂРµР·Р°РіСЂСѓР¶Р°РµС‚ СЂРёРі РїСЂРё РѕС‚РІР°Р»Р°С…. РЈРїСЂР°РІР»РµРЅРёРµ РёР· Telegram.">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://ocbot.org/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="OCBot: авторазгон">
-<meta name="twitter:description" content="Бот подбирает разгон каждой карты NVIDIA на HiveOS (поддержка AMD готовится), проверяет его 2 часа, держит блок питания в рамках и сам перезагружает риг при отвалах. Управление из Telegram.">
-<meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
 </head>
 <body>
-<nav class="top" aria-label="Разделы сайта"><div class="wrap">
-  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
-  <a href="#features" class="hide-s">Возможности</a><a href="#mixed" class="hide-s">Разные карты</a><a href="#modes" class="hide-s">Режимы</a><a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a><a href="guide.ru.html">Инструкция</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
-  <a class="btn primary" href="guide.ru.html#install">Установить</a>
+<nav class="top" aria-label="Р Р°Р·РґРµР»С‹ СЃР°Р№С‚Р°"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: Р°РІС‚РѕСЂР°Р·РіРѕРЅ</span></a>
+  <a href="#features" class="hide-s">Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё</a><a href="#mixed" class="hide-s">Р Р°Р·РЅС‹Рµ РєР°СЂС‚С‹</a><a href="#modes" class="hide-s">Р РµР¶РёРјС‹</a><a href="catalog.ru.html">РљР°С‚Р°Р»РѕРі</a><a href="buy.ru.html">РљСѓРїРёС‚СЊ</a><a href="guide.ru.html">РРЅСЃС‚СЂСѓРєС†РёСЏ</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
+  <a class="btn primary" href="guide.ru.html#install">РЈСЃС‚Р°РЅРѕРІРёС‚СЊ</a>
 </div></nav>
 
 <main class="wrap">
   <header class="hero">
     <div>
-      <span class="eyebrow"><i class="dot"></i>Для ригов из разных карт</span>
-      <h1>Бот следит за всей фермой <em>и сам подбирает разгон</em></h1>
-      <p class="lede">Особенно выручает на ригах, где много карт и все разные: 3070, 3090, 4070 в одной связке. Бот ищет core, memory и мощность отдельно под каждую, проверяет результат два часа — и продолжает следить дальше: если карта отваливается, сам разбирается в причине, перезагружает риг по нарастающей и возвращает безопасный пресет без вашего участия. Отчёты приходят в Telegram.</p>
-      <div class="cta"><a class="btn primary" href="guide.ru.html#install">Установить за несколько минут</a><a class="btn" href="catalog.ru.html">Каталог пресетов</a></div>
+      <span class="eyebrow"><i class="dot"></i>Р”Р»СЏ СЂРёРіРѕРІ РёР· СЂР°Р·РЅС‹С… РєР°СЂС‚</span>
+      <h1>Р Р°Р·РіРѕРЅ РєР°Р¶РґРѕР№ РєР°СЂС‚С‹ <em>РїРѕРґР±РёСЂР°РµС‚ СЃР°Рј Р±РѕС‚</em></h1>
+      <p class="lede">РћСЃРѕР±РµРЅРЅРѕ РІС‹СЂСѓС‡Р°РµС‚ РЅР° СЂРёРіР°С…, РіРґРµ РјРЅРѕРіРѕ РєР°СЂС‚ Рё РІСЃРµ СЂР°Р·РЅС‹Рµ: 3070, 3090, 4070 РІ РѕРґРЅРѕР№ СЃРІСЏР·РєРµ. Р‘РѕС‚ РёС‰РµС‚ core, memory Рё РјРѕС‰РЅРѕСЃС‚СЊ РѕС‚РґРµР»СЊРЅРѕ РїРѕРґ РєР°Р¶РґСѓСЋ, РїСЂРѕРІРµСЂСЏРµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РґРІР° С‡Р°СЃР° Рё РґРµР»РёС‚ Р±СЋРґР¶РµС‚ Р±Р»РѕРєР° РїРёС‚Р°РЅРёСЏ РјРµР¶РґСѓ РЅРёРјРё. РћС‚С‡С‘С‚С‹ РїСЂРёС…РѕРґСЏС‚ РІ Telegram.</p>
+      <div class="cta"><a class="btn primary" href="guide.ru.html#install">РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р° РЅРµСЃРєРѕР»СЊРєРѕ РјРёРЅСѓС‚</a><a class="btn" href="catalog.ru.html">РљР°С‚Р°Р»РѕРі РїСЂРµСЃРµС‚РѕРІ</a></div>
     </div>
-    <div class="term" aria-label="Пример сообщений бота">
-      <div class="bar"><i></i><i></i><i></i><span>rig · ocbot</span></div>
+    <div class="term" aria-label="РџСЂРёРјРµСЂ СЃРѕРѕР±С‰РµРЅРёР№ Р±РѕС‚Р°">
+      <div class="bar"><i></i><i></i><i></i><span>rig В· ocbot</span></div>
 <pre><span class="m">$</span> /status
 <span class="g">GPU 0</span>  RTX 3070   core <span class="g">+225</span>  mem <span class="g">-100</span>  PL <span class="g">106</span>
-        <span class="m">67.8 MH/s · 104.8 Вт · 0.650 /Вт</span>
+        <span class="m">67.8 MH/s В· 104.8 Р’С‚ В· 0.650 /Р’С‚</span>
 <span class="g">GPU 1</span>  RTX 3090   core <span class="g">+150</span>  mem <span class="g">0</span>   PL <span class="g">171</span>
-        <span class="m">113.4 MH/s · 171 Вт</span>
-<span class="y">GPU 4</span>  проверка кандидата <span class="m">1 ч 12 мин из 2 ч</span>
-<span class="m">PSU 1200 Вт · запас в норме</span>
-<span class="g">пресет проверен</span> <span class="m">(120 мин)</span></pre>
+        <span class="m">113.4 MH/s В· 171 Р’С‚</span>
+<span class="y">GPU 4</span>  РїСЂРѕРІРµСЂРєР° РєР°РЅРґРёРґР°С‚Р° <span class="m">1 С‡ 12 РјРёРЅ РёР· 2 С‡</span>
+<span class="m">PSU 1200 Р’С‚ В· Р·Р°РїР°СЃ РІ РЅРѕСЂРјРµ</span>
+<span class="g">РїСЂРµСЃРµС‚ РїСЂРѕРІРµСЂРµРЅ</span> <span class="m">(120 РјРёРЅ)</span></pre>
     </div>
   </header>
 
   <div class="stats" role="list">
-    <div role="listitem"><b>2 ч</b><span>проверка каждого пресета</span></div>
-    <div role="listitem"><b>3</b><span>режима: эффективность, компромисс, хешрейт</span></div>
-    <div role="listitem"><b>10</b><span>карт разных моделей в одном риге, у каждой свой пресет</span></div>
-    <div role="listitem"><b>24/7</b><span>автозапуск, самообновление, откат</span></div>
+    <div role="listitem"><b>2 С‡</b><span>РїСЂРѕРІРµСЂРєР° РєР°Р¶РґРѕРіРѕ РїСЂРµСЃРµС‚Р°</span></div>
+    <div role="listitem"><b>3</b><span>СЂРµР¶РёРјР°: СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚СЊ, РєРѕРјРїСЂРѕРјРёСЃСЃ, С…РµС€СЂРµР№С‚</span></div>
+    <div role="listitem"><b>10</b><span>РєР°СЂС‚ СЂР°Р·РЅС‹С… РјРѕРґРµР»РµР№ РІ РѕРґРЅРѕРј СЂРёРіРµ, Сѓ РєР°Р¶РґРѕР№ СЃРІРѕР№ РїСЂРµСЃРµС‚</span></div>
+    <div role="listitem"><b>24/7</b><span>Р°РІС‚РѕР·Р°РїСѓСЃРє, СЃР°РјРѕРѕР±РЅРѕРІР»РµРЅРёРµ, РѕС‚РєР°С‚</span></div>
   </div>
 
   <div class="live" id="live" aria-live="polite">
-    <h3>Живой каталог пресетов</h3>
+    <h3>Р–РёРІРѕР№ РєР°С‚Р°Р»РѕРі РїСЂРµСЃРµС‚РѕРІ</h3>
     <p id="liveSub"></p>
     <div class="row" id="liveRow"></div>
-    <a href="catalog.ru.html">Открыть весь каталог →</a>
+    <a href="catalog.ru.html">РћС‚РєСЂС‹С‚СЊ РІРµСЃСЊ РєР°С‚Р°Р»РѕРі в†’</a>
   </div>
 
   <section id="features">
-    <p class="kicker">Возможности</p><h2>Всё, что нужно ригу, в одном боте</h2>
-    <p class="sub">Один стандартный Python без лишних зависимостей. Работает как служба на самом риге.</p>
+    <p class="kicker">Р’РѕР·РјРѕР¶РЅРѕСЃС‚Рё</p><h2>Р’СЃС‘, С‡С‚Рѕ РЅСѓР¶РЅРѕ СЂРёРіСѓ, РІ РѕРґРЅРѕРј Р±РѕС‚Рµ</h2>
+    <p class="sub">РћРґРёРЅ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ Python Р±РµР· Р»РёС€РЅРёС… Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№. Р Р°Р±РѕС‚Р°РµС‚ РєР°Рє СЃР»СѓР¶Р±Р° РЅР° СЃР°РјРѕРј СЂРёРіРµ.</p>
     <div class="grid">
-      <div class="card"><div class="ic">⚙</div><h3>Индивидуальный подбор</h3><p>Каждая карта настраивается отдельно, настройки хранятся по её собственному ID и переживают переустановку.</p></div>
-      <div class="card"><div class="ic">✔</div><h3>Проверка 2 часа</h3><p>Пресет принимается только после стабильной работы. У карты с повторными отвалами проверка длиннее.</p></div>
-      <div class="card"><div class="ic">⚡</div><h3>Бюджет блока питания</h3><p>Суммарный PL держится в пределах мощности БП. В режиме хешрейта мощность перераспределяется между картами.</p></div>
-      <div class="card"><div class="ic">↻</div><h3>Выход из отвалов</h3><p>Разбирает Xid и зависания драйвера, ставит границу разгона и перезагружает риг по лестнице действий.</p></div>
-      <div class="card"><div class="ic">✉</div><h3>Управление из Telegram</h3><p>Статус, режимы, лимиты, пауза, обновление и история командами. Работает только ваш ID.</p></div>
-      <div class="card"><div class="ic">▤</div><h3>Каталог пресетов</h3><p>Лучшие настройки по моделям карт стартовой точкой для новых ригов. Без UUID и имён ригов.</p></div>
+      <div class="card"><div class="ic">вљ™</div><h3>РРЅРґРёРІРёРґСѓР°Р»СЊРЅС‹Р№ РїРѕРґР±РѕСЂ</h3><p>РљР°Р¶РґР°СЏ РєР°СЂС‚Р° РЅР°СЃС‚СЂР°РёРІР°РµС‚СЃСЏ РѕС‚РґРµР»СЊРЅРѕ, РЅР°СЃС‚СЂРѕР№РєРё С…СЂР°РЅСЏС‚СЃСЏ РїРѕ РµС‘ СЃРѕР±СЃС‚РІРµРЅРЅРѕРјСѓ ID Рё РїРµСЂРµР¶РёРІР°СЋС‚ РїРµСЂРµСѓСЃС‚Р°РЅРѕРІРєСѓ.</p></div>
+      <div class="card"><div class="ic">вњ”</div><h3>РџСЂРѕРІРµСЂРєР° 2 С‡Р°СЃР°</h3><p>РџСЂРµСЃРµС‚ РїСЂРёРЅРёРјР°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ РїРѕСЃР»Рµ СЃС‚Р°Р±РёР»СЊРЅРѕР№ СЂР°Р±РѕС‚С‹. РЈ РєР°СЂС‚С‹ СЃ РїРѕРІС‚РѕСЂРЅС‹РјРё РѕС‚РІР°Р»Р°РјРё РїСЂРѕРІРµСЂРєР° РґР»РёРЅРЅРµРµ.</p></div>
+      <div class="card"><div class="ic">вљЎ</div><h3>Р‘СЋРґР¶РµС‚ Р±Р»РѕРєР° РїРёС‚Р°РЅРёСЏ</h3><p>РЎСѓРјРјР°СЂРЅС‹Р№ PL РґРµСЂР¶РёС‚СЃСЏ РІ РїСЂРµРґРµР»Р°С… РјРѕС‰РЅРѕСЃС‚Рё Р‘Рџ. Р’ СЂРµР¶РёРјРµ С…РµС€СЂРµР№С‚Р° РјРѕС‰РЅРѕСЃС‚СЊ РїРµСЂРµСЂР°СЃРїСЂРµРґРµР»СЏРµС‚СЃСЏ РјРµР¶РґСѓ РєР°СЂС‚Р°РјРё.</p></div>
+      <div class="card"><div class="ic">в†»</div><h3>Р’С‹С…РѕРґ РёР· РѕС‚РІР°Р»РѕРІ</h3><p>Р Р°Р·Р±РёСЂР°РµС‚ Xid Рё Р·Р°РІРёСЃР°РЅРёСЏ РґСЂР°Р№РІРµСЂР°, СЃС‚Р°РІРёС‚ РіСЂР°РЅРёС†Сѓ СЂР°Р·РіРѕРЅР° Рё РїРµСЂРµР·Р°РіСЂСѓР¶Р°РµС‚ СЂРёРі РїРѕ Р»РµСЃС‚РЅРёС†Рµ РґРµР№СЃС‚РІРёР№.</p></div>
+      <div class="card"><div class="ic">вњ‰</div><h3>РЈРїСЂР°РІР»РµРЅРёРµ РёР· Telegram</h3><p>РЎС‚Р°С‚СѓСЃ, СЂРµР¶РёРјС‹, Р»РёРјРёС‚С‹, РїР°СѓР·Р°, РѕР±РЅРѕРІР»РµРЅРёРµ Рё РёСЃС‚РѕСЂРёСЏ РєРѕРјР°РЅРґР°РјРё. Р Р°Р±РѕС‚Р°РµС‚ С‚РѕР»СЊРєРѕ РІР°С€ ID.</p></div>
+      <div class="card"><div class="ic">в–¤</div><h3>РљР°С‚Р°Р»РѕРі РїСЂРµСЃРµС‚РѕРІ</h3><p>Р›СѓС‡С€РёРµ РЅР°СЃС‚СЂРѕР№РєРё РїРѕ РјРѕРґРµР»СЏРј РєР°СЂС‚ СЃС‚Р°СЂС‚РѕРІРѕР№ С‚РѕС‡РєРѕР№ РґР»СЏ РЅРѕРІС‹С… СЂРёРіРѕРІ. Р‘РµР· UUID Рё РёРјС‘РЅ СЂРёРіРѕРІ.</p></div>
     </div>
   </section>
 
   <section id="mixed">
-    <p class="kicker">Разные карты в одном риге</p><h2>Один набор настроек на все карты не работает</h2>
-    <p class="sub">Типичная ситуация: 3070, 3080 Ti, 3090 и 4070 в одном риге. У каждой свой запас по core и memory, своя память, свой КПД. Ручной подбор под такой риг занимает недели, а общий профиль теряет хешрейт или роняет слабые карты.</p>
+    <p class="kicker">Р Р°Р·РЅС‹Рµ РєР°СЂС‚С‹ РІ РѕРґРЅРѕРј СЂРёРіРµ</p><h2>РћРґРёРЅ РЅР°Р±РѕСЂ РЅР°СЃС‚СЂРѕРµРє РЅР° РІСЃРµ РєР°СЂС‚С‹ РЅРµ СЂР°Р±РѕС‚Р°РµС‚</h2>
+    <p class="sub">РўРёРїРёС‡РЅР°СЏ СЃРёС‚СѓР°С†РёСЏ: 3070, 3080 Ti, 3090 Рё 4070 РІ РѕРґРЅРѕРј СЂРёРіРµ. РЈ РєР°Р¶РґРѕР№ СЃРІРѕР№ Р·Р°РїР°СЃ РїРѕ core Рё memory, СЃРІРѕСЏ РїР°РјСЏС‚СЊ, СЃРІРѕР№ РљРџР”. Р СѓС‡РЅРѕР№ РїРѕРґР±РѕСЂ РїРѕРґ С‚Р°РєРѕР№ СЂРёРі Р·Р°РЅРёРјР°РµС‚ РЅРµРґРµР»Рё, Р° РѕР±С‰РёР№ РїСЂРѕС„РёР»СЊ С‚РµСЂСЏРµС‚ С…РµС€СЂРµР№С‚ РёР»Рё СЂРѕРЅСЏРµС‚ СЃР»Р°Р±С‹Рµ РєР°СЂС‚С‹.</p>
     <div class="grid">
-      <div class="card"><div class="ic">▦</div><h3>Каждая карта отдельно</h3><p>Свой core, mem и PL для каждой карты. Настройки привязаны к её ID, а не к номеру слота, и не путаются при перестановке.</p></div>
-      <div class="card"><div class="ic">⇄</div><h3>Мощность делится умно</h3><p>В режиме хешрейта бот поднимает PL одной карте за счёт других, находит максимум каждой, а потом подбирает лучшее распределение по всему ригу в пределах БП.</p></div>
-      <div class="card"><div class="ic">◎</div><h3>Слабая карта не тянет риг</h3><p>Отвал записывается границей именно той карты, которая его вызвала. Остальные сохраняют свои пресеты, а виновнице бот оставляет запас.</p></div>
+      <div class="card"><div class="ic">в–¦</div><h3>РљР°Р¶РґР°СЏ РєР°СЂС‚Р° РѕС‚РґРµР»СЊРЅРѕ</h3><p>РЎРІРѕР№ core, mem Рё PL РґР»СЏ РєР°Р¶РґРѕР№ РєР°СЂС‚С‹. РќР°СЃС‚СЂРѕР№РєРё РїСЂРёРІСЏР·Р°РЅС‹ Рє РµС‘ ID, Р° РЅРµ Рє РЅРѕРјРµСЂСѓ СЃР»РѕС‚Р°, Рё РЅРµ РїСѓС‚Р°СЋС‚СЃСЏ РїСЂРё РїРµСЂРµСЃС‚Р°РЅРѕРІРєРµ.</p></div>
+      <div class="card"><div class="ic">в‡„</div><h3>РњРѕС‰РЅРѕСЃС‚СЊ РґРµР»РёС‚СЃСЏ СѓРјРЅРѕ</h3><p>Р’ СЂРµР¶РёРјРµ С…РµС€СЂРµР№С‚Р° Р±РѕС‚ РїРѕРґРЅРёРјР°РµС‚ PL РѕРґРЅРѕР№ РєР°СЂС‚Рµ Р·Р° СЃС‡С‘С‚ РґСЂСѓРіРёС…, РЅР°С…РѕРґРёС‚ РјР°РєСЃРёРјСѓРј РєР°Р¶РґРѕР№, Р° РїРѕС‚РѕРј РїРѕРґР±РёСЂР°РµС‚ Р»СѓС‡С€РµРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РїРѕ РІСЃРµРјСѓ СЂРёРіСѓ РІ РїСЂРµРґРµР»Р°С… Р‘Рџ.</p></div>
+      <div class="card"><div class="ic">в—Ћ</div><h3>РЎР»Р°Р±Р°СЏ РєР°СЂС‚Р° РЅРµ С‚СЏРЅРµС‚ СЂРёРі</h3><p>РћС‚РІР°Р» Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РіСЂР°РЅРёС†РµР№ РёРјРµРЅРЅРѕ С‚РѕР№ РєР°СЂС‚С‹, РєРѕС‚РѕСЂР°СЏ РµРіРѕ РІС‹Р·РІР°Р»Р°. РћСЃС‚Р°Р»СЊРЅС‹Рµ СЃРѕС…СЂР°РЅСЏСЋС‚ СЃРІРѕРё РїСЂРµСЃРµС‚С‹, Р° РІРёРЅРѕРІРЅРёС†Рµ Р±РѕС‚ РѕСЃС‚Р°РІР»СЏРµС‚ Р·Р°РїР°СЃ.</p></div>
     </div>
   </section>
 
   <section id="how">
-    <p class="kicker">Как это работает</p><h2>От установки до готового пресета</h2><p class="sub">Первый подбор занимает время, дальше бот только следит.</p>
+    <p class="kicker">РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚</p><h2>РћС‚ СѓСЃС‚Р°РЅРѕРІРєРё РґРѕ РіРѕС‚РѕРІРѕРіРѕ РїСЂРµСЃРµС‚Р°</h2><p class="sub">РџРµСЂРІС‹Р№ РїРѕРґР±РѕСЂ Р·Р°РЅРёРјР°РµС‚ РІСЂРµРјСЏ, РґР°Р»СЊС€Рµ Р±РѕС‚ С‚РѕР»СЊРєРѕ СЃР»РµРґРёС‚.</p>
     <ol class="steps">
-      <li><h3>Установка</h3><p>Распаковали архив, запустили мастер, ввели только токен бота — остальное мастер найдёт сам.</p></li>
-      <li><h3>Поиск</h3><p>Бот меняет core, mem и PL, измеряет хешрейт и потребление, помечает границы.</p></li>
-      <li><h3>Проверка</h3><p>Лучшие точки проходят двухчасовую работу под нагрузкой.</p></li>
-      <li><h3>Работа</h3><p>Пресет применяется сам, при сбое включается безопасный профиль.</p></li>
+      <li><h3>РЈСЃС‚Р°РЅРѕРІРєР°</h3><p>Р Р°СЃРїР°РєРѕРІР°Р»Рё Р°СЂС…РёРІ, Р·Р°РїСѓСЃС‚РёР»Рё РјР°СЃС‚РµСЂ, РІРІРµР»Рё С‚РѕРєРµРЅ Р±РѕС‚Р° Рё СЃРІРѕР№ ID.</p></li>
+      <li><h3>РџРѕРёСЃРє</h3><p>Р‘РѕС‚ РјРµРЅСЏРµС‚ core, mem Рё PL, РёР·РјРµСЂСЏРµС‚ С…РµС€СЂРµР№С‚ Рё РїРѕС‚СЂРµР±Р»РµРЅРёРµ, РїРѕРјРµС‡Р°РµС‚ РіСЂР°РЅРёС†С‹.</p></li>
+      <li><h3>РџСЂРѕРІРµСЂРєР°</h3><p>Р›СѓС‡С€РёРµ С‚РѕС‡РєРё РїСЂРѕС…РѕРґСЏС‚ РґРІСѓС…С‡Р°СЃРѕРІСѓСЋ СЂР°Р±РѕС‚Сѓ РїРѕРґ РЅР°РіСЂСѓР·РєРѕР№.</p></li>
+      <li><h3>Р Р°Р±РѕС‚Р°</h3><p>РџСЂРµСЃРµС‚ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ СЃР°Рј, РїСЂРё СЃР±РѕРµ РІРєР»СЋС‡Р°РµС‚СЃСЏ Р±РµР·РѕРїР°СЃРЅС‹Р№ РїСЂРѕС„РёР»СЊ.</p></li>
     </ol>
   </section>
 
   <section id="modes">
-    <p class="kicker">Режимы</p><h2>Выберите, что важнее</h2><p class="sub">Режим переключается на лету командой <code>/mode</code>.</p>
+    <p class="kicker">Р РµР¶РёРјС‹</p><h2>Р’С‹Р±РµСЂРёС‚Рµ, С‡С‚Рѕ РІР°Р¶РЅРµРµ</h2><p class="sub">Р РµР¶РёРј РїРµСЂРµРєР»СЋС‡Р°РµС‚СЃСЏ РЅР° Р»РµС‚Сѓ РєРѕРјР°РЅРґРѕР№ <code>/mode</code>.</p>
     <div class="modes">
-      <div class="mode"><code>efficiency</code><h3>Эффективность</h3><p>Максимум хешрейта на ватт. Обычно при сниженном PL, самый экономный по электричеству.</p></div>
-      <div class="mode main"><code>compromise</code><h3>Компромисс</h3><p>Максимум хешрейта при эффективности не хуже лучшей на 3%. Режим по умолчанию.</p></div>
-      <div class="mode"><code>hashrate</code><h3>Хешрейт</h3><p>Максимум хешрейта в пределах бюджета БП. Затем лишний PL снимается, пока потеря не больше 0,5%.</p></div>
+      <div class="mode"><code>efficiency</code><h3>Р­С„С„РµРєС‚РёРІРЅРѕСЃС‚СЊ</h3><p>РњР°РєСЃРёРјСѓРј С…РµС€СЂРµР№С‚Р° РЅР° РІР°С‚С‚. РћР±С‹С‡РЅРѕ РїСЂРё СЃРЅРёР¶РµРЅРЅРѕРј PL, СЃР°РјС‹Р№ СЌРєРѕРЅРѕРјРЅС‹Р№ РїРѕ СЌР»РµРєС‚СЂРёС‡РµСЃС‚РІСѓ.</p></div>
+      <div class="mode main"><code>compromise</code><h3>РљРѕРјРїСЂРѕРјРёСЃСЃ</h3><p>РњР°РєСЃРёРјСѓРј С…РµС€СЂРµР№С‚Р° РїСЂРё СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё РЅРµ С…СѓР¶Рµ Р»СѓС‡С€РµР№ РЅР° 3%. Р РµР¶РёРј РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.</p></div>
+      <div class="mode"><code>hashrate</code><h3>РҐРµС€СЂРµР№С‚</h3><p>РњР°РєСЃРёРјСѓРј С…РµС€СЂРµР№С‚Р° РІ РїСЂРµРґРµР»Р°С… Р±СЋРґР¶РµС‚Р° Р‘Рџ. Р—Р°С‚РµРј Р»РёС€РЅРёР№ PL СЃРЅРёРјР°РµС‚СЃСЏ, РїРѕРєР° РїРѕС‚РµСЂСЏ РЅРµ Р±РѕР»СЊС€Рµ 0,5%.</p></div>
     </div>
   </section>
 
   <section id="install">
     <div class="install">
-      <div><p class="kicker">Старт</p><h2>Установка за пять минут</h2><p class="sub" style="margin:0 0 18px">Подробные шаги с готовыми командами, мастер настройки Telegram и обновление одной командой.</p><a class="btn primary" href="guide.ru.html#install">Открыть инструкцию</a></div>
-<pre><span style="color:#7d948d"># на риге, под root</span>
-mkdir -p /root/ocbot && cd /root/ocbot && wget -qO ocbot.zip https://raw.githubusercontent.com/ocbotauto/ocbot-dist/main/ocbot.zip
-unzip -qo ocbot.zip && bash install.sh
-<span style="color:#7d948d"># обновление</span>
+      <div><p class="kicker">РЎС‚Р°СЂС‚</p><h2>РЈСЃС‚Р°РЅРѕРІРєР° Р·Р° РїСЏС‚СЊ РјРёРЅСѓС‚</h2><p class="sub" style="margin:0 0 18px">РџРѕРґСЂРѕР±РЅС‹Рµ С€Р°РіРё СЃ РіРѕС‚РѕРІС‹РјРё РєРѕРјР°РЅРґР°РјРё, РјР°СЃС‚РµСЂ РЅР°СЃС‚СЂРѕР№РєРё Telegram Рё РѕР±РЅРѕРІР»РµРЅРёРµ РѕРґРЅРѕР№ РєРѕРјР°РЅРґРѕР№.</p><a class="btn primary" href="guide.ru.html#install">РћС‚РєСЂС‹С‚СЊ РёРЅСЃС‚СЂСѓРєС†РёСЋ</a></div>
+<pre><span style="color:#7d948d"># РЅР° СЂРёРіРµ, РїРѕРґ root</span>
+cd /root && unzip -qo hive-oc-bot.zip
+cd hive-oc-bot && bash install.sh
+<span style="color:#7d948d"># РѕР±РЅРѕРІР»РµРЅРёРµ</span>
 python3 -m ocbot --config config.json --self-update</pre>
     </div>
   </section>
 
   <section id="faq">
-    <p class="kicker">Вопросы</p><h2>Коротко о главном</h2>
-    <details><summary>Какие карты и системы поддерживаются?</summary><p>Сейчас карты NVIDIA на HiveOS, поддержка AMD готовится. Алгоритм и майнер задаются в конфиге.</p></details>
-    <details><summary>Нужен ли внешний сервер?</summary><p>Нет. Бот работает на самом риге, данные хранятся в локальной базе SQLite. Telegram нужен только для управления и отчётов.</p></details>
-    <details><summary>Что если риг упадёт во время подбора?</summary><p>Бот запишет точку как границу, вернёт безопасный профиль и продолжит с запасом от неё.</p></details>
-    <details><summary>Можно ли безопасно обновляться?</summary><p>Да. Конфиги и база не затрагиваются, перед заменой кода проверяется архив, при проблеме доступен откат.</p></details>
+    <p class="kicker">Р’РѕРїСЂРѕСЃС‹</p><h2>РљРѕСЂРѕС‚РєРѕ Рѕ РіР»Р°РІРЅРѕРј</h2>
+    <details><summary>РљР°РєРёРµ РєР°СЂС‚С‹ Рё СЃРёСЃС‚РµРјС‹ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚СЃСЏ?</summary><p>РЎРµР№С‡Р°СЃ РєР°СЂС‚С‹ NVIDIA РЅР° HiveOS, РїРѕРґРґРµСЂР¶РєР° AMD РіРѕС‚РѕРІРёС‚СЃСЏ. РђР»РіРѕСЂРёС‚Рј Рё РјР°Р№РЅРµСЂ Р·Р°РґР°СЋС‚СЃСЏ РІ РєРѕРЅС„РёРіРµ.</p></details>
+    <details><summary>РќСѓР¶РµРЅ Р»Рё РІРЅРµС€РЅРёР№ СЃРµСЂРІРµСЂ?</summary><p>РќРµС‚. Р‘РѕС‚ СЂР°Р±РѕС‚Р°РµС‚ РЅР° СЃР°РјРѕРј СЂРёРіРµ, РґР°РЅРЅС‹Рµ С…СЂР°РЅСЏС‚СЃСЏ РІ Р»РѕРєР°Р»СЊРЅРѕР№ Р±Р°Р·Рµ SQLite. Telegram РЅСѓР¶РµРЅ С‚РѕР»СЊРєРѕ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ Рё РѕС‚С‡С‘С‚РѕРІ.</p></details>
+    <details><summary>Р§С‚Рѕ РµСЃР»Рё СЂРёРі СѓРїР°РґС‘С‚ РІРѕ РІСЂРµРјСЏ РїРѕРґР±РѕСЂР°?</summary><p>Р‘РѕС‚ Р·Р°РїРёС€РµС‚ С‚РѕС‡РєСѓ РєР°Рє РіСЂР°РЅРёС†Сѓ, РІРµСЂРЅС‘С‚ Р±РµР·РѕРїР°СЃРЅС‹Р№ РїСЂРѕС„РёР»СЊ Рё РїСЂРѕРґРѕР»Р¶РёС‚ СЃ Р·Р°РїР°СЃРѕРј РѕС‚ РЅРµС‘.</p></details>
+    <details><summary>РњРѕР¶РЅРѕ Р»Рё Р±РµР·РѕРїР°СЃРЅРѕ РѕР±РЅРѕРІР»СЏС‚СЊСЃСЏ?</summary><p>Р”Р°. РљРѕРЅС„РёРіРё Рё Р±Р°Р·Р° РЅРµ Р·Р°С‚СЂР°РіРёРІР°СЋС‚СЃСЏ, РїРµСЂРµРґ Р·Р°РјРµРЅРѕР№ РєРѕРґР° РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ Р°СЂС…РёРІ, РїСЂРё РїСЂРѕР±Р»РµРјРµ РґРѕСЃС‚СѓРїРµРЅ РѕС‚РєР°С‚.</p></details>
   </section>
 
   <footer>
-    <span>OCBot: авторазгон. Бот и пресеты «как есть», использование на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</span>
-    <span><a href="catalog.ru.html">Каталог</a> · <a href="guide.ru.html">Инструкция</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">English</a></span>
-    <span>Независимый проект: не связан с Hiveon и HiveOS, не одобрен и не спонсируется ими. HiveOS, NVIDIA, Telegram и другие названия принадлежат их владельцам и упомянуты только для описания совместимости.</span>
+    <span>OCBot: Р°РІС‚РѕСЂР°Р·РіРѕРЅ. Р‘РѕС‚ Рё РїСЂРµСЃРµС‚С‹ В«РєР°Рє РµСЃС‚СЊВ», РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ РЅР° РІР°С€ СЂРёСЃРє: <a href="guide.ru.html#terms">РѕС‚РєР°Р· РѕС‚ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕСЃС‚Рё</a>.</span>
+    <span><a href="catalog.ru.html">РљР°С‚Р°Р»РѕРі</a> В· <a href="guide.ru.html">РРЅСЃС‚СЂСѓРєС†РёСЏ</a> В· <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">English</a></span>
+    <span>РќРµР·Р°РІРёСЃРёРјС‹Р№ РїСЂРѕРµРєС‚: РЅРµ СЃРІСЏР·Р°РЅ СЃ Hiveon Рё HiveOS, РЅРµ РѕРґРѕР±СЂРµРЅ Рё РЅРµ СЃРїРѕРЅСЃРёСЂСѓРµС‚СЃСЏ РёРјРё. HiveOS, NVIDIA, Telegram Рё РґСЂСѓРіРёРµ РЅР°Р·РІР°РЅРёСЏ РїСЂРёРЅР°РґР»РµР¶Р°С‚ РёС… РІР»Р°РґРµР»СЊС†Р°Рј Рё СѓРїРѕРјСЏРЅСѓС‚С‹ С‚РѕР»СЊРєРѕ РґР»СЏ РѕРїРёСЃР°РЅРёСЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё.</span>
   </footer>
 </main>
-<script src="assets/revenue.js"></script>
 <script>
 (function () {
   function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
   function sg(n) { n = Math.round(n); return n > 0 ? "+" + n : String(n); }
-  var COMMUNITY_URL = "https://ocbot-catalog.ocbotauto.workers.dev";
-  function grabJson(url) {
-    return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
-  }
-  Promise.all([
-    grabJson(COMMUNITY_URL + "/catalog.json"),
-    grabJson(COMMUNITY_URL + "/coinmap.json").catch(function () { return { map: {} }; }),
-    grabJson("network.json").catch(function () { return { coins: {} }; })
-  ]).then(function (res) {
-      var d = res[0], coinmap = (res[1] && res[1].map) || {}, network = (res[2] && res[2].coins) || {};
+  // Каталог с этого же домена (Ру снимок), затем воркер: на мобильных у РФ-операторов
+  // *.workers.dev часто недоступен — каталог «пропадал», теперь сначала локальный файл.
+  (function () {
+    var community = "https://ocbot-catalog.ocbotauto.workers.dev/catalog.json";
+    function render(d) {
       var e = (d.entries || []).filter(function (x) { return x && x.best && x.efficiency > 0; });
       if (!e.length) return;
       var models = {}, cards = 0;
       function slugOf(x) { return (String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "").replace(/\s+/g, " ").trim() + " " + (x.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
       e.forEach(function (x) { models[String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")] = 1; cards += x.cards || 1; });
       e.sort(function (a, b) { return b.efficiency - a.efficiency; });
-      document.getElementById("liveSub").textContent = "Моделей: " + Object.keys(models).length + " · карт в данных: " + cards + " · присылают боты с ригов, без UUID и имён.";
-      var top3 = e.slice(0, 3);
-      function coinsPerDay(x) {
-        var n = network[x.algo];
-        if (!n || !x.hashrate) return null;
-        return (x.hashrate * n.hashrate_to_hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
-      }
-      var tickers = Array.from(new Set(top3.map(function (x) { return coinmap[x.algo]; }).filter(Boolean)));
-      OCBotRevenue.resolvePrices(tickers, "rub").then(function (priceByCoin) {
-        document.getElementById("liveRow").innerHTML = top3.map(function (x, i) {
-          var cpd = coinsPerDay(x);
-          var coin = coinmap[x.algo];
-          var price = coin ? priceByCoin[coin] : null;
-          var revBlock = (!coin || cpd == null) ? '<div class="rev"><span class="na">нет сетевых данных</span></div>'
-            : !price ? '<div class="rev"><span class="na">курс загружается…</span></div>'
-            : '<div class="rev"><span>доход, за сутки</span><b>' + (cpd * price).toFixed(2) + ' ₽</b></div>';
-          return "<div><div class=\"meta\"><small>№" + (i + 1) + " по эффективности</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".ru.html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-            x.efficiency.toFixed(3) + " TH/Вт</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " Вт</small></div>" + revBlock + "</div>";
-        }).join("");
-        document.getElementById("live").className = "live on";
-      });
-    }).catch(function () {});
+      document.getElementById("liveSub").textContent = "РњРѕРґРµР»РµР№: " + Object.keys(models).length + " В· РєР°СЂС‚ РІ РґР°РЅРЅС‹С…: " + cards + " В· РїСЂРёСЃС‹Р»Р°СЋС‚ Р±РѕС‚С‹ СЃ СЂРёРіРѕРІ, Р±РµР· UUID Рё РёРјС‘РЅ.";
+      document.getElementById("liveRow").innerHTML = e.slice(0, 3).map(function (x, i) {
+        return "<div><small>в„–" + (i + 1) + " РїРѕ СЌС„С„РµРєС‚РёРІРЅРѕСЃС‚Рё</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
+          x.efficiency.toFixed(3) + " TH/Р’С‚</span><br><small>core " + sg(x.best.core) + " В· mem " + sg(x.best.mem) + " В· PL " + Math.round(x.best.pl) + " Р’С‚</small></div>";
+      }).join("");
+      document.getElementById("live").className = "live on";
+    }
+    fetch("catalog.json", { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(render)
+      .catch(function () { return fetch(community, { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(render).catch(function () {}); });
+  })();
 })();
 </script>
 <script src="chat.js" defer></script>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a903b20668564c079d7b7f6a265c0b8d"}'></script>
 </body>
 </html>

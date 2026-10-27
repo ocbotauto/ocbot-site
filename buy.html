@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){var p=location.pathname;var t=/\.html$/.test(p)?p.replace(/\.html$/,'.ru.html'):p.replace(/\/$/,'')+'/index.ru.html';if(t!==p)location.replace(t+location.search+location.hash);}}catch(e){}})();</script>
+<script>(function(){try{var L=localStorage.getItem('ocbot_lang');if(L==='en')return;if(L==='ru'||(!L&&/^ru\b/i.test(navigator.language||''))){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="canonical" href="https://ocbot.org/buy.html">
-<link rel="alternate" hreflang="en" href="https://ocbot.org/buy.html">
-<link rel="alternate" hreflang="ru" href="https://ocbot.org/buy.ru.html">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/buy.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/buy.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/buy.ru.html">
 <title>Buy an OCBot key</title>
 <link rel="stylesheet" href="assets/buy.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
@@ -16,13 +16,6 @@
 <meta property="og:title" content="Buy an OCBot key">
 <meta property="og:description" content="Key for the OCBot auto-overclock bot: 1 month $2, 3 months $5.4, 12 months $20 per rig. Payment in USDT on the BNB Chain network, no accounts or email.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ocbot.org/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Buy an OCBot key">
-<meta name="twitter:description" content="Key for the OCBot auto-overclock bot: 1 month $2, 3 months $5.4, 12 months $20 per rig. Payment in USDT on the BNB Chain network, no accounts or email.">
-<meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
 </head>
 <body>
 <div class="wrap">
@@ -38,8 +31,8 @@
 
   <div class="card2">
     <h2>Trial period: 3 days</h2>
-    <p>Once per rig. The setup wizard turns it on by itself at the end of installation — nothing extra to run. If the bot was installed without the wizard, or the trial didn't start by itself, run this on the rig:</p>
-    <pre>cd /root/ocbot && python3 -m ocbot --config config.json --trial</pre>
+    <p>Once per rig. Run this on the rig and see how the bot performs on your cards:</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --trial</pre>
     <p>The trial runs in “Compromise” mode and accepts the core commands: /status, /card, /stop, /resume, /safe, /table, /psu, /pl, /balance. Mode selection, the “4 parameters”, manual tuning and the catalog unlock with a key.</p>
     <p><b>Trial condition:</b> verified presets are submitted anonymously to the site’s shared catalog (card model, core/mem/PL, hashrate and power draw; no rig name, card UUID or IP). This can’t be turned off during the trial. With a purchased key, submission can be turned off at any time with /share off. Before starting, the bot will ask you to confirm you’ve read the <a href="guide.html#terms">terms and disclaimer</a>.</p>
   </div>
@@ -83,8 +76,7 @@
   <div class="card2">
     <h2>How to activate a key</h2>
     <p>Run this on the rig (replace OC-... with your own key):</p>
-    <pre>cd /root/ocbot && python3 -m ocbot --config config.json --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</pre>
-    <p>If the bot is already connected to Telegram, you can do the same right in the chat, no Hive Shell needed: send the bot <code>/activate OC-XXXXX-XXXXX-XXXXX-XXXXX</code>.</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</pre>
     <p>One key works on one rig: each rig needs its own key. <a href="status.html">Service status</a></p>
     <p class="small">An independent project: not affiliated with, endorsed by, or sponsored by Hiveon or HiveOS. HiveOS, NVIDIA, Telegram and other names belong to their owners and are mentioned only to describe compatibility.</p>
   </div>
@@ -182,6 +174,5 @@
 })();
 </script>
 <script src="chat.en.js" defer></script>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a903b20668564c079d7b7f6a265c0b8d"}'></script>
 </body>
 </html>

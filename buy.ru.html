@@ -4,9 +4,9 @@
 <script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="canonical" href="https://ocbot.org/buy.ru.html">
-<link rel="alternate" hreflang="en" href="https://ocbot.org/buy.html">
-<link rel="alternate" hreflang="ru" href="https://ocbot.org/buy.ru.html">
+<link rel="canonical" href="https://makar2186.github.io/ocbot-site/buy.ru.html">
+<link rel="alternate" hreflang="en" href="https://makar2186.github.io/ocbot-site/buy.html">
+<link rel="alternate" hreflang="ru" href="https://makar2186.github.io/ocbot-site/buy.ru.html">
 <title>Купить ключ OCBot</title>
 <link rel="stylesheet" href="assets/buy.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
@@ -16,13 +16,6 @@
 <meta property="og:title" content="Купить ключ OCBot">
 <meta property="og:description" content="Ключ для бота авторазгона OCBot: 1 месяц $2, 3 месяца $5.4, 12 месяцев $20 за риг. Оплата USDT в сети BNB Chain, без аккаунтов и почты.">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://ocbot.org/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Купить ключ OCBot">
-<meta name="twitter:description" content="Ключ для бота авторазгона OCBot: 1 месяц $2, 3 месяца $5.4, 12 месяцев $20 за риг. Оплата USDT в сети BNB Chain, без аккаунтов и почты.">
-<meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
 </head>
 <body>
 <div class="wrap">
@@ -38,8 +31,8 @@
 
   <div class="card2">
     <h2>Пробный период: 3 дня</h2>
-    <p>Один раз на риг. Мастер установки включает его сам в конце установки — отдельно запускать ничего не нужно. Если бот уже установлен без мастера или период не включился сам, выполните на риге:</p>
-    <pre>cd /root/ocbot && python3 -m ocbot --config config.json --trial</pre>
+    <p>Один раз на риг. Выполните на риге и посмотрите, как бот работает на ваших картах:</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --trial</pre>
     <p>Пробная версия работает в режиме «Компромисс» и принимает основные команды: /status, /card, /stop, /resume, /safe, /table, /psu, /pl, /balance. Выбор режима, «4 параметра», ручной подбор и каталог открываются с ключом.</p>
     <p><b>Условие пробного периода:</b> проверенные пресеты анонимно отправляются в общий каталог на сайте (модель карты, core/mem/PL, хешрейт и потребление; без имени рига, UUID карт и IP). На пробном периоде это отключить нельзя. С купленным ключом отправку можно отключить в любой момент командой /share off. Перед стартом бот попросит подтвердить, что вы прочитали <a href="guide.ru.html#terms">условия и отказ от ответственности</a>.</p>
   </div>
@@ -83,8 +76,7 @@
   <div class="card2">
     <h2>Как активировать ключ</h2>
     <p>На риге выполните (подставьте свой ключ вместо OC-...):</p>
-    <pre>cd /root/ocbot && python3 -m ocbot --config config.json --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</pre>
-    <p>Если бот уже подключён к Telegram, то же самое можно прямо в чате с ним, без Hive Shell: напишите боту <code>/activate OC-XXXXX-XXXXX-XXXXX-XXXXX</code>.</p>
+    <pre>cd /root/hive-oc-bot && python3 -m ocbot --config config.json --activate OC-XXXXX-XXXXX-XXXXX-XXXXX</pre>
     <p>Один ключ действует на один риг: для каждого рига нужен свой ключ. <a href="status.ru.html">Статус сервисов</a></p>
     <p class="small">Независимый проект: не связан с Hiveon и HiveOS, не одобрен и не спонсируется ими. HiveOS, NVIDIA, Telegram и другие названия принадлежат их владельцам и упомянуты только для описания совместимости.</p>
   </div>
@@ -182,6 +174,5 @@
 })();
 </script>
 <script src="chat.js" defer></script>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a903b20668564c079d7b7f6a265c0b8d"}'></script>
 </body>
 </html>
