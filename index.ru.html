@@ -27,7 +27,7 @@
 <body>
 <nav class="top" aria-label="Разделы сайта"><div class="wrap">
   <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
-  <a href="#features" class="hide-s">Возможности</a><a href="#mixed" class="hide-s">Разные карты</a><a href="#modes" class="hide-s">Режимы</a><a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a><a href="guide.ru.html">Инструкция</a> · <a href="security.ru.html">Безопасность</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
+  <a href="#features" class="hide-s">Возможности</a><a href="#notify" class="hide-s">Оповещения</a><a href="#modes" class="hide-s">Режимы</a><a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a><a href="guide.ru.html">Инструкция</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
   <a class="btn primary" href="guide.ru.html#install">Установить</a>
 </div></nav>
 
@@ -105,6 +105,18 @@
       <div class="mode"><code>efficiency</code><h3>Эффективность</h3><p>Максимум хешрейта на ватт. Обычно при сниженном PL, самый экономный по электричеству.</p></div>
       <div class="mode main"><code>compromise</code><h3>Компромисс</h3><p>Максимум хешрейта при эффективности не хуже лучшей на 3%. Режим по умолчанию.</p></div>
       <div class="mode"><code>hashrate</code><h3>Хешрейт</h3><p>Максимум хешрейта в пределах бюджета БП. Затем лишний PL снимается, пока потеря не больше 0,5%.</p></div>
+    </div>
+  </section>
+
+  <section id="notify">
+    <p class="kicker">Связь и оповещения</p><h2>Управление и уведомления — куда удобно вам</h2><p class="sub">Все каналы настраиваются одной командой <code>/notify</code>; список подключённых — <code>/notify</code>, пробное сообщение — <code>/notify test</code>.</p>
+    <div class="grid">
+      <div class="card"><div class="ic">✉</div><h3>Telegram — основной канал</h3><p>Управление и все уведомления: статусы, алерты, отчёты, команды. Если Telegram у вашего провайдера ограничен — бот работает через прокси (параметр <code>tg_proxy</code>).</p></div>
+      <div class="card"><div class="ic">◈</div><h3>MAX — для пользователей из РФ</h3><p>Актуально там, где Telegram блокируется: уведомления приходят в мессенджер MAX. Подключение: <code>/notify max ТОКЕН CHAT_ID</code>.</p></div>
+      <div class="card"><div class="ic">⚙</div><h3>Discord</h3><p>Дублирует уведомления в ваш канал сервера через вебхук: <code>/notify discord URL</code>.</p></div>
+      <div class="card"><div class="ic">▣</div><h3>ntfy</h3><p>Push-уведомления на телефон без учёток и лишних приложений: <code>/notify ntfy URL</code>.</p></div>
+      <div class="card"><div class="ic">↯</div><h3>Webhook</h3><p>Свой обработчик: бот присылает JSON POST — для домашней автоматики, мониторинга и скриптов. Подключение: <code>/notify webhook URL</code>.</p></div>
+      <div class="card"><div class="ic">◌</div><h3>В разработке</h3><p>VK, Email, SMS и голосовые звонки — готовятся; появится в списке <code>/notify</code> с очередным выпуском.</p></div>
     </div>
   </section>
 

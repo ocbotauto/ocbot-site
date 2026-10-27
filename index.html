@@ -27,7 +27,7 @@
 <body>
 <nav class="top" aria-label="Site navigation"><div class="wrap">
   <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
-  <a href="#features" class="hide-s">Features</a><a href="#mixed" class="hide-s">Mixed rigs</a><a href="#modes" class="hide-s">Modes</a><a href="catalog.html">Catalog</a><a href="buy.html">Buy</a><a href="guide.html">Guide</a> · <a href="security.html">Security</a><a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">RU</a>
+  <a href="#features" class="hide-s">Features</a><a href="#notify" class="hide-s">Notifications</a><a href="#modes" class="hide-s">Modes</a><a href="catalog.html">Catalog</a><a href="buy.html">Buy</a><a href="guide.html">Guide</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">RU</a>
   <a class="btn primary" href="guide.html#install">Install</a>
 </div></nav>
 
@@ -105,6 +105,18 @@
       <div class="mode"><code>efficiency</code><h3>Efficiency</h3><p>Maximum hashrate per watt. Usually at a reduced power limit, the cheapest on electricity.</p></div>
       <div class="mode main"><code>compromise</code><h3>Compromise</h3><p>Maximum hashrate while staying within 3% of the best efficiency. The default mode.</p></div>
       <div class="mode"><code>hashrate</code><h3>Hashrate</h3><p>Maximum hashrate within the PSU budget. Extra power limit is then trimmed back as long as the loss stays under 0.5%.</p></div>
+    </div>
+  </section>
+
+  <section id="notify">
+    <p class="kicker">Comms &amp; alerts</p><h2>Control and notifications — wherever suits you</h2><p class="sub">Every channel is set up with a single <code>/notify</code> command; <code>/notify</code> lists what's connected, and <code>/notify test</code> sends a test message.</p>
+    <div class="grid">
+      <div class="card"><div class="ic">✉</div><h3>Telegram — the main channel</h3><p>Full control plus every notification: statuses, alerts, reports. If Telegram is restricted by your ISP — the bot works through a proxy (<code>tg_proxy</code>).</p></div>
+      <div class="card"><div class="ic">◈</div><h3>MAX — for RF users</h3><p>Where Telegram is blocked, notifications arrive in the MAX messenger (max.ru). Setup: <code>/notify max TOKEN CHAT_ID</code>.</p></div>
+      <div class="card"><div class="ic">⚙</div><h3>Discord</h3><p>Mirrors notifications to your server channel via webhook: <code>/notify discord URL</code>.</p></div>
+      <div class="card"><div class="ic">▣</div><h3>ntfy</h3><p>Push notifications to your phone, no accounts or extra apps needed: <code>/notify ntfy URL</code>.</p></div>
+      <div class="card"><div class="ic">↯</div><h3>Webhook</h3><p>Custom handler: the bot posts a JSON payload — for home automation, monitoring and scripts. Setup: <code>/notify webhook URL</code>.</p></div>
+      <div class="card"><div class="ic">◌</div><h3>In development</h3><p>VK, Email, SMS and voice calls are in the works; they appear in <code>/notify</code> with the upcoming release.</p></div>
     </div>
   </section>
 
