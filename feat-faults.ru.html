@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Выход из отвалов и зависаний карт — OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Что такое отвал карты и код Xid ошибки драйвера, как OCBot разбирает причины, ставит границу разгона и восстанавливает риг.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Выход из отвалов и зависаний карт — OCBot">
+<meta property="og:description" content="Что такое отвал карты и код Xid ошибки драйвера, как OCBot разбирает причины, ставит границу разгона и восстанавливает риг.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/feat-faults.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/feat-faults.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/feat-faults.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a>
+  <a href="security.ru.html">Безопасность</a>
+  <a href="feat-faults.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Выход из отвалов — бот сам разбирает и чинит</h1>
+  <p class="lede">Простыми словами: «отвал» — это когда карта разом перестала работать в майнинге (хешрейт упал почти до нуля или карта исчезла). Бот разбирает событие: причину, границу, чистое восстановление.</p>
+  </div>
+  <ul class="chips"><li><a href="index.ru.html#features">← Возможности</a></li>
+  <li><a href="notify-telegram.ru.html">Telegram</a></li>
+  <li><a href="notify-max.ru.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>Как это работает</h2>
+  <ol class="steps">
+  <li><h3>Отвал и Xid — простыми словами</h3><p>Ошибка драйвера NVIDIA печатается в лог Hive как «Xid число» — карта честно признаётся, что не смогла продолжить. Причин немного: разогнали выше предела, драйвер завис, память перегрелась. Бот читает Xid и соотносит его с текущим пресетом этой карты.</p></li><li><h3>Первая реакция — безопасный профиль</h3><p>Как только карта зависла или отон превратился в постоянный сбой, бот ставит на неё безопасные значения — риг продолжает работать. Уведомление о причине и действиях приходит в Telegram.</p></li><li><h3>Лестница действий при зависании</h3><p>Если профиль не помог — бот перезагружает риг сам, максимум 3 попытки. Если и это не помогло — перезагрузка откладывается, чтобы дать системе устояться, и проверяется снова позже. Ручного вмешательства не нужно: восстановление полностью автоматическое.</p></li><li><h3>Граница — это урок, не потеря</h3><p>После отвала бот записывает: «выше этой точки этой карте нет смысла». Граница индивидуальная для карты. Не путать: если карта просто замедлилась из-за нехватки мощности (просадка), бот меняет пресет, а не перезагружает риг.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>Что видите вы</h2>Сообщение в Telegram на каждый отвал: какая карта, что случилось (код Xid), что сделал бот (безопасный профиль или перезагрузка), где теперь граница. История — <code>/history 3</code>. Можно помечать вручную: <code>/faulty 3</code> — считать карту неисправной и остановить для неё автоматику; <code>/faulty 3 off</code> — вернуть в работу.</section>
+  <section class="block" id="faq"><h2>Частые вопросы</h2>
+  <div class="card" style="margin-top:12px"><h3>Отвал одной карты роняет весь риг?</h3><p>Нет: безопасный профиль ставится только виновнику; остальные карты сохраняют свои пресеты. Перезагрузка рига — крайняя ступень, не первая реакция.</p></div><div class="card" style="margin-top:12px"><h3>Что бот делает с «проблемной» картой?</h3><p>Если отвалы повторяются и пережили 3 попытки, картой займётся защита: после 5–7 подряд бот возвращает последний хороший пресет и не мучает карту. Вы видите это в Telegram.</p></div><div class="card" style="margin-top:12px"><h3>Мне самому перезагружать риг после отвала?</h3><p>Нет: бот делает сам. Руками — только по вашему желанию.</p></div><div class="card" style="margin-top:12px"><h3>Что показывают сообщения про отвалы?</h3><p>Код Xid, риг, карту и действия — вся история хранится, поэтому легко вспомнить события любой ночи.</p></div>
+  </section>
+  <p class="legal">Управление ботом — в <a href="guide.ru.html">инструкции</a>; условия и отказ от ответственности — <a href="guide.ru.html#terms">#terms</a>.</p>
+  <p class="legal">Индивидуальный проект: не связан с Hiveon и HiveOS и не спонсируется ими; их названия принадлежат их владельцам.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

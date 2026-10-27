@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compromise mode is the default — OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="How the OCBot compromise mode works: maximum hashrate while efficiency stays within 3% of the best; why it is the default.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compromise mode is the default — OCBot">
+<meta property="og:description" content="How the OCBot compromise mode works: maximum hashrate while efficiency stays within 3% of the best; why it is the default.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/mode-compromise.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/mode-compromise.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/mode-compromise.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="mode-compromise.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Compromise mode — the default</h1>
+  <p class="lede">In plain words: the bot picks maximum hashrate among points where efficiency (MH/s per watt) is no worse than 97% of the best. The "golden middle" — that is why it is the default.</p>
+  </div>
+  <ul class="chips"><li><a href="index.html#modes">← Modes</a></li>
+  <li><a href="notify-telegram.html">Telegram</a></li>
+  <li><a href="notify-max.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>How it works</h2>
+  <ol class="steps">
+  <li><h3>What changes</h3><p>The bot takes the fastest point among those losing no more than 3% by economy. In practice — almost maximum hashrate at almost the best efficiency.</p></li><li><h3>Why it is the default</h3><p>Because the balance rarely loses: speed is near maximum, electricity is barely overpaid. A beginner sets up nothing — it is already on.</p></li><li><h3>How to enable/check</h3><p>In Telegram: <code>/mode compromise</code> — enable; <code>/mode</code> — show the current rig goal; <code>/mode 3 compromise</code> — set one card. The 3% tolerance is a fixed comparison rule, not a hand knob.</p></li><li><h3>What about verification</h3><p>As always: new points pass the 2-hour check before saving (see <a href="feat-verify.html">the 2-hour verification</a>).</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>What "within 3%" means</h2>Say the best economic point yields 0.60 MH/W. Compromise candidates must be no worse than 0.58 MH/W; from those the bot takes the fastest. The card ends up both fast and economical.</section>
+  <section class="block" id="faq"><h2>FAQ</h2>
+  <div class="card" style="margin-top:12px"><h3>How much do I lose versus raw speed?</h3><p>Usually 1–3% of hashrate versus the hashrate mode, with a visible saving in watts. Your tariff decides: <code>/table</code> shows both numbers.</p></div><div class="card" style="margin-top:12px"><h3>Can I raise the tolerance?</h3><p>The tolerance is fixed inside the bot (the comparison rule) — it is not meant to be edited manually. For other goals there are separate modes.</p></div><div class="card" style="margin-top:12px"><h3>What if I want raw maximum?</h3><p>That is <code>/mode hashrate</code> — see <a href="mode-hashrate.html">its page</a>. Switching on the fly is fine.</p></div>
+  </section>
+  <p class="legal">Bot control is described in the <a href="guide.html">guide</a>; terms and disclaimer — <a href="guide.html#terms">#terms</a>.</p>
+  <p class="legal">Independent project: not affiliated with Hiveon/HiveOS; their names belong to their owners.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

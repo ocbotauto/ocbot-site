@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Индивидуальный подбор разгона каждой карты — OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Почему один пресет на все карты не работает: OCBot подбирает core, память и Power Limit отдельно для каждой карты NVIDIA и хранит настройки по её ID.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Индивидуальный подбор разгона каждой карты — OCBot">
+<meta property="og:description" content="Почему один пресет на все карты не работает: OCBot подбирает core, память и Power Limit отдельно для каждой карты NVIDIA и хранит настройки по её ID.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/feat-individual.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/feat-individual.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/feat-individual.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a>
+  <a href="security.ru.html">Безопасность</a>
+  <a href="feat-individual.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Индивидуальный подбор — своя настройка каждой карты</h1>
+  <p class="lede">Простыми словами: бот не ставит всем картам одно и то же «среднее» значение, а ищет отдельный разгон для каждой конкретной карты и запоминает его именно за этой картой.</p>
+  </div>
+  <ul class="chips"><li><a href="index.ru.html#features">← Возможности</a></li>
+  <li><a href="notify-telegram.ru.html">Telegram</a></li>
+  <li><a href="notify-max.ru.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>Как это работает</h2>
+  <ol class="steps">
+  <li><h3>Что такое «пресет»</h3><p>Пресет — это три числа для конкретной карты: сдвиг частоты ядра (core), сдвиг частоты памяти (memory) и потолок мощности (Power Limit, PL — «сколько ватт карта имеет право взять»). Хороший пресет = холодное ядро + быстрая память + достаточно ватт одновременно.</p></li><li><h3>Почему нельзя «один на все»</h3><p>Даже карты одной модели с разными типами памяти принимают разный разгон: одна тянет память на +1500, другая начинает сбоить уже на +800. Единый профиль теряет хешрейт на сильных картах и роняет слабые.</p></li><li><h3>Как бот ищет</h3><p>Бот по очереди меняет core, mem и PL; после каждого шага меряет хешрейт и потребление и записывает «лучше/хуже». Если карта упала — точка запоминается как граница и больше не пробуется. Так за часы складывается профиль именно этой карты, без вашего участия.</p></li><li><h3>Настройки привязаны к карте, а не к слоту</h3><p>Идентификатор — UUID карты (уникальный серийный номер, видно в nvidia-smi). Переставить карту в другой слот или на другой риг — бот узнаёт её по UUID и сам применяет прежний пресет.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>Что видите вы</h2>Всё в Telegram: <code>/status</code> — состояние всех карт и пресетов; <code>/card 3</code> — подробно по одной карте (core/mem/PL, чем занята, история); <code>/table</code> — сводная таблица по ригу с максимумами и лучшей эффективностью. Решать вручную ничего не нужно: бот сам останавливается и сам продолжает.</section>
+  <section class="block" id="x1"><h2>Если хочется вмешаться самому</h2>Ручные команды доступны: <code>/pl 3 150</code> — задать карте 3 потолок мощности; <code>/restore 3</code> — вернуть прежний проверенный пресет без новго подбора; <code>/tune 3</code> — запустить подбор заново; <code>/optimize 3</code> — аккуратный поиск лучшего вокруг готового пресета.</section>
+  <section class="block" id="faq"><h2>Частые вопросы</h2>
+  <div class="card" style="margin-top:12px"><h3>Можно ли одной карте задать свой режим/цель?</h3><p>Да: <code>/mode 3 hashrate</code> — цель для карты 3; <code>/mode rig</code> — вернуть карту под общую цель рига.</p></div><div class="card" style="margin-top:12px"><h3>Собьётся ли пресет после переустановки бота?</h3><p>Нет: пресеты живут в локальной базе рига (SQLite) и привязаны к UUID карты. Обновление, переустановка, перезагрузки — настройки остаются.</p></div><div class="card" style="margin-top:12px"><h3>Настройки перенесутся между ригами?</h3><p>Если карта физически переезжает — её пресет едет вместе с ней (UUID тот же). Скопировать лучшие настройки на другие риги можно через каталог: см. <a href="feat-catalog.ru.html">страницу каталога</a>.</p></div><div class="card" style="margin-top:12px"><h3>Сколько занимает первый подбор?</h3><p>Первый проход — часы (зависит от числа карт), дальше бот только следит и мелочь подстраивает. Ваша часть — читать Telegram.</p></div>
+  </section>
+  <p class="legal">Управление ботом — в <a href="guide.ru.html">инструкции</a>; условия и отказ от ответственности — <a href="guide.ru.html#terms">#terms</a>.</p>
+  <p class="legal">Индивидуальный проект: не связан с Hiveon и HiveOS и не спонсируется ими; их названия принадлежат их владельцам.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бюджет блока питания и Power Limit — OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Как OCBot держит суммарный Power Limit рига в пределах блока питания и перераспределяет мощность между картами в режиме хешрейта.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Бюджет блока питания и Power Limit — OCBot">
+<meta property="og:description" content="Как OCBot держит суммарный Power Limit рига в пределах блока питания и перераспределяет мощность между картами в режиме хешрейта.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/feat-psu.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/feat-psu.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/feat-psu.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a>
+  <a href="security.ru.html">Безопасность</a>
+  <a href="feat-psu.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Бюджет блока питания — ватты берутся только в долг под сдачу</h1>
+  <p class="lede">Простыми словами: у блока питания есть потолок ватт, и бот никогда не выходит за него — ни в поиске, ни в работе.</p>
+  </div>
+  <ul class="chips"><li><a href="index.ru.html#features">← Возможности</a></li>
+  <li><a href="notify-telegram.ru.html">Telegram</a></li>
+  <li><a href="notify-max.ru.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>Как это работает</h2>
+  <ol class="steps">
+  <li><h3>Что такое Power Limit (PL)</h3><p>PL — потолок мощности карты в ваттах: карта не возьмёт больше, даже если могла бы. Меньше PL — хешрейт может чуть упасть, но потребление и температура падают гарантированно. Больше PL — больше хешрейт, но и больше ватт и тепла.</p></li><li><h3>Как бот считает бюджет</h3><p>Мастер установки сам подсказывает значение: сумма потолков PL найденных карт с запасом примерно 20%. Вы указываете БП один раз; дальше бот считает карты и систему и держится внутри бюджета.</p></li><li><h3>Где смотреть нагрузку</h3><p><code>/psu</code> в Telegram: как загружен блок питания прямо сейчас, раздача между картами и запас. Поменяли БП или карты — задайте новые вводные той же командой.</p></li><li><h3>Раздача лимитов автоматическая</h3><p>В режиме хешрейта бот может поднять PL одной карте за счёт другой (которой хватает меньше), найти максимум каждой и подобрать лучшее распределение: <code>/balance run</code>. Вручную ватты считать не нужно никогда.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>Почему новичку это удобно</h2>Превышение бюджета «чуть-чуть» — реальный риск: просадки, отстройка защиты, перегрев проводки. Бот просто не позволяет этого: любое действие вписано в бюджет, даже если карта могла бы дать больше.</section>
+  <section class="block" id="faq"><h2>Частые вопросы</h2>
+  <div class="card" style="margin-top:12px"><h3>Как посчитать бюджет самому?</h3><p>Не надо: мастер складывает по найденным картам и добавляет 20% запаса. Изменился БП — <code>/psu</code> с новыми числами.</p></div><div class="card" style="margin-top:12px"><h3>В бюджет входит и система?</h3><p>Да: материнка, процессор, вентиляторы оцениваются ботом и учитываются при раздаче.</p></div><div class="card" style="margin-top:12px"><h3>Одна карта просит больше PL?</h3><p>Это часть работы бота: он берёт ватты там, где карта них не нуждается, и отдаёт туда, где они дают хешрейт. Вашего решения не требует.</p></div><div class="card" style="margin-top:12px"><h3>Лимит общий или на каждую карту?</h3><p>Общий лимит один (pl_total_max в ваттах), распределение по картам — автоматическое; по-отдельности можно <code>/pl</code> к карте.</p></div>
+  </section>
+  <p class="legal">Управление ботом — в <a href="guide.ru.html">инструкции</a>; условия и отказ от ответственности — <a href="guide.ru.html#terms">#terms</a>.</p>
+  <p class="legal">Индивидуальный проект: не связан с Hiveon и HiveOS и не спонсируется ими; их названия принадлежат их владельцам.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

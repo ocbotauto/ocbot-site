@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Per-card overclocking — OCBot</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Why one preset for all cards fails: OCBot searches core, memory and Power Limit separately for each NVIDIA card and keeps presets bound to each card's own ID.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Per-card overclocking — OCBot">
+<meta property="og:description" content="Why one preset for all cards fails: OCBot searches core, memory and Power Limit separately for each NVIDIA card and keeps presets bound to each card's own ID.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/feat-individual.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/feat-individual.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/feat-individual.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="feat-individual.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Per-card tuning — every card gets its own profile</h1>
+  <p class="lede">In plain words: the bot does not slap the same "average" settings on every card — it searches a separate overclock for each specific card and remembers it for that exact card.</p>
+  </div>
+  <ul class="chips"><li><a href="index.html#features">← Features</a></li>
+  <li><a href="notify-telegram.html">Telegram</a></li>
+  <li><a href="notify-max.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>How it works</h2>
+  <ol class="steps">
+  <li><h3>What a "preset" is</h3><p>A preset is three numbers for one card: the core frequency offset, the memory offset and the Power Limit (PL — "how many watts the card is allowed to draw"). A good preset = a cold die, fast memory and enough watts at once.</p></li><li><h3>Why "one for all" fails</h3><p>Even identical models with different memory vendors accept different values: one card happily runs memory +1500, another chokes at +800. A shared profile loses hashrate on strong cards and knocks weak ones offline.</p></li><li><h3>How the bot searches</h3><p>The bot changes core, mem and PL in turn; after each step it measures hashrate and power draw and records "better/worse". If the card drops — the point is recorded as a boundary and never tried again. Over hours this adds up to a card-specific profile, hands-free.</p></li><li><h3>Settings bound to the card, not the slot</h3><p>The identifier is the card UUID (a unique serial number, visible in nvidia-smi). Move the card to another slot or rig — the bot recognizes it by UUID and applies the old preset automatically.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>What you see</h2>Everything is in Telegram: <code>/status</code> — the state of all cards and presets; <code>/card 3</code> — one card in detail (core/mem/PL, what it is busy with, history); <code>/table</code> — a per-rig summary with maxima and the best efficiency. No manual decisions required.</section>
+  <section class="block" id="x1"><h2>If you want to intervene</h2>Manual commands exist: <code>/pl 3 150</code> — set card 3's power limit; <code>/restore 3</code> — roll back to the last verified preset without a new search; <code>/tune 3</code> — restart tuning; <code>/optimize 3</code> — a careful search around the current best preset.</section>
+  <section class="block" id="faq"><h2>FAQ</h2>
+  <div class="card" style="margin-top:12px"><h3>Can one card get its own goal?</h3><p>Yes: <code>/mode 3 hashrate</code> sets the goal for card 3; <code>/mode rig</code> returns it to the rig-wide goal.</p></div><div class="card" style="margin-top:12px"><h3>Do presets survive a reinstall?</h3><p>They live in the rig's local SQLite database, bound to the card UUID. Updates, reinstalls, reboots — the values stay.</p></div><div class="card" style="margin-top:12px"><h3>Do settings carry over between rigs?</h3><p>If a card physically moves, its preset comes along (same UUID). To copy good settings onto other rigs use the catalog: see the <a href="feat-catalog.html">catalog page</a>.</p></div><div class="card" style="margin-top:12px"><h3>How long is the first search?</h3><p>The first pass takes hours (depends on the card count); after that the bot just keeps watch. Your part is reading Telegram.</p></div>
+  </section>
+  <p class="legal">Bot control is described in the <a href="guide.html">guide</a>; terms and disclaimer — <a href="guide.html#terms">#terms</a>.</p>
+  <p class="legal">Independent project: not affiliated with Hiveon/HiveOS; their names belong to their owners.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

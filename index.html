@@ -23,6 +23,7 @@
 <meta name="twitter:title" content="OCBot: auto-overclock">
 <meta name="twitter:description" content="The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming), verifies it for 2 hours, keeps the power supply within limits and reboots the rig after card drops on its own. Controlled from Telegram.">
 <meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"OCBot","operatingSystem":"HiveOS (Linux), NVIDIA GPUs","applicationCategory":"UtilitiesApplication","description":"Auto-overclocking bot for NVIDIA cards on HiveOS: per-card core/mem/PL search, 2-hour preset verification, PSU budget, drop recovery, preset catalog.","offers":{"@type":"Offer","description":"3-day free trial; licenses from 2 USDT/rig per month"},"inLanguage":"en"}</script>
 </head>
 <body>
 <nav class="top" aria-label="Site navigation"><div class="wrap">
@@ -70,12 +71,12 @@
     <p class="kicker">Features</p><h2>Everything a rig needs, in one bot</h2>
     <p class="sub">Plain standard-library Python, no extra dependencies. Runs as a service on the rig itself.</p>
     <div class="grid">
-      <div class="card"><div class="ic">⚙</div><h3>Per-card tuning</h3><p>Every card is tuned separately; settings are stored by the card’s own ID and survive a reinstall.</p></div>
-      <div class="card"><div class="ic">✔</div><h3>2-hour verification</h3><p>A preset is accepted only after running stably. A card with repeated drops gets a longer check.</p></div>
-      <div class="card"><div class="ic">⚡</div><h3>Power-supply budget</h3><p>Total power limit stays within the PSU’s capacity. In hashrate mode, power is redistributed between cards.</p></div>
-      <div class="card"><div class="ic">↻</div><h3>Recovery from drops</h3><p>Parses Xid errors and driver hangs, sets an overclock boundary, and reboots the rig through an escalating sequence of actions.</p></div>
-      <div class="card"><div class="ic">✉</div><h3>Controlled from Telegram</h3><p>Status, modes, limits, pause, update and history, all by command. Only your ID can use it.</p></div>
-      <div class="card"><div class="ic">▤</div><h3>Preset catalog</h3><p>The best settings per card model as a starting point for new rigs. No UUIDs or rig names.</p></div>
+      <a class="card" href="feat-individual.html"><div class="ic">⚙</div><h3>Per-card tuning</h3><p>Every card is tuned separately; settings are stored by the card’s own ID and survive a reinstall.</p><p class="more">Learn more →</p></a>
+      <a class="card" href="feat-verify.html"><div class="ic">✔</div><h3>2-hour verification</h3><p>A preset is accepted only after running stably. A card with repeated drops gets a longer check.</p><p class="more">Learn more →</p></a>
+      <a class="card" href="feat-psu.html"><div class="ic">⚡</div><h3>Power-supply budget</h3><p>Total power limit stays within the PSU’s capacity. In hashrate mode, power is redistributed between cards.</p><p class="more">Learn more →</p></a>
+      <a class="card" href="feat-faults.html"><div class="ic">↻</div><h3>Recovery from drops</h3><p>Parses Xid errors and driver hangs, sets an overclock boundary, and reboots the rig through an escalating sequence of actions.</p><p class="more">Learn more →</p></a>
+      <a class="card" href="notify-telegram.html"><div class="ic">✉</div><h3>Controlled from Telegram</h3><p>Status, modes, limits, pause, update and history, all by command. Only your ID can use it.</p><p class="more">Learn more →</p></a>
+      <a class="card" href="feat-catalog.html"><div class="ic">▤</div><h3>Preset catalog</h3><p>The best settings per card model as a starting point for new rigs. No UUIDs or rig names.</p><p class="more">Learn more →</p></a>
     </div>
   </section>
 
@@ -102,9 +103,9 @@
   <section id="modes">
     <p class="kicker">Modes</p><h2>Choose what matters most</h2><p class="sub">The mode switches on the fly with the <code>/mode</code> command.</p>
     <div class="modes">
-      <div class="mode"><code>efficiency</code><h3>Efficiency</h3><p>Maximum hashrate per watt. Usually at a reduced power limit, the cheapest on electricity.</p></div>
-      <div class="mode main"><code>compromise</code><h3>Compromise</h3><p>Maximum hashrate while staying within 3% of the best efficiency. The default mode.</p></div>
-      <div class="mode"><code>hashrate</code><h3>Hashrate</h3><p>Maximum hashrate within the PSU budget. Extra power limit is then trimmed back as long as the loss stays under 0.5%.</p></div>
+      <a class="mode" href="mode-efficiency.html"><code>efficiency</code><h3>Efficiency</h3><p>Maximum hashrate per watt. Usually at a reduced power limit, the cheapest on electricity.</p><p class="more">Learn more →</p></a>
+      <a class="mode main" href="mode-compromise.html"><code>compromise</code><h3>Compromise</h3><p>Maximum hashrate while staying within 3% of the best efficiency. The default mode.</p><p class="more">Learn more →</p></a>
+      <a class="mode" href="mode-hashrate.html"><code>hashrate</code><h3>Hashrate</h3><p>Maximum hashrate within the PSU budget. Extra power limit is then trimmed back as long as the loss stays under 0.5%.</p><p class="more">Learn more →</p></a>
     </div>
   </section>
 

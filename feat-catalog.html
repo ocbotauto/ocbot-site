@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OCBot preset catalog — verified starting points per card model</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="How the OCBot catalog works: verified best settings per card model (no UUIDs or rig names), exchange between rigs and the community.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCBot preset catalog — verified starting points per card model">
+<meta property="og:description" content="How the OCBot catalog works: verified best settings per card model (no UUIDs or rig names), exchange between rigs and the community.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/feat-catalog.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/feat-catalog.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/feat-catalog.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="feat-catalog.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+  <h1>Preset catalog — best settings per card model</h1>
+  <p class="lede">In plain words: the community has built verified presets for specific card models (RTX 3060, 3070 Ti, 4070…) and the bot uses them as a reasonable starting point instead of a from-scratch search.</p>
+  </div>
+  <ul class="chips"><li><a href="index.html#features">← Features</a></li>
+  <li><a href="notify-telegram.html">Telegram</a></li>
+  <li><a href="notify-max.html">MAX</a></li>
+  </ul>
+  <section class="block" id="steps"><h2>How it works</h2>
+  <ol class="steps">
+  <li><h3>What the catalog stores</h3><p>Only what helps another owner of the same card: card model and memory type, core/mem/PL, mode, efficiency. No UUIDs, no rig names, no accounts — entries are impersonal.</p></li><li><h3>How to use it</h3><p><code>/catalog 3070</code> in Telegram: the bot shows the best presets for RTX 3070 (matched by memory type). The console equivalent is <code>--catalog 3070</code>. On the web everything is at <a href="catalog.html">ocbot.org/catalog</a>.</p></li><li><h3>How to share</h3><p>Exchange via a file: <code>--catalog-export</code> writes your presets to a file, <code>--catalog-import</code> takes them in. Contributing impersonated presets to the shared catalog is voluntary — the <code>catalog_share</code> flag controls it (the wizard asks).</p></li><li><h3>What the catalog does NOT do</h3><p>It forces nothing: it is a starting point. Every imported preset still passes your 2-hour verification; only what the card holds firmly is kept.</p></li>
+  </ol>
+  </section>
+  <section class="block" id="x0"><h2>Model pages</h2>Popular cards get their own catalog pages (RTX 3060 Ti, 3070 Samsung/Micron, 4070 Ti…): identical models with different memory batches accept different values, and the catalog matches by memory type.</section>
+  <section class="block" id="x1"><h2>Security</h2>The catalog contains no UUIDs, rig names, accounts or other personal data. What exactly is stored — <a href="security.html">the security page</a>.</section>
+  <section class="block" id="faq"><h2>FAQ</h2>
+  <div class="card" style="margin-top:12px"><h3>Will the catalog help an "average" rig?</h3><p>Yes: presets from a similar model give the search a solid start; your limits remain yours and get refined by verification.</p></div><div class="card" style="margin-top:12px"><h3>Whose database is it?</h3><p>The community's: your presets, mine, everyone's — shared on ocbot.org, contributed voluntarily and impersonally.</p></div><div class="card" style="margin-top:12px"><h3>Will anything of mine leak?</h3><p>No: no UUIDs, names or accounts; the security page describes it in detail.</p></div>
+  </section>
+  <p class="legal">Bot control is described in the <a href="guide.html">guide</a>; terms and disclaimer — <a href="guide.html#terms">#terms</a>.</p>
+  <p class="legal">Independent project: not affiliated with Hiveon/HiveOS; their names belong to their owners.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

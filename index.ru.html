@@ -23,6 +23,7 @@
 <meta name="twitter:title" content="OCBot: авторазгон">
 <meta name="twitter:description" content="Бот подбирает разгон каждой карты NVIDIA на HiveOS (поддержка AMD готовится), проверяет его 2 часа, держит блок питания в рамках и сам перезагружает риг при отвалах. Управление из Telegram.">
 <meta name="twitter:image" content="https://ocbot.org/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"OCBot","operatingSystem":"HiveOS (Linux), NVIDIA GPUs","applicationCategory":"UtilitiesApplication","description":"Бот авторазгона NVIDIA-карт на HiveOS: подбор core/mem/PL по каждой карте отдельно, проверка пресета 2 часа, бюджет блока питания, восстановление после отвалов, каталог пресетов.","offers":{"@type":"Offer","description":"триал 3 дня бесплатно; лицензия от 2 USDT/риг в месяц"},"inLanguage":"ru"}</script>
 </head>
 <body>
 <nav class="top" aria-label="Разделы сайта"><div class="wrap">
@@ -70,12 +71,12 @@
     <p class="kicker">Возможности</p><h2>Всё, что нужно ригу, в одном боте</h2>
     <p class="sub">Один стандартный Python без лишних зависимостей. Работает как служба на самом риге.</p>
     <div class="grid">
-      <div class="card"><div class="ic">⚙</div><h3>Индивидуальный подбор</h3><p>Каждая карта настраивается отдельно, настройки хранятся по её собственному ID и переживают переустановку.</p></div>
-      <div class="card"><div class="ic">✔</div><h3>Проверка 2 часа</h3><p>Пресет принимается только после стабильной работы. У карты с повторными отвалами проверка длиннее.</p></div>
-      <div class="card"><div class="ic">⚡</div><h3>Бюджет блока питания</h3><p>Суммарный PL держится в пределах мощности БП. В режиме хешрейта мощность перераспределяется между картами.</p></div>
-      <div class="card"><div class="ic">↻</div><h3>Выход из отвалов</h3><p>Разбирает Xid и зависания драйвера, ставит границу разгона и перезагружает риг по лестнице действий.</p></div>
-      <div class="card"><div class="ic">✉</div><h3>Управление из Telegram</h3><p>Статус, режимы, лимиты, пауза, обновление и история командами. Работает только ваш ID.</p></div>
-      <div class="card"><div class="ic">▤</div><h3>Каталог пресетов</h3><p>Лучшие настройки по моделям карт стартовой точкой для новых ригов. Без UUID и имён ригов.</p></div>
+      <a class="card" href="feat-individual.ru.html"><div class="ic">⚙</div><h3>Индивидуальный подбор</h3><p>Каждая карта настраивается отдельно, настройки хранятся по её собственному ID и переживают переустановку.</p><p class="more">Подробнее →</p></a>
+      <a class="card" href="feat-verify.ru.html"><div class="ic">✔</div><h3>Проверка 2 часа</h3><p>Пресет принимается только после стабильной работы. У карты с повторными отвалами проверка длиннее.</p><p class="more">Подробнее →</p></a>
+      <a class="card" href="feat-psu.ru.html"><div class="ic">⚡</div><h3>Бюджет блока питания</h3><p>Суммарный PL держится в пределах мощности БП. В режиме хешрейта мощность перераспределяется между картами.</p><p class="more">Подробнее →</p></a>
+      <a class="card" href="feat-faults.ru.html"><div class="ic">↻</div><h3>Выход из отвалов</h3><p>Разбирает Xid и зависания драйвера, ставит границу разгона и перезагружает риг по лестнице действий.</p><p class="more">Подробнее →</p></a>
+      <a class="card" href="notify-telegram.ru.html"><div class="ic">✉</div><h3>Управление из Telegram</h3><p>Статус, режимы, лимиты, пауза, обновление и история командами. Работает только ваш ID.</p><p class="more">Подробнее →</p></a>
+      <a class="card" href="feat-catalog.ru.html"><div class="ic">▤</div><h3>Каталог пресетов</h3><p>Лучшие настройки по моделям карт стартовой точкой для новых ригов. Без UUID и имён ригов.</p><p class="more">Подробнее →</p></a>
     </div>
   </section>
 
@@ -102,9 +103,9 @@
   <section id="modes">
     <p class="kicker">Режимы</p><h2>Выберите, что важнее</h2><p class="sub">Режим переключается на лету командой <code>/mode</code>.</p>
     <div class="modes">
-      <div class="mode"><code>efficiency</code><h3>Эффективность</h3><p>Максимум хешрейта на ватт. Обычно при сниженном PL, самый экономный по электричеству.</p></div>
-      <div class="mode main"><code>compromise</code><h3>Компромисс</h3><p>Максимум хешрейта при эффективности не хуже лучшей на 3%. Режим по умолчанию.</p></div>
-      <div class="mode"><code>hashrate</code><h3>Хешрейт</h3><p>Максимум хешрейта в пределах бюджета БП. Затем лишний PL снимается, пока потеря не больше 0,5%.</p></div>
+      <a class="mode" href="mode-efficiency.ru.html"><code>efficiency</code><h3>Эффективность</h3><p>Максимум хешрейта на ватт. Обычно при сниженном PL, самый экономный по электричеству.</p><p class="more">Подробнее →</p></a>
+      <a class="mode main" href="mode-compromise.ru.html"><code>compromise</code><h3>Компромисс</h3><p>Максимум хешрейта при эффективности не хуже лучшей на 3%. Режим по умолчанию.</p><p class="more">Подробнее →</p></a>
+      <a class="mode" href="mode-hashrate.ru.html"><code>hashrate</code><h3>Хешрейт</h3><p>Максимум хешрейта в пределах бюджета БП. Затем лишний PL снимается, пока потеря не больше 0,5%.</p><p class="more">Подробнее →</p></a>
     </div>
   </section>
 

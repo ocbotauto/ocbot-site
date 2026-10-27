@@ -193,3 +193,9 @@
 a.card { display: block; color: inherit; text-decoration: none; }
 a.card:hover { border-color: var(--accent); }
 a.card .more { margin-top: 10px; color: var(--accent); font-size: 13.5px; font-weight: 500; }
+
+
+/* кликабельные карточки режимов */
+a.mode { display: block; color: inherit; text-decoration: none; }
+a.mode:hover { border-color: var(--accent); }
+a.mode .more { margin-top: 10px; color: var(--accent); font-size: 13.5px; font-weight: 500; }
