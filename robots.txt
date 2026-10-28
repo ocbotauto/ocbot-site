@@ -2,4 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /calculator.html
 Disallow: /calculator.ru.html
+Disallow: /stats.html
 Sitemap: https://ocbot.org/sitemap.xml
