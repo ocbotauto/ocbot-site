@@ -287,6 +287,17 @@ def update_sitemap(site_dir, base, model_slugs):
     # вырезаем все старые записи о страницах моделей и об устаревшем пути catalog/<slug> — под ЛЮБЫМ доменом
     # (не только текущим base), чтобы после смены домена сайта не копились дубли-страницы со старым адресом
     kept = [b for b in blocks if not re.search(r"loc>https?://[^<]*?/(catalog/|rtx-)", b)]
+    # дедупликация по <loc>: повторные запуски сборки не должны плодить копии одной страницы
+    seen_locs = set()
+    unique = []
+    for b in kept:
+        m = re.search(r"loc>([^<]+)</loc>", b)
+        if m and m.group(1) in seen_locs:
+            continue
+        if m:
+            seen_locs.add(m.group(1))
+        unique.append(b)
+    kept = unique
     fresh = "".join(sitemap_url_block(base + s + ".html", base + s + ".ru.html") for s in sorted(model_slugs))
     with open(path, "w", encoding="utf-8") as f:
         f.write(SITEMAP_HEAD + "".join(kept) + fresh + "</urlset>\n")
