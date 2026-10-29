@@ -75,8 +75,9 @@
   </div>
 
   <p class="modenote">Dollar revenue is calculated where network data (difficulty, block reward — from whattomine.com) is available for that card's algorithm; for other algorithms the column shows "no network data" instead of a guess. This is a point-in-time estimate: network difficulty and coin price keep moving, so real revenue can differ by a few percent either way. Don't use these numbers as the sole basis for a financial decision.</p>
+  <p class="modenote" id="srcstamp" hidden style="margin-top:6px"></p>
 
-  <footer>Hashrate and power draw are the best verified presets from the <a href="catalog.html">community catalog</a> (confirmed by at least 1 rig). Coin prices can lag the exchange by a minute or two. Figures are indicative — use at your own risk.<br>Powered by CoinGecko.
+  <footer>Hashrate and power draw are the best verified presets from the <a href="catalog.html">community catalog</a> (confirmed by at least 1 rig). Coin prices can lag the exchange by a minute or two. Figures are indicative — use at your own risk.<br>Price sources: SafeTrade, CoinGecko, Gate.io.
   <span></span>
 
   <span></span></footer>
@@ -104,6 +105,19 @@
   function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
   function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
 
+  // Stamp next to the prices: where they come from (layers 0–2) and as of when (snapshot/worker timestamp).
+  var SRC_NAMES = { safetrade: "SafeTrade", coingecko: "CoinGecko", gate: "Gate.io" };
+  function stampNote() {
+    var L = (window.OCBotRevenue && OCBotRevenue.last && OCBotRevenue.last()) || {};
+    var s = Object.keys((L.sources && L.sources[state.cur]) || {}).map(function (t) { return L.sources[state.cur][t]; })
+      .map(function (n) { return SRC_NAMES[String(n).replace(/-cache$/, "")] || n; });
+    var uniq = Array.from(new Set(s));
+    var txt = "coin prices" + (uniq.length ? " — " + uniq.join(", ") : "");
+    if (L.asOf) txt += " · data as of " + String(L.asOf).slice(11, 16) + " UTC";
+    var el = $("srcstamp");
+    if (el) { el.textContent = txt; el.hidden = false; }
+  }
+
   var MODES = [
     { id: "efficiency", name: "Efficiency", note: "max hashrate per watt." },
     { id: "compromise", name: "Compromise", note: "the sweet spot (default on rigs)." },
@@ -116,7 +130,7 @@
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
   }
 
-  // Coin price in all three currencies at once — shared module assets/revenue.js (worker → CoinGecko →
+  // Coin price in all three currencies at once — shared module assets/revenue.js (snapshot → worker → CoinGecko →
   // Gate.io → per-ticker cache; see its own comment). Here we just merge usd/eur/rub into one record per ticker.
   function loadPrices(coins) {
     var tickers = Array.from(new Set(coins.filter(Boolean)));
@@ -221,7 +235,7 @@
   function refreshPrices() {
     var algos = Array.from(new Set(state.entries.map(function (e) { return e.algo; })));
     var coins = algos.map(function (a) { return state.coinmap[a]; }).filter(Boolean);
-    loadPrices(coins).then(function (prices) { state.prices = prices; render(); });
+    loadPrices(coins).then(function (prices) { state.prices = prices; render(); stampNote(); });
   }
 
   function loadAll() {
