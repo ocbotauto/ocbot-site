@@ -75,8 +75,9 @@
   </div>
 
   <p class="modenote">Доход в деньгах считается там, где есть сетевые данные (сложность сети, награда за блок — с whattomine.com) для алгоритма карты; для остальных алгоритмов в колонке будет «нет сетевых данных» вместо гадания на глаз. Это оценка по текущему моменту: сложность сети и курс монеты постоянно меняются, поэтому реальный доход может отличаться на несколько процентов в любую сторону. Не используйте эти цифры как единственное основание для финансовых решений.</p>
+  <p class="modenote" id="srcstamp" hidden style="margin-top:6px"></p>
 
-  <footer>Хешрейт и потребление — лучшие проверенные пресеты из <a href="catalog.ru.html">общего каталога</a> (минимум подтверждения — 1 риг). Курс монет может на минуту-две отставать от биржи. Цифры ориентировочные, использование — на ваш риск.<br>Powered by CoinGecko.
+  <footer>Хешрейт и потребление — лучшие проверенные пресеты из <a href="catalog.ru.html">общего каталога</a> (минимум подтверждения — 1 риг). Курс монет может на минуту-две отставать от биржи. Цифры ориентировочные, использование — на ваш риск.<br>Источники цен: SafeTrade, CoinGecko, Gate.io.
   <span></span>
 
   <span></span></footer>
@@ -104,6 +105,19 @@
   function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : ""; }
   function keyOf(e) { return [clean(e.model), e.mem_vendor || "", e.algo, e.miner, e.miner_version, e.objective || ""].join("|"); }
 
+  // Подпись у курса: откуда он (источники слоя 0–2) и на какое время по данным снапшота/воркера.
+  var SRC_NAMES = { safetrade: "SafeTrade", coingecko: "CoinGecko", gate: "Gate.io" };
+  function stampNote() {
+    var L = (window.OCBotRevenue && OCBotRevenue.last && OCBotRevenue.last()) || {};
+    var s = Object.keys((L.sources && L.sources[state.cur]) || {}).map(function (t) { return L.sources[state.cur][t]; })
+      .map(function (n) { return SRC_NAMES[String(n).replace(/-cache$/, "")] || n; });
+    var uniq = Array.from(new Set(s));
+    var txt = "курс монет" + (uniq.length ? " — " + uniq.join(", ") : "");
+    if (L.asOf) txt += " · данные на " + String(L.asOf).slice(11, 16) + " UTC";
+    var el = $("srcstamp");
+    if (el) { el.textContent = txt; el.hidden = false; }
+  }
+
   var MODES = [
     { id: "efficiency", name: "Эффективность", note: "максимум хешрейта на ватт." },
     { id: "compromise", name: "Компромисс", note: "золотая середина (по умолчанию на ригах)." },
@@ -116,7 +130,7 @@
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
   }
 
-  // Цена монеты по всем трём валютам сразу — общий модуль assets/revenue.js (воркер → CoinGecko →
+  // Цена монеты по всем трём валютам сразу — общий модуль assets/revenue.js (снапшот → воркер → CoinGecko →
   // Gate.io → кэш на тикер, см. его комментарий); здесь только сводим usd/eur/rub в одну запись на тикер.
   function loadPrices(coins) {
     var tickers = Array.from(new Set(coins.filter(Boolean)));
@@ -221,7 +235,7 @@
   function refreshPrices() {
     var algos = Array.from(new Set(state.entries.map(function (e) { return e.algo; })));
     var coins = algos.map(function (a) { return state.coinmap[a]; }).filter(Boolean);
-    loadPrices(coins).then(function (prices) { state.prices = prices; render(); });
+    loadPrices(coins).then(function (prices) { state.prices = prices; render(); stampNote(); });
   }
 
   function loadAll() {
