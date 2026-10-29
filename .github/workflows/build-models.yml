@@ -1,4 +1,4 @@
-name: Rebuild model pages from catalog
+﻿name: Rebuild model pages from catalog
 on:
   push:
     branches: [main]
@@ -19,6 +19,9 @@ jobs:
         run: python3 build_models.py --url https://ocbot-catalog.ocbotauto.workers.dev/catalog.json --base https://ocbot.org/
       - name: Refresh network data for the calculator's $ estimate
         run: python3 build_network.py
+
+      - name: Snapshot coin prices to the same-origin fallback (works where the worker is blocked)
+        run: python3 build_price_snapshot.py
       - name: Commit and push if changed
         run: |
           git config user.name "ocbot-site-bot"
