@@ -28,7 +28,7 @@
 <body>
 <nav class="top" aria-label="Разделы сайта"><div class="wrap">
   <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
-  <a href="#features" class="hide-s">Возможности</a><a href="#notify" class="hide-s">Оповещения</a><a href="#modes" class="hide-s">Режимы</a><a href="catalog.ru.html">Каталог</a><a href="buy.ru.html">Купить</a><a href="security.ru.html">Безопасность</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
+  <a href="#features" class="hide-s">Возможности</a><a href="#notify" class="hide-s">Оповещения</a><a href="#modes" class="hide-s">Режимы</a><a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a><a href="security.ru.html">Безопасность</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">EN</a>
   <a class="btn primary" href="guide.ru.html#install">Установить</a>
 </div></nav>
 
@@ -38,7 +38,7 @@
       <span class="eyebrow"><i class="dot"></i>Для ригов из разных карт</span>
       <h1>Бот следит за всей фермой <em>и сам подбирает разгон</em></h1>
       <p class="lede">Особенно выручает на ригах, где много карт и все разные: 3070, 3090, 4070 в одной связке. Бот ищет core, memory и мощность отдельно под каждую, проверяет результат два часа — и продолжает следить дальше: если карта отваливается, сам разбирается в причине, перезагружает риг по нарастающей и возвращает безопасный пресет без вашего участия. Отчёты приходят в Telegram.</p>
-      <div class="cta"><a class="btn primary" href="guide.ru.html#install">Установить за несколько минут</a><a class="btn" href="catalog.ru.html">Каталог пресетов</a></div>
+      <div class="cta"><a class="btn primary" href="guide.ru.html#install">Установить за несколько минут</a><a class="btn" href="catalog.ru.html">Каталог пресетов</a><a class="btn" href="calculator.ru.html">Калькулятор дохода</a></div>
     </div>
     <div class="term" aria-label="Пример сообщений бота">
       <div class="bar"><i></i><i></i><i></i><span>rig · ocbot</span></div>
@@ -64,7 +64,7 @@
     <h3>Живой каталог пресетов</h3>
     <p id="liveSub"></p>
     <div class="row" id="liveRow"></div>
-    <a href="catalog.ru.html">Открыть весь каталог →</a>
+    <a href="catalog.ru.html">Открыть весь каталог →</a> · <a href="calculator.ru.html">Сколько это принесёт: калькулятор дохода →</a>
   </div>
 
   <section id="features">
@@ -142,12 +142,9 @@ python3 -m ocbot --config config.json --self-update</pre>
 
   <footer>
     <span>OCBot: авторазгон. Бот и пресеты «как есть», использование на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</span>
-    <span><a href="catalog.ru.html">Каталог</a> · <a href="security.ru.html">Безопасность</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">English</a></span>
+    <span><a href="catalog.ru.html">Каталог</a> · <a href="calculator.ru.html">Калькулятор</a> · <a href="security.ru.html">Безопасность</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','en');location.href='index.html';}catch(e){}return false;">English</a></span>
     <span>Независимый проект: не связан с Hiveon и HiveOS, не одобрен и не спонсируется ими. HiveOS, NVIDIA, Telegram и другие названия принадлежат их владельцам и упомянуты только для описания совместимости.</span>
-  
-  <span></span>
-
-  <span></span></footer>
+  </footer>
 </main>
 <script src="assets/revenue.js"></script>
 <script>

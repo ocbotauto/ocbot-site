@@ -28,7 +28,7 @@
 <body>
 <nav class="top" aria-label="Site navigation"><div class="wrap">
   <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
-  <a href="#features" class="hide-s">Features</a><a href="#notify" class="hide-s">Notifications</a><a href="#modes" class="hide-s">Modes</a><a href="catalog.html">Catalog</a><a href="buy.html">Buy</a><a href="security.html">Security</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">RU</a>
+  <a href="#features" class="hide-s">Features</a><a href="#notify" class="hide-s">Notifications</a><a href="#modes" class="hide-s">Modes</a><a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a><a href="security.html">Security</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">RU</a>
   <a class="btn primary" href="guide.html#install">Install</a>
 </div></nav>
 
@@ -38,7 +38,7 @@
       <span class="eyebrow"><i class="dot"></i>For rigs with mixed cards</span>
       <h1>The bot watches the whole farm <em>and tunes every card itself</em></h1>
       <p class="lede">Especially useful on rigs with many different cards at once: 3070, 3090, 4070 side by side. The bot searches core, memory and power limit separately for each one, verifies the result for two hours, and keeps watching afterwards — if a card drops, it diagnoses the cause itself, reboots the rig through an escalating sequence of actions, and restores a safe preset without you lifting a finger. Reports arrive in Telegram.</p>
-      <div class="cta"><a class="btn primary" href="guide.html#install">Install in a few minutes</a><a class="btn" href="catalog.html">Preset catalog</a></div>
+      <div class="cta"><a class="btn primary" href="guide.html#install">Install in a few minutes</a><a class="btn" href="catalog.html">Preset catalog</a><a class="btn" href="calculator.html">Revenue calculator</a></div>
     </div>
     <div class="term" aria-label="Example bot messages">
       <div class="bar"><i></i><i></i><i></i><span>rig · ocbot</span></div>
@@ -64,7 +64,7 @@
     <h3>Live preset catalog</h3>
     <p id="liveSub"></p>
     <div class="row" id="liveRow"></div>
-    <a href="catalog.html">Open full catalog →</a>
+    <a href="catalog.html">Open full catalog →</a> · <a href="calculator.html">What it earns: revenue calculator →</a>
   </div>
 
   <section id="features">
@@ -143,12 +143,9 @@ python3 -m ocbot --config config.json --self-update</pre>
 
   <footer>
     <span>OCBot: auto-overclock. The bot and its presets are provided “as is”, use at your own risk: <a href="guide.html#terms">disclaimer</a>.</span>
-    <span><a href="catalog.html">Catalog</a> · <a href="security.html">Security</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">Русский</a></span>
+    <span><a href="catalog.html">Catalog</a> · <a href="calculator.html">Calculator</a> · <a href="security.html">Security</a> · <a href="#" onclick="try{localStorage.setItem('ocbot_lang','ru');location.href='index.ru.html';}catch(e){}return false;">Русский</a></span>
     <span>Independent project: not affiliated with, endorsed or sponsored by Hiveon or HiveOS. HiveOS, NVIDIA, Telegram and other names belong to their owners and are mentioned only to describe compatibility.</span>
-  
-  <span></span>
-
-  <span></span></footer>
+  </footer>
 </main>
 <script src="assets/revenue.js"></script>
 <script>
