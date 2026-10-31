@@ -44,6 +44,8 @@
     <p><b>Условие пробного периода:</b> проверенные пресеты анонимно отправляются в общий каталог на сайте (модель карты, core/mem/PL, хешрейт и потребление; без имени рига, UUID карт и IP). На пробном периоде это отключить нельзя. С купленным ключом отправку можно отключить в любой момент командой /share off. Перед стартом бот попросит подтвердить, что вы прочитали <a href="guide.ru.html#terms">условия и отказ от ответственности</a>.</p>
   </div>
 
+  <div class="card2 promo" id="promo" hidden></div>
+
   <div class="buy" id="forms">
     <div class="card2">
       <h2>Купить новые ключи</h2>
@@ -92,7 +94,7 @@
   <div class="card2 terms">
     <h2>Условия</h2>
     <ul>
-      <li>Ключ на 30 дней стоит 2 USDT за риг, на 3 месяца 5,4 USDT, на год 20 USDT.</li>
+      <li>Ключ на 30 дней стоит 2 USDT за риг, на 3 месяца 5,4 USDT, на год 20 USDT. При покупке на несколько ригов действуют скидки: от 5 ригов −15%, от 10 −25%, от 25 −35%.</li>
       <li>Когда срок заканчивается, бот применяет безопасные значения и перестаёт подбирать разгон.</li>
       <li>Если ключ не продлить, через 5 дней бот удаляет с рига свой код и службу. Пресеты, база и конфиг остаются: после продления работа продолжится с того же места.</li>
       <li>Если сервер лицензий недоступен, бот ничего не удаляет и работает ещё до 3 дней сверх срока.</li>
@@ -106,7 +108,7 @@
   // Адрес сервера продаж задаётся при выкладке сайта. Пустой: страница показывает «приём платежей недоступен».
   var SALES_URL = "https://ocbot-sales.ocbotauto.workers.dev";
   var $ = function (id) { return document.getElementById(id); };
-  var prices = null, months1 = 1, months2 = 1, timer = null;
+  var prices = null, volume = [], promo = null, months1 = 1, months2 = 1, timer = null;
   function say(t) { $("msg").textContent = t || ""; }
   function api(path, body) {
     return fetch(SALES_URL.replace(/\/$/, "") + path, body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) } : { cache: "no-store" })
@@ -115,16 +117,33 @@
   function label(m) { return m === 1 ? "30 дней" : m === 3 ? "3 месяца" : "12 месяцев"; }
   function opts(box, name, cur, pick) {
     box.innerHTML = Object.keys(prices).map(function (m) {
-      return '<label><input type="radio" name="' + name + '" value="' + m + '"' + (+m === cur ? " checked" : "") + '><b>' + prices[m].toFixed(2) + ' $</b><span>' + label(+m) + ' за риг</span></label>';
+      return '<label><input type="radio" name="' + name + '" value="' + m + '"' + (+m === cur ? " checked" : "") + '><b>' + promoUnit(m).toFixed(2) + ' $</b>' + (promo ? ' <s class="old">' + prices[m].toFixed(2) + ' $</s>' : '') + '<span>' + label(+m) + ' за риг</span></label>';
     }).join("");
     box.onchange = function (e) { pick(+e.target.value); calc(); };
   }
   function keyList() { return $("keys").value.split(/[\s,;]+/).map(function (k) { return k.trim().toUpperCase(); }).filter(Boolean); }
+  function discPct(q) { var d = 0; volume.forEach(function (v) { if (q >= v.min && v.pct > d) d = v.pct; }); return d; }
+  function promoUnit(m) { return promo ? prices[m] * (1 - promo.pct / 100) : prices[m]; }
+  function unit(m, q) { return promoUnit(m) * (1 - discPct(q) / 100); }
+  function total(m, q) {
+    var t = unit(m, q) * q, base = prices[m] * q;
+    return "≈ " + t.toFixed(2) + " USDT" + (t < base - 0.004 ? ' <s class="old">' + base.toFixed(2) + '</s>' : "");
+  }
+  function renderPromo() {
+    var box = $("promo"), parts = [];
+    if (promo) {
+      var d = new Date(Date.parse(promo.until) - 1);
+      parts.push("Акция до <b>" + d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "Europe/Moscow" }) + "</b>: дополнительно −" + promo.pct + "% на всё — уже учтена в ценах ниже.");
+    }
+    if (volume.length) parts.push("Скидки за объём: " + volume.map(function (v) { return "от " + v.min + " ригов −" + v.pct + "%"; }).join(", ") + (promo ? " — суммируются с акцией." : "."));
+    if (parts.length) { box.innerHTML = parts.join("<br>"); box.hidden = false; }
+  }
   function calc() {
     if (!prices) return;
     var q = Math.max(1, Math.min(50, parseInt($("qty").value, 10) || 1));
-    $("tot1").textContent = "≈ " + (prices[months1] * q).toFixed(2) + " USDT";
-    $("tot2").textContent = keyList().length ? "≈ " + (prices[months2] * keyList().length).toFixed(2) + " USDT" : "";
+    $("tot1").innerHTML = total(months1, q);
+    var n = keyList().length;
+    $("tot2").innerHTML = n ? total(months2, n) : "";
   }
   function copy(id, btn) {
     var t = $(id).textContent;
@@ -174,7 +193,8 @@
   document.querySelectorAll("[data-copy]").forEach(function (b) { b.onclick = function () { copy(b.getAttribute("data-copy"), b); }; });
   if (!SALES_URL) { $("down").className = "card2 down on"; $("forms").style.display = "none"; return; }
   api("/config").then(function (c) {
-    prices = c.prices; months1 = months2 = +Object.keys(prices)[0];
+    prices = c.prices; volume = c.volume || []; promo = c.promo || null; months1 = months2 = +Object.keys(prices)[0];
+    renderPromo();
     opts($("opts1"), "m1", months1, function (m) { months1 = m; }); opts($("opts2"), "m2", months2, function (m) { months2 = m; });
     calc();
     try { var last = localStorage.getItem("ocbot-order"); if (last) { $("oidin").value = last; } } catch (e) {}

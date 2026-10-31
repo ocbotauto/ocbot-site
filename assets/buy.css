@@ -195,3 +195,8 @@
   .down.on { display: block; }
   .terms li { margin: 6px 0; color: var(--muted); }
   @media (max-width: 800px) { .buy { grid-template-columns: 1fr; } .opts { grid-template-columns: 1fr; } }
+
+/* скидки и акции на странице покупки */
+.promo { background: var(--accent-soft); border-color: var(--accent); font-size: 14px; }
+.promo b { color: var(--accent); }
+s.old { color: var(--muted); font-weight: 400; font-size: 90%; margin-left: 4px; }

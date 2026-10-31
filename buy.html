@@ -44,6 +44,8 @@
     <p><b>Trial condition:</b> verified presets are submitted anonymously to the site’s shared catalog (card model, core/mem/PL, hashrate and power draw; no rig name, card UUID or IP). This can’t be turned off during the trial. With a purchased key, submission can be turned off at any time with /share off. Before starting, the bot will ask you to confirm you’ve read the <a href="guide.html#terms">terms and disclaimer</a>.</p>
   </div>
 
+  <div class="card2 promo" id="promo" hidden></div>
+
   <div class="buy" id="forms">
     <div class="card2">
       <h2>Buy new keys</h2>
@@ -92,7 +94,7 @@
   <div class="card2 terms">
     <h2>Terms</h2>
     <ul>
-      <li>A 30-day key costs 2 USDT per rig, 3 months costs 5.4 USDT, a year costs 20 USDT.</li>
+      <li>A 30-day key costs 2 USDT per rig, 3 months costs 5.4 USDT, a year costs 20 USDT. Volume discounts: 5+ rigs −15%, 10+ −25%, 25+ −35%.</li>
       <li>When the term ends, the bot applies safe values and stops tuning the overclock.</li>
       <li>If the key isn’t renewed, after 5 days the bot removes its own code and service from the rig. Presets, the database and config stay in place: after renewal, work picks up right where it left off.</li>
       <li>If the license server is unreachable, the bot deletes nothing and keeps working for up to 3 extra days beyond the term.</li>
@@ -106,7 +108,7 @@
   // Sales-server address is set at site deploy time. Empty: the page shows “payments unavailable”.
   var SALES_URL = "https://ocbot-sales.ocbotauto.workers.dev";
   var $ = function (id) { return document.getElementById(id); };
-  var prices = null, months1 = 1, months2 = 1, timer = null;
+  var prices = null, volume = [], promo = null, months1 = 1, months2 = 1, timer = null;
   function say(t) { $("msg").textContent = t || ""; }
   function api(path, body) {
     return fetch(SALES_URL.replace(/\/$/, "") + path, body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) } : { cache: "no-store" })
@@ -115,16 +117,33 @@
   function label(m) { return m === 1 ? "30 days" : m === 3 ? "3 months" : "12 months"; }
   function opts(box, name, cur, pick) {
     box.innerHTML = Object.keys(prices).map(function (m) {
-      return '<label><input type="radio" name="' + name + '" value="' + m + '"' + (+m === cur ? " checked" : "") + '><b>' + prices[m].toFixed(2) + ' $</b><span>' + label(+m) + ' per rig</span></label>';
+      return '<label><input type="radio" name="' + name + '" value="' + m + '"' + (+m === cur ? " checked" : "") + '><b>' + promoUnit(m).toFixed(2) + ' $</b>' + (promo ? ' <s class="old">' + prices[m].toFixed(2) + ' $</s>' : '') + '<span>' + label(+m) + ' per rig</span></label>';
     }).join("");
     box.onchange = function (e) { pick(+e.target.value); calc(); };
   }
   function keyList() { return $("keys").value.split(/[\s,;]+/).map(function (k) { return k.trim().toUpperCase(); }).filter(Boolean); }
+  function discPct(q) { var d = 0; volume.forEach(function (v) { if (q >= v.min && v.pct > d) d = v.pct; }); return d; }
+  function promoUnit(m) { return promo ? prices[m] * (1 - promo.pct / 100) : prices[m]; }
+  function unit(m, q) { return promoUnit(m) * (1 - discPct(q) / 100); }
+  function total(m, q) {
+    var t = unit(m, q) * q, base = prices[m] * q;
+    return "≈ " + t.toFixed(2) + " USDT" + (t < base - 0.004 ? ' <s class="old">' + base.toFixed(2) + '</s>' : "");
+  }
+  function renderPromo() {
+    var box = $("promo"), parts = [];
+    if (promo) {
+      var d = new Date(Date.parse(promo.until) - 1);
+      parts.push("Sale until <b>" + d.toLocaleDateString("en-US", { day: "numeric", month: "long", timeZone: "Europe/Moscow" }) + "</b>: an extra −" + promo.pct + "% off everything — already reflected in the prices below.");
+    }
+    if (volume.length) parts.push("Volume discounts: " + volume.map(function (v) { return v.min + "+ rigs −" + v.pct + "%"; }).join(", ") + (promo ? " — stacks with the sale." : "."));
+    if (parts.length) { box.innerHTML = parts.join("<br>"); box.hidden = false; }
+  }
   function calc() {
     if (!prices) return;
     var q = Math.max(1, Math.min(50, parseInt($("qty").value, 10) || 1));
-    $("tot1").textContent = "≈ " + (prices[months1] * q).toFixed(2) + " USDT";
-    $("tot2").textContent = keyList().length ? "≈ " + (prices[months2] * keyList().length).toFixed(2) + " USDT" : "";
+    $("tot1").innerHTML = total(months1, q);
+    var n = keyList().length;
+    $("tot2").innerHTML = n ? total(months2, n) : "";
   }
   function copy(id, btn) {
     var t = $(id).textContent;
@@ -174,7 +193,8 @@
   document.querySelectorAll("[data-copy]").forEach(function (b) { b.onclick = function () { copy(b.getAttribute("data-copy"), b); }; });
   if (!SALES_URL) { $("down").className = "card2 down on"; $("forms").style.display = "none"; return; }
   api("/config").then(function (c) {
-    prices = c.prices; months1 = months2 = +Object.keys(prices)[0];
+    prices = c.prices; volume = c.volume || []; promo = c.promo || null; months1 = months2 = +Object.keys(prices)[0];
+    renderPromo();
     opts($("opts1"), "m1", months1, function (m) { months1 = m; }); opts($("opts2"), "m2", months2, function (m) { months2 = m; });
     calc();
     try { var last = localStorage.getItem("ocbot-order"); if (last) { $("oidin").value = last; } } catch (e) {}
