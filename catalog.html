@@ -248,15 +248,7 @@
     }
     function hiveText(p) {
       var s = "Core clock: " + Math.round(p.core) + "\nMemory clock: " + Math.round(p.mem) + "\nPower limit: " + Math.round(p.pl) + " W";
-      if (p.core_lock || p.mem_lock) s += "\n(locked clocks: core " + (p.core_lock || "—") + ", mem " + (p.mem_lock || "—") + " MHz, set via console)";
-      return s;
-    }
-    function consoleText(p) {
-      var s = "GPU=0   # card index\nnvidia-smi -i $GPU -pl " + Math.round(p.pl) +
-        "\nDISPLAY=:0 nvidia-settings -a \"[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels=" + Math.round(p.core) +
-        "\" -a \"[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels=" + Math.round(p.mem) + "\"";
-      if (p.core_lock) s += "\nnvidia-smi -i $GPU -lgc " + p.core_lock + "," + p.core_lock;
-      if (p.mem_lock) s += "\nnvidia-smi -i $GPU -lmc " + p.mem_lock + "," + p.mem_lock;
+      if (p.core_lock || p.mem_lock) s += "\n(locked clocks: core " + (p.core_lock || "—") + ", mem " + (p.mem_lock || "—") + " MHz)";
       return s;
     }
     function pcell(p, label) {
@@ -265,7 +257,6 @@
       return '<div class="pre"><i>core</i> ' + sgn(p.core) + ' &nbsp;<i>mem</i> ' + sgn(p.mem) + '<br><i>PL</i> ' + Math.round(p.pl) + ' W' +
         (p.core_lock || p.mem_lock ? '<br><i>locked</i> ' + esc(p.core_lock || "—") + ' / ' + esc(p.mem_lock || "—") + ' MHz' : '') +
         '</div><span class="cps"><button type="button" class="cp" data-copy="' + esc(hiveText(p)) + '" aria-label="Copy the ' + esc(label) + ' preset for the Hive panel" title="Values for the Overclocking tab in the Hive panel">Hive</button>' +
-        '<button type="button" class="cp" data-copy="' + esc(consoleText(p)) + '" aria-label="Copy the ' + esc(label) + ' preset for the console" title="nvidia-smi and nvidia-settings commands">Console</button>' +
         '<button type="button" class="cp" data-copy="' + esc(txt) + '" aria-label="Copy the ' + esc(label) + ' preset as text">Text</button></span>';
     }
     function beforeAfter(was, now, d, unit, up) {

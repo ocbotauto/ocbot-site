@@ -43,20 +43,8 @@ def hive_text(p, lang):
     s = f"Core clock: {round(p['core'])}\nMemory clock: {round(p['mem'])}\nPower limit: {round(p['pl'])} W"
     if p.get("core_lock") or p.get("mem_lock"):
         core, mem = p.get("core_lock") or "—", p.get("mem_lock") or "—"
-        s += (f"\n(фиксация частот: ядро {core}, память {mem} МГц, задаётся в консоли)" if lang == "ru" else
-              f"\n(clock lock: core {core}, memory {mem} MHz, set via console)")
-    return s
-
-
-def console_text(p, lang):
-    comment = "номер карты" if lang == "ru" else "card index"
-    s = (f"GPU=0   # {comment}\n" f"nvidia-smi -i $GPU -pl {round(p['pl'])}\n"
-         f"DISPLAY=:0 nvidia-settings -a \"[gpu:$GPU]/GPUGraphicsClockOffsetAllPerformanceLevels={round(p['core'])}\" "
-         f"-a \"[gpu:$GPU]/GPUMemoryTransferRateOffsetAllPerformanceLevels={round(p['mem'])}\"")
-    if p.get("core_lock"):
-        s += f"\nnvidia-smi -i $GPU -lgc {p['core_lock']},{p['core_lock']}"
-    if p.get("mem_lock"):
-        s += f"\nnvidia-smi -i $GPU -lmc {p['mem_lock']},{p['mem_lock']}"
+        s += (f"\n(фиксация частот: ядро {core}, память {mem} МГц)" if lang == "ru" else
+              f"\n(clock lock: core {core}, memory {mem} MHz)")
     return s
 
 
@@ -104,14 +92,13 @@ def row(en, lang, network):
             matched = f"✓ matched on {rigs} rig{('' if rigs == 1 else 's')}"
     else:
         matched = ""
-    hive_btn, console_btn = ("Hive", "Консоль") if lang == "ru" else ("Hive", "Console")
+    hive_btn = "Hive"
     copied = "Скопировано" if lang == "ru" else "Copied"
     power_label = "Потребл." if lang == "ru" else "Power"
     return (f'<tr><td><b>{e(mode)}</b><small>{e(en["algo"])} / {e(mname(en["miner"]))} {e(en.get("miner_version"))}</small>'
             f'{f"<small>{matched}</small>" if matched else ""}</td>'
             f'<td><div class="pre"><i>core</i> {sgn(b["core"])} &nbsp;<i>mem</i> {sgn(b["mem"])}<br><i>PL</i> {round(b["pl"])} {unit_w}{lock}</div>'
-            f'<span class="cps"><button type="button" class="cp" data-copy="{e(hive_text(b, lang))}">{hive_btn}</button>'
-            f'<button type="button" class="cp" data-copy="{e(console_text(b, lang))}">{console_btn}</button></span></td>'
+            f'<span class="cps"><button type="button" class="cp" data-copy="{e(hive_text(b, lang))}">{hive_btn}</button></span></td>'
             f'<td class="num">{num(en.get("hashrate"), 1)} <small>{unit_h}</small>{was.split("</span>")[0] + "</span>" if en.get("stock_hashrate") else ""}</td>'
             f'<td class="num">{num(en.get("power_w"), 0)} <small>{unit_w}</small></td>'
             f'<td class="num"><span class="good">{num(en.get("efficiency"), 3)}</span> <small>{unit_h.split("/")[0]}/{unit_w}</small></td>'

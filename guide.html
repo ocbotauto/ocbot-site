@@ -153,7 +153,7 @@
     <details><summary>Thunderbolt cards are invisible to X, offsets are not applied</summary>
       <p>X disables external GPUs by default (<code>/var/log/Xorg.0.log</code> says "external GPUs have not been enabled"). The bot can add the needed option to the Hive script. Reboot the rig afterwards.</p>
       <div class="code"><pre><code>cd /root/ocbot &amp;&amp; python3 -m ocbot --config <span class="cfg">config.json</span> --fix-external-gpus</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div>
-      <div class="code"><pre><code>nvidia-smi -L | wc -l; DISPLAY=:0 nvidia-settings -q gpus | grep -c &quot;\[gpu:&quot;</code></pre><button type="button" class="copy" aria-label="Copy command">Copy</button></div><p class="note">The two numbers must match the number of cards.</p>
+      <p>After the reboot, make sure every card is visible in the Hive panel and in <code>/status</code>: the number of cards there must match the rig.</p>
       <p>A Hive image update overwrites the script: repeat the command.</p></details>
     <details><summary>Settings disappeared after the miner restarted</summary>
       <p>Hive may have applied its own overclock on top. Make sure the overclock is cleared in the panel and check <code>/status</code>.</p></details>
