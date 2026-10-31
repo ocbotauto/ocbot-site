@@ -135,7 +135,7 @@
       var d = new Date(Date.parse(promo.until) - 1);
       parts.push("Sale until <b>" + d.toLocaleDateString("en-US", { day: "numeric", month: "long", timeZone: "Europe/Moscow" }) + "</b>: an extra −" + promo.pct + "% off everything — already reflected in the prices below.");
     }
-    if (volume.length) parts.push("Volume discounts: " + volume.map(function (v) { return v.min + "+ rigs −" + v.pct + "%"; }).join(", ") + (promo ? " — stacks with the sale." : "."));
+    if (volume.length) parts.push("Volume discounts: " + volume.slice().sort(function (a, b) { return a.min - b.min; }).map(function (v) { return v.min + "+ rigs −" + v.pct + "%"; }).join(", ") + (promo ? " — stacks with the sale." : "."));
     if (parts.length) { box.innerHTML = parts.join("<br>"); box.hidden = false; }
   }
   function calc() {

@@ -135,7 +135,7 @@
       var d = new Date(Date.parse(promo.until) - 1);
       parts.push("Акция до <b>" + d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", timeZone: "Europe/Moscow" }) + "</b>: дополнительно −" + promo.pct + "% на всё — уже учтена в ценах ниже.");
     }
-    if (volume.length) parts.push("Скидки за объём: " + volume.map(function (v) { return "от " + v.min + " ригов −" + v.pct + "%"; }).join(", ") + (promo ? " — суммируются с акцией." : "."));
+    if (volume.length) parts.push("Скидки за объём: " + volume.slice().sort(function (a, b) { return a.min - b.min; }).map(function (v) { return "от " + v.min + " ригов −" + v.pct + "%"; }).join(", ") + (promo ? " — суммируются с акцией." : "."));
     if (parts.length) { box.innerHTML = parts.join("<br>"); box.hidden = false; }
   }
   function calc() {
