@@ -5,9 +5,8 @@
 посетителей недоступны. Снапшот рядом со страницей решает это: assets/revenue.js читает
 его первым слоем (дальше — живой воркер, CoinGecko, Gate.io, localStorage-кеш).
 
-Источник — /price.json воркера ocbot-catalog (внутри него цепочка SafeTrade → CoinGecko →
-Gate.io → KV-кеш; SafeTrade — биржа, где торгуются майнерские монеты каталога, и то же
-место, откуда whattomine берёт их курсы). Тикеры — те, что реально используются в
+Источник — /price.json воркера ocbot-catalog (внутри него цепочка WhatToMine → CoinGecko →
+Gate.io → последний известный курс; WhatToMine отдаёт курсы всех GPU-монет одним запросом). Тикеры — те, что реально используются в
 каталоге (как в build_network.py).
 
 Запуск из корня сайта:  python3 build_price_snapshot.py

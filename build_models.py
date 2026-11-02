@@ -105,6 +105,275 @@ def row(en, lang, network):
             f'{rev_cell}</tr>'), copied, power_label
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# «Разгон → хешрейт»: калькулятор, график и таблица на странице модели. Данные: curves.json приёмника (замеры точек
+# подбора многих карт одной модели, склеенные по шагам разгона). Таблица и график рисуются сразу в HTML (видны без JS
+# и поисковикам); калькулятор работает на встроенных данных страницы — без запросов к *.workers.dev (в части сетей
+# недоступен). Доход в сутки — по живому курсу монеты (assets/revenue.js) и сетевым данным network.json.
+# ---------------------------------------------------------------------------------------------------------------
+CURVE_TXT = {
+    "ru": {"title": "Какой хешрейт даст разгон", "kicker": "Калькулятор по реальным замерам",
+           "lede": "Выберите разгон — покажем, что получится на этой карте. Цифры собраны из замеров разных карт этой модели "
+                   "на ригах с ботом: одна карта держит меньше, другая больше, вместе они покрывают весь диапазон.",
+           "axis_core": "Ядро (core)", "axis_mem": "Память (mem)", "col_hash": "Хешрейт", "col_range": "Разброс",
+           "col_pw": "Потребл.", "col_eff": "Эффективность", "col_hold": "Держат", "few": "мало данных", "heat": "перегрев",
+           "none": "не держит ни одна", "cards": "карт", "w": "Вт", "of": "из", "day": "сутки",
+           "t_hash": "Хешрейт", "t_pw": "Потребление", "t_eff": "Эффективность", "t_rev": "Доход в сутки", "t_hold": "Надёжность",
+           "rev_note": "без учёта электричества", "rev_na": "нет курса", "hold_txt": "держат {ok} {of} {t} карт",
+           "v_ok": "надёжно", "v_mid": "на грани: часть карт не держит", "v_bad": "высокий риск отвала",
+           "v_few": "проверено мало карт", "v_none": "на этом шаге не удержалась ни одна из {t} карт — ставить нельзя",
+           "above": "Выше {v} данных пока нет: такой разгон на этой модели ещё никто не проверял.",
+           "safe": "Надёжный максимум", "peak": "Максимум хешрейта", "table": "Все шаги по замерам",
+           "chart_t": "Хешрейт по шагам разгона", "legend_band": "разброс между картами", "legend_fail": "отвал",
+           "pl_note": "PL у карт разный (бот задаёт его по лимиту блока питания), поэтому показан типичный PL на шаге. "
+                      "Бот на вашем риге подберёт точку именно под вашу карту.",
+           "minus": "Меньше", "plus": "Больше"},
+    "en": {"title": "What hashrate an overclock gives", "kicker": "Calculator built from real measurements",
+           "lede": "Pick an overclock to see what this card gets. The numbers come from measurements of different cards of "
+                   "this model on rigs running the bot: one card holds less, another more, and together they cover the whole range.",
+           "axis_core": "Core", "axis_mem": "Memory", "col_hash": "Hashrate", "col_range": "Range",
+           "col_pw": "Power", "col_eff": "Efficiency", "col_hold": "Hold", "few": "few data", "heat": "overheat",
+           "none": "no card holds", "cards": "cards", "w": "W", "of": "of", "day": "day",
+           "t_hash": "Hashrate", "t_pw": "Power", "t_eff": "Efficiency", "t_rev": "Revenue per day", "t_hold": "Reliability",
+           "rev_note": "before electricity", "rev_na": "no price", "hold_txt": "{ok} {of} {t} cards hold it",
+           "v_ok": "reliable", "v_mid": "borderline: some cards fail", "v_bad": "high crash risk",
+           "v_few": "few cards tested", "v_none": "none of the {t} cards held this step — do not use",
+           "above": "No data above {v} yet: nobody has tested this overclock on this model.",
+           "safe": "Reliable maximum", "peak": "Peak hashrate", "table": "Every measured step",
+           "chart_t": "Hashrate by overclock step", "legend_band": "spread between cards", "legend_fail": "crash",
+           "pl_note": "Cards run different PL (the bot sets it from the PSU budget), so the typical PL at each step is shown. "
+                      "The bot on your rig tunes the point for your exact card.",
+           "minus": "Less", "plus": "More"},
+}
+
+
+def _pct(r):
+    return round(100 * r["ok"] / r["tested"]) if r["tested"] else 0
+
+
+def _cls(p):
+    return "good" if p >= 80 else ("warn" if p >= 50 else "bad")
+
+
+def _hold_cell(r, t):
+    if not r["tested"]:
+        return "<td></td>"
+    p = _pct(r)
+    flags = []
+    if r["tested"] < 3:
+        flags.append(t["few"])
+    if r.get("heat"):
+        flags.append(t["heat"])
+    fl = f'<small>{e(", ".join(flags))}</small>' if flags else ""
+    return (f'<td class="num hold"><span class="hb"><span class="hf {_cls(p)}" style="width:{p}%"></span></span>'
+            f'<b class="{_cls(p)}">{r["ok"]}/{r["tested"]}</b>{fl}</td>')
+
+
+def _curve_table(g, axis, lang, unit_h):
+    t = CURVE_TXT[lang]
+    other = "mem" if axis == "core" else "core"
+    head = (f'<th>{e(t["axis_" + axis])}</th><th class="num">{t["col_hash"]}</th><th class="num opt">{t["col_range"]}</th>'
+            f'<th class="num">{t["col_pw"]}</th><th class="num opt">PL</th><th class="num opt">{other}</th>'
+            f'<th class="num opt">{t["col_eff"]}</th><th class="num">{t["col_hold"]}</th>')
+    body = []
+    for r in g["axes"][axis]["rows"]:
+        if r["ok"]:
+            rng = f'{num(r["h_min"], 1)}–{num(r["h_max"], 1)}' if r["h_min"] != r["h_max"] else "—"
+            cells = (f'<td class="num">{num(r["hashrate"], 1)} <small>{unit_h}</small></td><td class="num muted opt">{rng}</td>'
+                     f'<td class="num">{num(r["power_w"], 0)} <small>{t["w"]}</small></td><td class="num opt">{e(r["pl"])}</td>'
+                     f'<td class="num opt">{sgn(r[other]) if r.get(other) is not None else "—"}</td>'
+                     f'<td class="num opt"><span class="good">{num(r["efficiency"], 3)}</span></td>')
+        else:
+            cells = (f'<td class="num bad" colspan="2">{e(t["none"])}</td>'
+                     '<td class="opt"></td><td class="opt"></td><td class="opt"></td><td class="opt"></td>')
+        body.append(f'<tr data-v="{r["v"]}" class="{"" if r["ok"] else "fail"}"><td><b>{sgn(r["v"])}</b></td>{cells}{_hold_cell(r, t)}</tr>')
+    return f'<div class="tw"><table class="tbl curve"><thead><tr>{head}</tr></thead><tbody>{"".join(body)}</tbody></table></div>'
+
+
+def _curve_chart(g, axis, lang, unit_h):
+    """Статичный SVG: медиана хешрейта по шагам, полоса разброса между картами, точки цветом по «держат»."""
+    t = CURVE_TXT[lang]
+    rows = g["axes"][axis]["rows"]
+    ok = [r for r in rows if r["ok"]]
+    if len(ok) < 2:
+        return ""
+    W, H, L, R, T, B = 640, 220, 48, 16, 14, 34
+    xs = [r["v"] for r in rows]
+    x0, x1 = min(xs), max(xs)
+    lo = min(r["h_min"] for r in ok)
+    hi = max(r["h_max"] for r in ok)
+    pad = (hi - lo) * 0.12 or hi * 0.05 or 1
+    y0, y1 = lo - pad, hi + pad
+    X = lambda v: L + (W - L - R) * ((v - x0) / (x1 - x0) if x1 > x0 else 0.5)
+    Y = lambda h: T + (H - T - B) * (1 - (h - y0) / (y1 - y0))
+    band = " ".join(f"{X(r['v']):.1f},{Y(r['h_max']):.1f}" for r in ok) + " " + \
+        " ".join(f"{X(r['v']):.1f},{Y(r['h_min']):.1f}" for r in reversed(ok))
+    line = " ".join(f"{X(r['v']):.1f},{Y(r['hashrate']):.1f}" for r in ok)
+    grid, ticks = [], []
+    for i in range(4):
+        h = y0 + (y1 - y0) * (i + 0.5) / 4
+        grid.append(f'<line x1="{L}" x2="{W - R}" y1="{Y(h):.1f}" y2="{Y(h):.1f}" class="cg"/>'
+                    f'<text x="{L - 6}" y="{Y(h) + 4:.1f}" text-anchor="end" class="ct">{h:.0f}</text>')
+    step = max(1, len(rows) // 7)
+    for r in rows[::step]:
+        ticks.append(f'<text x="{X(r["v"]):.1f}" y="{H - 12}" text-anchor="middle" class="ct">{sgn(r["v"])}</text>')
+    dots = []
+    for r in rows:
+        if r["ok"]:
+            dots.append(f'<circle cx="{X(r["v"]):.1f}" cy="{Y(r["hashrate"]):.1f}" r="4.2" class="cd {_cls(_pct(r))}">'
+                        f'<title>{sgn(r["v"])}: {num(r["hashrate"], 1)} {unit_h}, {r["ok"]}/{r["tested"]}</title></circle>')
+        else:
+            x = X(r["v"])
+            dots.append(f'<path d="M{x - 4:.1f} {H - B - 8:.1f}l8 8m0-8l-8 8" class="cx"><title>{sgn(r["v"])}: {e(t["none"])}</title></path>')
+    return (f'<figure class="cchart"><figcaption>{e(t["chart_t"])}, {unit_h}'
+            f'<span class="lg"><i class="lgb"></i>{e(t["legend_band"])}<i class="lgx"></i>{e(t["legend_fail"])}</span></figcaption>'
+            f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="{e(t["chart_t"])}">{"".join(grid)}'
+            f'<polygon points="{band}" class="cb"/><polyline points="{line}" class="cl"/>{"".join(dots)}{"".join(ticks)}'
+            f'<line x1="0" x2="0" y1="{T}" y2="{H - B}" class="cm" id="cmark-{g["_i"]}-{axis}"/></svg></figure>')
+
+
+def curve_section(curves, lang, network=None, unit_h="TH/s"):
+    if not curves:
+        return ""
+    t = CURVE_TXT[lang]
+    network = network or {}
+    curves = sorted(curves, key=lambda g: -g["cards"])
+    opts, panes, data = [], [], []
+    for gi, g in enumerate(curves):
+        g["_i"] = gi
+        label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {t["cards"]}'
+        opts.append(f'<option value="{gi}">{e(label)}</option>')
+        axes_ok = [a for a in ("core", "mem") if sum(1 for r in g["axes"][a]["rows"] if r["ok"]) >= 2] or [g["axis"]]
+        for axis in axes_ok:
+            hidden = "" if (gi == 0 and axis == g["axis"]) else " hidden"
+            panes.append(f'<div class="cpane" data-g="{gi}" data-axis="{axis}"{hidden}>{_curve_chart(g, axis, lang, unit_h)}'
+                         f'<details class="ctable" open><summary>{e(t["table"])}</summary>{_curve_table(g, axis, lang, unit_h)}</details></div>')
+        n = network.get(g["algo"])
+        net = None
+        if n:
+            try:
+                net = {"k": n["hashrate_to_hs"] / n["nethash_hs"] * (86400 / n["block_time_s"]) * n["block_reward"], "coin": n["coin"]}
+            except (KeyError, TypeError, ZeroDivisionError):
+                net = None
+        data.append({"axis": g["axis"] if g["axis"] in axes_ok else axes_ok[0], "axes": {a: g["axes"][a]["rows"] for a in axes_ok},
+                     "net": net})
+    blob = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    sel = (f'<label class="cfield"><span>{"Алгоритм" if lang == "ru" else "Algorithm"}</span><select id="cg">{"".join(opts)}</select></label>'
+           if len(curves) > 1 else f'<span class="cgone">{e(opts[0][opts[0].index(">") + 1:-9])}</span>')
+    keys = ("above", "v_ok", "v_mid", "v_bad", "v_few", "v_none", "hold_txt", "w", "of", "day", "axis_core", "axis_mem", "rev_na")
+    txt = json.dumps({k: t[k] for k in keys}, ensure_ascii=False).replace("</", "<\\/")
+    cur, pre, suf = ("rub", "", " ₽") if lang == "ru" else ("usd", "$", "")
+    return f"""<section class="curvebox" id="curve">
+  <div class="calc">
+    <div class="chead"><span class="kicker">{e(t["kicker"])}</span><h2>{e(t["title"])}</h2><p class="lede">{e(t["lede"])}</p></div>
+    <div class="cctl">
+      {sel}
+      <span class="seg" role="group"><button type="button" data-ax="core">{e(t["axis_core"])}</button><button type="button" data-ax="mem">{e(t["axis_mem"])}</button></span>
+    </div>
+    <div class="cinput">
+      <button type="button" class="step" id="cminus" aria-label="{e(t["minus"])}">−</button>
+      <label class="cval"><span id="cax">{e(t["axis_core"])}</span><input id="cval" type="number" inputmode="numeric" value="0"></label>
+      <button type="button" class="step" id="cplus" aria-label="{e(t["plus"])}">+</button>
+      <input id="crange" type="range" aria-label="{e(t["title"])}">
+    </div>
+    <div class="cpresets"><button type="button" class="chip" id="csafe">{e(t["safe"])}: <b></b></button><button type="button" class="chip" id="cpeak">{e(t["peak"])}: <b></b></button></div>
+    <div class="ctiles" aria-live="polite">
+      <div class="tile big"><span>{e(t["t_hash"])}</span><b id="o-h">—</b><small>{unit_h}</small></div>
+      <div class="tile"><span>{e(t["t_pw"])}</span><b id="o-p">—</b><small>{e(t["w"])}</small></div>
+      <div class="tile"><span>{e(t["t_eff"])}</span><b id="o-e">—</b><small>{unit_h.split("/")[0]}/{e(t["w"])}</small></div>
+      <div class="tile" id="o-rev-t"><span>{e(t["t_rev"])}</span><b id="o-r">—</b><small>{e(t["rev_note"])}</small></div>
+      <div class="tile hold-t"><span>{e(t["t_hold"])}</span><div class="hbig"><i id="o-hb"></i></div><b id="o-hold">—</b><small id="o-verdict"></small></div>
+    </div>
+    <p class="cmsg" id="cmsg" hidden></p>
+  </div>
+  {"".join(panes)}
+  <p class="note">{e(t["pl_note"])}</p>
+</section>
+<script type="application/json" id="curvedata">{blob}</script>
+<script>
+(function () {{
+  var D = JSON.parse(document.getElementById("curvedata").textContent), T = {txt};
+  var gi = 0, ax = D[0].axis, v = null, sel = document.getElementById("cg"), price = {{}};
+  var $ = function (id) {{ return document.getElementById(id); }};
+  function sg(n) {{ n = Math.round(n); return (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n); }}
+  function f(x, d) {{ return x == null || isNaN(x) ? "—" : Number(x).toFixed(d); }}
+  function rows() {{ return D[gi].axes[ax] || []; }}
+  function pct(r) {{ return r.tested ? Math.round(100 * r.ok / r.tested) : 0; }}
+  function presets() {{
+    var rs = rows(), ok = rs.filter(function (r) {{ return r.ok > 0; }}), safe = null, peak = null;
+    ok.forEach(function (r) {{ if (pct(r) >= 80) safe = r; if (!peak || r.hashrate > peak.hashrate) peak = r; }});
+    return {{ safe: safe || ok[0], peak: peak }};
+  }}
+  function setup() {{
+    var rs = rows(), rg = $("crange"), st = rs.length > 1 ? rs[1].v - rs[0].v : 25;
+    rg.min = rs[0].v; rg.max = rs[rs.length - 1].v; rg.step = st; $("cval").step = st;
+    var p = presets();
+    $("csafe").querySelector("b").textContent = sg(p.safe.v); $("cpeak").querySelector("b").textContent = sg(p.peak.v);
+    $("cax").textContent = T["axis_" + ax];
+    document.querySelectorAll(".cpane").forEach(function (el) {{ el.hidden = !(el.getAttribute("data-g") == gi && el.getAttribute("data-axis") == ax); }});
+    document.querySelectorAll("[data-ax]").forEach(function (b) {{ var a = b.getAttribute("data-ax"); b.disabled = !D[gi].axes[a]; b.classList.toggle("on", a === ax); }});
+    $("o-rev-t").hidden = !D[gi].net;
+    set(p.safe.v);
+  }}
+  function set(x) {{ v = x; $("cval").value = Math.round(x); $("crange").value = x; calc(); }}
+  function mark(r) {{
+    document.querySelectorAll(".cpane:not([hidden]) tr[data-v]").forEach(function (tr) {{ tr.classList.toggle("cur", r && +tr.getAttribute("data-v") === r.v); }});
+    var m = $("cmark-" + gi + "-" + ax), svg = m && m.ownerSVGElement;
+    if (!m) return;
+    var rs = rows(), x0 = rs[0].v, x1 = rs[rs.length - 1].v, W = 640, L = 48, R = 16;
+    var px = L + (W - L - R) * (x1 > x0 ? (Math.min(Math.max(v, x0), x1) - x0) / (x1 - x0) : 0.5);
+    m.setAttribute("x1", px); m.setAttribute("x2", px);
+  }}
+  function calc() {{
+    var rs = rows(), ok = rs.filter(function (r) {{ return r.ok > 0; }}), msg = $("cmsg");
+    if (!rs.length || !ok.length || v == null || isNaN(v)) return;
+    var maxT = rs[rs.length - 1].v, x = Math.max(v, rs[0].v);
+    msg.hidden = true; msg.className = "cmsg";
+    if (x > maxT) {{ msg.hidden = false; msg.classList.add("bad"); msg.textContent = T.above.replace("{{v}}", sg(maxT)); tiles(null); mark(null); return; }}
+    var hr = rs.filter(function (r) {{ return r.v >= x; }})[0];       // устойчивость — по шагу не ниже введённого
+    if (!hr.ok) {{ msg.hidden = false; msg.classList.add("bad"); msg.textContent = T.v_none.replace("{{t}}", hr.tested); tiles(null, hr); mark(hr); return; }}
+    var lo = null, hi = null;                                          // хешрейт — между соседними удачными шагами
+    ok.forEach(function (r) {{ if (r.v <= x) lo = r; if (r.v >= x && !hi) hi = r; }});
+    lo = lo || hi; hi = hi || lo;
+    var k = hi.v === lo.v ? 0 : (x - lo.v) / (hi.v - lo.v);
+    function mix(key) {{ var a = lo[key], b = hi[key]; return a == null ? b : b == null ? a : a + (b - a) * k; }}
+    var h = mix("hashrate"), pw = mix("power_w");
+    tiles({{ h: h, pw: pw, eff: pw ? h / pw : mix("efficiency") }}, hr);
+    mark(hr);
+  }}
+  function tiles(o, hr) {{
+    $("o-h").textContent = o ? f(o.h, 1) : "—"; $("o-p").textContent = o ? f(o.pw, 0) : "—"; $("o-e").textContent = o ? f(o.eff, 3) : "—";
+    var net = D[gi].net, r = $("o-r");
+    if (!o || !net) r.textContent = "—";
+    else if (price[net.coin] != null) r.textContent = "{pre}" + (o.h * net.k * price[net.coin]).toFixed(2) + "{suf}";
+    else {{ r.textContent = "…"; loadPrice(net.coin); }}
+    var p = hr ? pct(hr) : 0, cls = !hr ? "" : p >= 80 ? "good" : p >= 50 ? "warn" : "bad";
+    $("o-hb").style.width = (hr ? p : 0) + "%"; $("o-hb").className = cls;
+    $("o-hold").textContent = hr ? p + "%" : "—"; $("o-hold").className = cls;
+    $("o-verdict").textContent = !hr ? "" : T.hold_txt.replace("{{ok}}", hr.ok).replace("{{of}}", T.of).replace("{{t}}", hr.tested) + " · " +
+      (!hr.ok ? T.v_bad : hr.tested < 3 ? T.v_few : p >= 80 ? T.v_ok : p >= 50 ? T.v_mid : T.v_bad);
+  }}
+  var loading = {{}};
+  function loadPrice(coin) {{
+    if (loading[coin]) return; loading[coin] = 1;
+    var go = function () {{
+      if (typeof OCBotRevenue === "undefined") return setTimeout(go, 300);
+      OCBotRevenue.resolvePrices([coin], "{cur}").then(function (m) {{ price[coin] = m && m[coin] != null ? m[coin] : NaN; if (isNaN(price[coin])) $("o-r").textContent = T.rev_na; else calc(); }});
+    }};
+    go();
+  }}
+  if (sel) sel.addEventListener("change", function () {{ gi = +sel.value; ax = D[gi].axis; setup(); }});
+  document.querySelectorAll("[data-ax]").forEach(function (b) {{ b.addEventListener("click", function () {{ ax = b.getAttribute("data-ax"); setup(); }}); }});
+  $("cval").addEventListener("input", function () {{ var x = parseFloat(this.value); if (!isNaN(x)) {{ v = x; $("crange").value = x; calc(); }} }});
+  $("crange").addEventListener("input", function () {{ set(parseFloat(this.value)); }});
+  $("cminus").addEventListener("click", function () {{ set((v || 0) - +$("crange").step); }});
+  $("cplus").addEventListener("click", function () {{ set((v || 0) + +$("crange").step); }});
+  $("csafe").addEventListener("click", function () {{ set(presets().safe.v); }});
+  $("cpeak").addEventListener("click", function () {{ set(presets().peak.v); }});
+  setup();
+}})();
+</script>"""
+
 NAV = {
     "en": ('<nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html">{logo}<span>OCBot: auto-overclock</span></a>'
            '<a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a><a href="security.html">Security</a>'
@@ -136,7 +405,7 @@ def others_links(model, mem, all_models, lang):
     return " ".join(out)
 
 
-def page(model, mem, entries, all_models, base, lang, network):
+def page(model, mem, entries, all_models, base, lang, network, curves=None):
     rows_out = sorted(entries, key=lambda x: (x["algo"], mname(x["miner"]), MODES.get(x.get("objective") or "compromise", MODES["compromise"])[2]))
     name = clean(model) + (f" ({mem})" if mem else "")
     slg = slug(model, mem)
@@ -183,6 +452,8 @@ def page(model, mem, entries, all_models, base, lang, network):
                 "if(L==='ru')return;if(L==='en'||(!L&&!/^ru\\b/i.test(navigator.language||''))){"
                 "location.replace(location.pathname.replace(/\\.ru\\.html$/,'.html')+location.search+location.hash);}")
 
+    presets_html = (f'<div class="tw"><table class="tbl"><thead><tr>{head_cols}</tr></thead>'
+                    f'<tbody>{"".join(rows_html)}</tbody></table></div>') if rows_html else ""
     nav = NAV[lang].format(logo=LOGO)
     others = others_links(model, mem, all_models, lang)
 
@@ -219,8 +490,8 @@ def page(model, mem, entries, all_models, base, lang, network):
   <header class="hero"><div><h1>{e(name)}</h1>
   <a class="guidelink" href="{base}catalog{'.ru' if lang == 'ru' else ''}.html">{back}</a>
   <p class="lede">{lede}</p></div></header>
-  <div class="tw"><table class="tbl"><thead><tr>{head_cols}</tr></thead>
-  <tbody>{''.join(rows_html)}</tbody></table></div>
+  {presets_html}
+  {curve_section(curves or [], lang, network)}
   <p class="others"><b>{others_label}</b> {others} </p>
   <footer>{footer}</footer>
 </div>
@@ -294,6 +565,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="")
     ap.add_argument("--file", default="catalog-data.json")
+    ap.add_argument("--curves", default="curves-data.json")
+    ap.add_argument("--curves-url", default="")
     ap.add_argument("--base", default="https://example.github.io/ocbot-site/")
     ap.add_argument("--site", default=os.path.dirname(os.path.abspath(__file__)))
     a = ap.parse_args()
@@ -314,6 +587,26 @@ def main():
         with open(a.file, encoding="utf-8") as f:
             data = json.load(f)
     entries = [x for x in data.get("entries", []) if x.get("best") and x.get("hashrate")]
+    # таблицы «разгон → хешрейт» (необязательно: без файла страницы строятся как раньше)
+    curves_by = {}
+    cdoc = None
+    curves_url = a.curves_url or (a.url.rsplit("/", 1)[0] + "/curves.json" if a.url else "")
+    if curves_url:
+        try:
+            req = urllib.request.Request(curves_url, headers={"User-Agent": "ocbot-site-build/1.0 (+https://ocbot.org)"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                cdoc = json.loads(r.read().decode("utf-8"))
+        except Exception as ex:                       # нет кривых — страницы строятся как раньше
+            print(f"curves.json недоступен ({ex}) — страницы без таблицы «разгон → хешрейт»")
+    try:
+        if cdoc is None:
+            with open(a.curves, encoding="utf-8") as f:
+                cdoc = json.load(f)
+        for g in cdoc.get("curves", []):
+            if any(r.get("ok") for ax in g.get("axes", {}).values() for r in ax.get("rows", [])):
+                curves_by.setdefault((clean(g["model"]), g.get("mem_vendor") or ""), []).append(g)
+    except (OSError, json.JSONDecodeError, KeyError, TypeError):
+        pass
     # network.json (сетевые данные hashrate_to_hs/nethash/block_time/reward на алгоритм) живёт рядом с сайтом
     # и обновляется отдельно скриптом build_network.py; используем то, что уже лежит на диске, без похода в сеть.
     try:
@@ -324,6 +617,8 @@ def main():
     groups = {}
     for x in entries:
         groups.setdefault((clean(x["model"]), x.get("mem_vendor") or ""), []).append(x)
+    for k in curves_by:
+        groups.setdefault(k, [])
     all_models = sorted(groups.keys())
     new_slugs = {slug(m, mv) for m, mv in all_models}
 
@@ -336,9 +631,9 @@ def main():
     for (model, mem), es in groups.items():
         slg = slug(model, mem)
         with open(os.path.join(a.site, slg + ".html"), "w", encoding="utf-8") as f:
-            f.write(page(model, mem, es, all_models, base, "en", network))
+            f.write(page(model, mem, es, all_models, base, "en", network, curves_by.get((model, mem))))
         with open(os.path.join(a.site, slg + ".ru.html"), "w", encoding="utf-8") as f:
-            f.write(page(model, mem, es, all_models, base, "ru", network))
+            f.write(page(model, mem, es, all_models, base, "ru", network, curves_by.get((model, mem))))
 
     update_sitemap(a.site, base, new_slugs)
     print(f"страниц моделей: {len(groups)} (x2 языка)")
