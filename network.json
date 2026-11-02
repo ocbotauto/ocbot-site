@@ -5,17 +5,17 @@
   "pearl": {
    "coin": "PRL",
    "hashrate_to_hs": 1000000000000.0,
-   "nethash_hs": 8.219456126303029e+19,
-   "block_time_s": 176.0,
-   "block_reward": 2202.077947053794,
+   "nethash_hs": 8.167083355307858e+19,
+   "block_time_s": 177.0,
+   "block_reward": 2202.0499828098427,
    "source": "whattomine.com"
   },
   "pearlhash": {
    "coin": "PRL",
    "hashrate_to_hs": 1000000000000.0,
-   "nethash_hs": 8.219456126303029e+19,
-   "block_time_s": 176.0,
-   "block_reward": 2202.077947053794,
+   "nethash_hs": 8.167083355307858e+19,
+   "block_time_s": 177.0,
+   "block_reward": 2202.0499828098427,
    "source": "whattomine.com"
   }
  }
