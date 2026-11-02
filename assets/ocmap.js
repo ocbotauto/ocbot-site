@@ -218,7 +218,7 @@
       var r = any ? { holds: any.holds, tested: any.tested } : { holds: 0, tested: new Set(crs.map(function (q) { return q.card; })).size };
       var pct = r.tested ? Math.round(r.holds / r.tested * 100) : 0;
       var cls = (p ? "pr " + p.id : "") + (best ? "" : " bad");
-      var tag = p ? '<span class="pn"><i></i>' + esc(T[p.id]) + "</span>" : best ? "" : crs.length ? '<span class="crash">' + esc(T.crash) + "</span>" : '<span class="rng">' + esc(T.few) + "</span>";
+      var tag = p ? ps.map(function (x) { return '<span class="pn ' + x.id + '"><i></i>' + esc(T[x.id]) + (x !== p ? " · " + x.pl + " " + T.w : "") + "</span>"; }).join(" ") : best ? "" : crs.length ? '<span class="crash">' + esc(T.crash) + "</span>" : '<span class="rng">' + esc(T.few) + "</span>";
       rows += '<tr class="' + cls + '"><td>' + sgn(C) + "</td>" +
         (any ? "<td>" + sgn(any.mem) + "</td><td>" + any.pl + " " + T.w + "</td><td><b>" + fmt(any.h, 1) + "</b></td>" : "<td>—</td><td>—</td><td>—</td>") +
         '<td class="rng">' + (hs.length ? fmt(Math.min.apply(null, hs), 1) + "–" + fmt(Math.max.apply(null, hs), 1) : "—") + "</td>" +
