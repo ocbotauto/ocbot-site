@@ -393,6 +393,45 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
 }})();
 </script>"""
 
+def _net_k(network, algo):
+    n = (network or {}).get(algo)
+    if not n:
+        return None
+    try:
+        return {"k": n["hashrate_to_hs"] / n["nethash_hs"] * (86400 / n["block_time_s"]) * n["block_reward"], "coin": n["coin"]}
+    except (KeyError, TypeError, ZeroDivisionError):
+        return None
+
+
+def ocmap_section(curves, lang, network, model_name, unit_h="TH/s"):
+    """Карта разгона (assets/ocmap.js): три готовых пресета, простой график и 3D, полная таблица, свой разгон.
+    Нужны сырые точки групп (поле pts в curves.json приёмника). Без JS видна статичная таблица по шагам —
+    её же видят поисковики; скрипт её прячет и рисует карту."""
+    groups = [g for g in curves if g.get("pts")]
+    if not groups:
+        return curve_section(curves, lang, network)
+    t = CURVE_TXT[lang]
+    groups = sorted(groups, key=lambda g: (-g["cards"], -len(g["pts"])))
+    data = []
+    for g in groups:
+        label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {_cards_word(g["cards"], lang)}'
+        data.append({"id": f'{g["algo"]}|{g["miner"]}|{g["miner_version"]}', "label": label, "cards": g["cards"],
+                     "boards": g.get("boards") or None, "pts": g["pts"], "net": _net_k(network, g["algo"])})
+    blob = json.dumps({"lang": lang, "model": model_name, "unit": unit_h, "groups": data}, ensure_ascii=False,
+                      separators=(",", ":")).replace("</", "<\\/")
+    g0 = groups[0]
+    okn = {a: sum(1 for r in g0["axes"][a]["rows"] if r["ok"]) for a in ("core", "mem")} if g0.get("axes") else {}
+    static = ""
+    if okn:
+        axis = max(okn, key=lambda a: (okn[a], a == "core"))
+        g0["_i"] = 0
+        static = (f'<div class="ocm-static"><span class="kicker">{e(t["kicker"])}</span><h2>{e(t["title"])}</h2>'
+                  f'<p class="lede">{e(t["lede"])}</p>{_curve_table(g0, axis, lang, unit_h)}</div>')
+    return (f'<section class="ocmap" id="ocmap">{static}</section>\n'
+            f'<script type="application/json" id="ocmapdata">{blob}</script>\n'
+            f'<script src="assets/ocmap.js" defer></script>')
+
+
 NAV = {
     "en": ('<nav class="navtop" aria-label="Site navigation"><a class="brand" href="index.html">{logo}<span>OCBot: auto-overclock</span></a>'
            '<a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a><a href="security.html">Security</a>'
@@ -510,7 +549,7 @@ def page(model, mem, entries, all_models, base, lang, network, curves=None):
   <a class="guidelink" href="{base}catalog{'.ru' if lang == 'ru' else ''}.html">{back}</a>
   <p class="lede">{lede}</p></div></header>
   {presets_html}
-  {curve_section(curves or [], lang, network)}
+  {ocmap_section(curves or [], lang, network, name.split(" (")[0])}
   <p class="others"><b>{others_label}</b> {others} </p>
   <footer>{footer}</footer>
 </div>
