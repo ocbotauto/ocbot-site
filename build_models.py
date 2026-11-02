@@ -293,7 +293,7 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     <div class="cpresets"><button type="button" class="chip" id="csafe">{e(t["safe"])}: <b></b></button><button type="button" class="chip" id="cpeak">{e(t["peak"])}: <b></b></button></div>
     <div class="ctiles" aria-live="polite">
       <div class="tile big"><span>{e(t["t_hash"])}</span><b id="o-h">—</b><small>{unit_h}</small></div>
-      <div class="tile"><span>{e(t["t_pw"])}</span><b id="o-p">—</b><small>{e(t["w"])}</small></div>
+      <div class="tile"><span>{e(t["t_pw"])}</span><b id="o-p">—</b><small id="o-pl">{e(t["w"])}</small></div>
       <div class="tile"><span>{e(t["t_eff"])}</span><b id="o-e">—</b><small>{unit_h.split("/")[0]}/{e(t["w"])}</small></div>
       <div class="tile" id="o-rev-t"><span>{e(t["t_rev"])}</span><b id="o-r">—</b><small>{e(t["rev_note"])}</small></div>
       <div class="tile hold-t"><span>{e(t["t_hold"])}</span><div class="hbig"><i id="o-hb"></i></div><b id="o-hold">—</b><small id="o-verdict"></small></div>
@@ -316,7 +316,10 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
   function pct(r) {{ return r.tested ? Math.round(100 * r.ok / r.tested) : 0; }}
   function presets() {{
     var rs = rows(), ok = rs.filter(function (r) {{ return r.ok > 0; }}), safe = null, peak = null;
-    ok.forEach(function (r) {{ if (pct(r) >= 80) safe = r; if (!peak || r.hashrate > peak.hashrate) peak = r; }});
+    // надёжный максимум: самый высокий шаг, который держат ≥80% карт, и проверен он хотя бы на 3 картах
+    // (если таких шагов нет — на 2, затем на любом числе)
+    [3, 2, 1].some(function (n) {{ ok.forEach(function (r) {{ if (pct(r) >= 80 && r.tested >= n) safe = r; }}); return safe; }});
+    ok.forEach(function (r) {{ if (!peak || r.hashrate > peak.hashrate) peak = r; }});
     return {{ safe: safe || ok[0], peak: peak }};
   }}
   function setup() {{
@@ -357,7 +360,8 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     mark(hr);
   }}
   function tiles(o, hr) {{
-    $("o-h").textContent = o ? f(o.h, 1) : "—"; $("o-p").textContent = o ? f(o.pw, 0) : "—"; $("o-e").textContent = o ? f(o.eff, 3) : "—";
+    $("o-h").textContent = o ? f(o.h, 1) : "—"; $("o-p").textContent = o ? f(o.pw, 0) : "—";
+    $("o-pl").textContent = T.w + (o && hr && hr.pl ? " · PL " + hr.pl : ""); $("o-e").textContent = o ? f(o.eff, 3) : "—";
     var net = D[gi].net, r = $("o-r");
     if (!o || !net) r.textContent = "—";
     else if (price[net.coin] != null) r.textContent = "{pre}" + (o.h * net.k * price[net.coin]).toFixed(2) + "{suf}";
