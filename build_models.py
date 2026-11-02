@@ -119,9 +119,9 @@ CURVE_TXT = {
            "col_pw": "Потребл.", "col_eff": "Эффективность", "col_hold": "Держат", "few": "мало данных", "heat": "перегрев",
            "none": "не держит ни одна", "cards": "карт", "w": "Вт", "of": "из", "day": "сутки",
            "t_hash": "Хешрейт", "t_pw": "Потребление", "t_eff": "Эффективность", "t_rev": "Доход в сутки", "t_hold": "Надёжность",
-           "rev_note": "без учёта электричества", "rev_na": "нет курса", "hold_txt": "держат {ok} {of} {t} карт",
+           "rev_note": "без учёта электричества", "rev_na": "нет курса", "hold_txt": "держат {ok} {of} {t}",
            "v_ok": "надёжно", "v_mid": "на грани: часть карт не держит", "v_bad": "высокий риск отвала",
-           "v_few": "проверено мало карт", "v_none": "на этом шаге не удержалась ни одна из {t} карт — ставить нельзя",
+           "v_few": "проверено мало карт", "v_none": "на этом шаге не удержалась ни одна из {t} — ставить нельзя",
            "above": "Выше {v} данных пока нет: такой разгон на этой модели ещё никто не проверял.",
            "safe": "Надёжный максимум", "peak": "Максимум хешрейта", "table": "Все шаги по замерам",
            "chart_t": "Хешрейт по шагам разгона", "legend_band": "разброс между картами", "legend_fail": "отвал",
@@ -135,9 +135,9 @@ CURVE_TXT = {
            "col_pw": "Power", "col_eff": "Efficiency", "col_hold": "Hold", "few": "few data", "heat": "overheat",
            "none": "no card holds", "cards": "cards", "w": "W", "of": "of", "day": "day",
            "t_hash": "Hashrate", "t_pw": "Power", "t_eff": "Efficiency", "t_rev": "Revenue per day", "t_hold": "Reliability",
-           "rev_note": "before electricity", "rev_na": "no price", "hold_txt": "{ok} {of} {t} cards hold it",
+           "rev_note": "before electricity", "rev_na": "no price", "hold_txt": "{ok} {of} {t} hold it",
            "v_ok": "reliable", "v_mid": "borderline: some cards fail", "v_bad": "high crash risk",
-           "v_few": "few cards tested", "v_none": "none of the {t} cards held this step — do not use",
+           "v_few": "few cards tested", "v_none": "none of the {t} held this step — do not use",
            "above": "No data above {v} yet: nobody has tested this overclock on this model.",
            "safe": "Reliable maximum", "peak": "Peak hashrate", "table": "Every measured step",
            "chart_t": "Hashrate by overclock step", "legend_band": "spread between cards", "legend_fail": "crash",
@@ -232,18 +232,30 @@ def _curve_chart(g, axis, lang, unit_h):
             f'<line x1="0" x2="0" y1="{T}" y2="{H - B}" class="cm" id="cmark-{g["_i"]}-{axis}"/></svg></figure>')
 
 
+def _cards_word(n, lang):
+    if lang != "ru":
+        return "card" if n == 1 else "cards"
+    if n % 10 == 1 and n % 100 != 11:
+        return "карта"
+    return "карты" if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14 else "карт"
+
+
 def curve_section(curves, lang, network=None, unit_h="TH/s"):
     if not curves:
         return ""
     t = CURVE_TXT[lang]
     network = network or {}
-    curves = sorted(curves, key=lambda g: -g["cards"])
+    curves = sorted(curves, key=lambda g: (-g["cards"], -max(sum(1 for r in g["axes"][a]["rows"] if r["ok"]) for a in ("core", "mem"))))
     opts, panes, data = [], [], []
     for gi, g in enumerate(curves):
         g["_i"] = gi
-        label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {t["cards"]}'
+        label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {_cards_word(g["cards"], lang)}'
         opts.append(f'<option value="{gi}">{e(label)}</option>')
-        axes_ok = [a for a in ("core", "mem") if sum(1 for r in g["axes"][a]["rows"] if r["ok"]) >= 2] or [g["axis"]]
+        okn = {a: sum(1 for r in g["axes"][a]["rows"] if r["ok"]) for a in ("core", "mem")}
+        axes_ok = [a for a in ("core", "mem") if okn[a] >= 2] or [g["axis"]]
+        # по умолчанию — ось, по которой проверено больше шагов (при равенстве — ядро): так покупатель сразу видит
+        # полную кривую, а не пару случайных шагов памяти
+        g["axis"] = max(axes_ok, key=lambda a: (okn[a], a == "core"))
         for axis in axes_ok:
             hidden = "" if (gi == 0 and axis == g["axis"]) else " hidden"
             panes.append(f'<div class="cpane" data-g="{gi}" data-axis="{axis}"{hidden}>{_curve_chart(g, axis, lang, unit_h)}'
@@ -263,6 +275,8 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     keys = ("above", "v_ok", "v_mid", "v_bad", "v_few", "v_none", "hold_txt", "w", "of", "day", "axis_core", "axis_mem", "rev_na")
     txt = json.dumps({k: t[k] for k in keys}, ensure_ascii=False).replace("</", "<\\/")
     cur, pre, suf = ("rub", "", " ₽") if lang == "ru" else ("usd", "$", "")
+    cw_js = ('var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? "карты" : "карт";' if lang == "ru"
+             else 'return n === 1 ? "card" : "cards";')
     return f"""<section class="curvebox" id="curve">
   <div class="calc">
     <div class="chead"><span class="kicker">{e(t["kicker"])}</span><h2>{e(t["title"])}</h2><p class="lede">{e(t["lede"])}</p></div>
@@ -298,6 +312,7 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
   function sg(n) {{ n = Math.round(n); return (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n); }}
   function f(x, d) {{ return x == null || isNaN(x) ? "—" : Number(x).toFixed(d); }}
   function rows() {{ return D[gi].axes[ax] || []; }}
+  function cw(n) {{ {cw_js} }}
   function pct(r) {{ return r.tested ? Math.round(100 * r.ok / r.tested) : 0; }}
   function presets() {{
     var rs = rows(), ok = rs.filter(function (r) {{ return r.ok > 0; }}), safe = null, peak = null;
@@ -331,7 +346,7 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     msg.hidden = true; msg.className = "cmsg";
     if (x > maxT) {{ msg.hidden = false; msg.classList.add("bad"); msg.textContent = T.above.replace("{{v}}", sg(maxT)); tiles(null); mark(null); return; }}
     var hr = rs.filter(function (r) {{ return r.v >= x; }})[0];       // устойчивость — по шагу не ниже введённого
-    if (!hr.ok) {{ msg.hidden = false; msg.classList.add("bad"); msg.textContent = T.v_none.replace("{{t}}", hr.tested); tiles(null, hr); mark(hr); return; }}
+    if (!hr.ok) {{ msg.hidden = false; msg.classList.add("bad"); msg.textContent = T.v_none.replace("{{t}}", hr.tested + " " + cw(hr.tested)); tiles(null, hr); mark(hr); return; }}
     var lo = null, hi = null;                                          // хешрейт — между соседними удачными шагами
     ok.forEach(function (r) {{ if (r.v <= x) lo = r; if (r.v >= x && !hi) hi = r; }});
     lo = lo || hi; hi = hi || lo;
@@ -350,7 +365,7 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     var p = hr ? pct(hr) : 0, cls = !hr ? "" : p >= 80 ? "good" : p >= 50 ? "warn" : "bad";
     $("o-hb").style.width = (hr ? p : 0) + "%"; $("o-hb").className = cls;
     $("o-hold").textContent = hr ? p + "%" : "—"; $("o-hold").className = cls;
-    $("o-verdict").textContent = !hr ? "" : T.hold_txt.replace("{{ok}}", hr.ok).replace("{{of}}", T.of).replace("{{t}}", hr.tested) + " · " +
+    $("o-verdict").textContent = !hr ? "" : T.hold_txt.replace("{{ok}}", hr.ok).replace("{{of}}", T.of).replace("{{t}}", hr.tested + " " + cw(hr.tested)) + " · " +
       (!hr.ok ? T.v_bad : hr.tested < 3 ? T.v_few : p >= 80 ? T.v_ok : p >= 50 ? T.v_mid : T.v_bad);
   }}
   var loading = {{}};
