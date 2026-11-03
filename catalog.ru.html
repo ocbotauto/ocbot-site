@@ -102,7 +102,9 @@
   };
   var $ = function (id) { return document.getElementById(id); };
   var state = { data: SAMPLE, isSample: true, coinmap: {}, network: {}, prices: {} };
-  // Цена электричества для населения в СПб, 2026 — подставляется, когда пользователь не указал свою.
+  // Примерная цена электричества для населения по России, 2026 — подставляется, когда пользователь
+  // не указал свою. Это грубый ориентир, не тариф конкретного региона: по регионам цены сильно
+  // разнятся (примерно от 2 до 12 ₽/кВт·ч) — свою реальную цену всегда лучше указать в поле выше.
   var DEFAULT_KWH = 4.92;
 
   function mname(m) { return String(m || "").replace(/[-_ ]v?\d[\w.\-]*$/i, ""); }
@@ -211,7 +213,7 @@
     var usingDefaultKwh = !kwhRaw;
     var effKwh = kwhRaw || DEFAULT_KWH;
     $("kwhnote").textContent = usingDefaultKwh
-      ? "Цена электричества не указана — считаем по тарифу СПб: " + DEFAULT_KWH.toFixed(2) + " ₽/кВт·ч (2026 год). Укажите свою цену в поле выше для точного расчёта."
+      ? "Цена электричества не указана — считаем по примерной среднероссийской цене: " + DEFAULT_KWH.toFixed(2) + " ₽/кВт·ч. Тарифы по регионам сильно различаются — укажите свою цену в поле выше для точного расчёта."
       : "Электричество и прибыль считаются по вашей цене: " + effKwh.toFixed(2) + " ₽/кВт·ч.";
     var ser = {}; d.entries.forEach(function (e) { ser[series(clean(e.model)).title] = series(clean(e.model)).key; });
     var serKeys = Object.keys(ser).sort(function (a, b) { return ser[b] - ser[a]; });
