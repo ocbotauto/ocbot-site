@@ -17,6 +17,14 @@
    "block_time_s": 182.0,
    "block_reward": 2198.0231086068115,
    "source": "whattomine.com"
+  },
+  "noid": {
+   "coin": "NOID",
+   "hashrate_to_hs": 1000000.0,
+   "nethash_hs": 1086457880679.85,
+   "block_time_s": 20.0,
+   "block_reward": 14.41,
+   "source": "noid.innovlab.cc"
   }
  }
 }

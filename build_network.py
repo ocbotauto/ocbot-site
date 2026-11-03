@@ -30,6 +30,38 @@ VERIFIED_HASHRATE_TO_HS = {
     "pearlhash": 1e12,   # тот же алгоритм/монета, другое имя в каталоге
 }
 
+# Монеты, которых нет на whattomine.com: сетевые данные берём вручную из их собственного
+# пула/эксплорера и прибиваем здесь статически (whattomine их не обновит, поэтому и
+# build-скрипт их не трогает — обновлять вручную, если сильно изменится сеть).
+#
+# noid (ParanO(1)d, алгоритм "noid" в каталоге): whattomine монету не знает, сетевые данные
+# взяты с её собственного пула-эксплорера https://noid.innovlab.cc (API /api/coins/parano1d/*),
+# проверено вручную 2026-11-04:
+#   - nethash: "live".network_hashrate из /api/coins/parano1d/overview = 1086457880679.85 H/s
+#   - block_time: payout_interval_secs в /api/coin-manifest = 20 c (совпадает с реальным
+#     интервалом между последними блоками)
+#   - block_reward: по полю reward последних блоков в /overview (учитывая decimals=6 у NOID),
+#     среднее по ~10 последним блокам ≈ 14.41 NOID (НЕ поле live.block_reward=4950000000/1e6=4950 —
+#     оно расходится с реальными выплатами и явно не используется сетью сейчас)
+#   - hashrate_to_hs = 1e6 (MH/s): единственный пресет в каталоге (RTX 4080, raw hashrate 189.29,
+#     сайт подписывает его "TH/s", но это, похоже, просто скопированная с Pearl подпись и не
+#     отражает реальную единицу — см. обсуждение с пользователем 2026-11-04). При буквальном
+#     прочтении как TH/s один риг давал бы в ~174 раза больше хешрейта, чем вся сеть целиком —
+#     физически невозможно. При MH/s доля рига в сети получается ~0.02% — правдоподобно, и
+#     сходится по порядку величины со сторонним GPU-майнером для NOID (github.com/lucasan123/
+#     noid-gpu-miner: RTX 4090 ≈70 MH/s на другом майнере). Если появится более точный источник
+#     по этой карте — пересчитать.
+MANUAL_NETWORK = {
+    "noid": {
+        "coin": "NOID",
+        "hashrate_to_hs": 1e6,
+        "nethash_hs": 1086457880679.85,
+        "block_time_s": 20.0,
+        "block_reward": 14.41,
+        "source": "noid.innovlab.cc",
+    },
+}
+
 
 def grab(url):
     req = urllib.request.Request(url, headers=UA)
@@ -77,6 +109,11 @@ def main():
             "block_reward": block_reward,
             "source": "whattomine.com",
         }
+
+    algos_present = {e["algo"] for e in catalog.get("entries", [])}
+    for algo, entry in MANUAL_NETWORK.items():
+        if algo in algos_present:
+            coins[algo] = entry
 
     out = {"format": "ocbot-network", "version": 1, "coins": coins}
     with open(a.out, "w", encoding="utf-8") as f:
