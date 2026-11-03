@@ -32,14 +32,15 @@
   h1 em{font-style:normal;color:var(--accent)}
   .lede{font-size:18px;color:var(--muted);max-width:52ch;margin:0 0 26px}
   .cta{display:flex;flex-wrap:wrap;gap:12px}
-  .vthero{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:14px;text-decoration:none;color:var(--ink);box-shadow:0 10px 30px var(--glow);transition:border-color .15s,transform .15s}
-  .vthero:hover{border-color:var(--accent);transform:translateY(-1px)}
-  .vthero-ic{flex:none;width:42px;height:42px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+  .vthero{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 24px;margin-bottom:16px;text-decoration:none;color:var(--ink);box-shadow:0 14px 40px var(--glow);transition:border-color .15s,transform .15s}
+  .vthero:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .vthero-ic{flex:none;width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+  .vthero-ic svg{width:26px;height:26px}
   .vthero-txt{display:block;min-width:0}
-  .vthero-txt b{display:block;font-size:15.5px;letter-spacing:-.01em}
-  .vthero-txt span{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;line-height:1.4}
+  .vthero-txt b{display:block;font-size:19px;letter-spacing:-.01em}
+  .vthero-txt span{display:block;color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.5;max-width:30ch}
   .vthero-txt span b.score{color:var(--accent);font-family:var(--font-num);font-weight:600}
-  @media (max-width:900px){.vthero{margin-bottom:18px}}
+  @media (max-width:900px){.vthero{margin-bottom:18px;padding:22px 18px}}
   .term{border-radius:14px;border:1px solid #23342e;background:#07100e;color:#cfe3dd;box-shadow:0 20px 60px var(--glow);overflow:hidden;font-family:var(--font-num);font-size:12.5px}
   .term .bar{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid #1b2b26;align-items:center}
   .term .bar i{width:10px;height:10px;border-radius:50%;background:#2a3d37}
