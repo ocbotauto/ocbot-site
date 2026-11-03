@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A PSU for a 6–8 GPU farm: why "just enough" is the most expensive saving</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="How you actually pick a PSU for a multi-GPU mining rig: the 80 PLUS efficiency curve, miner load spikes, rails and OCP, heat from neighboring cards and the 10 °C rule. Why watt headroom pays for itself — and 'just enough' does not.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A PSU for a 6–8 GPU farm: why “just enough” is the most expensive saving">
+<meta property="og:description" content="Efficiency curves, transient load spikes, rails and OCP, cumulative heat: what actually drives PSU selection for a multi-GPU rig.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/psu-budget.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/psu-budget.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/psu-budget.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="psu-budget.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>A PSU for a 6–8 GPU farm: why “just enough” is the most expensive saving</h1>
+    <p class="lede">The PSU is the one farm component you buy once every several years — and the one that carries your whole electricity bill every single day. Cutting corners here does not save money; it produces random outages, cooked cards and a worse $/kWh than you already pay. This article is the real physics of PSU selection: the 80 PLUS efficiency curve, the miner's load spikes, rails and protection, heat from the cards. All of it is public material from any PSU datasheet and the ATX standards.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Efficiency is not one flat number.</strong> A PSU delivers its datasheet efficiency only mid-range (~40–60% load); at 90–100% it gets hotter, louder and pulls more watts from the wall.</li>
+    <li><strong>A miner does not eat the average, it eats the peaks.</strong> Algorithms spike current above their own average — a PSU on the edge trips its protection and the farm "goes dark for no visible reason".</li>
+    <li><strong>A "just enough" PSU lives in the worst part of the curve.</strong> Worse efficiency = more heat = faster aging by the 10 °C rule = an earlier death. The saving turns into spending.</li>
+    <li><strong>Rails and cables have datasheets too.</strong> Every line has a current limit; ignoring it — courtesy of Ohm's law — ends in warm, then scorched connectors.</li>
+    <li><strong>Watt headroom is not "money lying idle".</strong> It is the reserve that keeps the unit in its comfort zone and absorbs the transients, so protection never has to rescue the farm.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="curve"><h2>The truth about the efficiency curve: the wattage rating is not the optimum</h2>
+  <p>The 80 PLUS certification (and its modern successors like Cybenetics) measures PSU efficiency at several load points — typically 10%, 20%, 50% and 100%. The shape is always the same: a convex curve with a hump around 40–60% load and a drop-off at both edges (trickle load at 10% and the ceiling at 100%). That is just how switching converters work: the point where every watt converts at its best is the middle of the range.</p>
+  <p>What this means for you: a PSU rated 1200 W being fed 1200 W runs on the flattest, brightest part of the curve — the worst zone. The gap between ~93% efficiency mid-range and ~87% at the ceiling is extra watts you pay for 24/7: on a rig pulling ~1 kW, every couple of efficiency points is tens of kilowatt-hours a year, plus extra degrees in the room.</p>
+  <p>Just as important is <em>where</em> the headroom goes: a correctly sized unit (60–80% average load) sits in its maximum-efficiency, minimum-heat zone, which — by the 10 °C rule — directly extends the unit's own lifespan.</p>
+  </section>
+
+  <section class="block" id="transients"><h2>Load spikes: why a farm "goes dark for no reason"</h2>
+  <p>Mining is not a flat load. Inside any mining algorithm there are windows of higher intensity that stretch current draw multiples above the average for tens to hundreds of microseconds. That is exactly why the ATX 3.x standard requires PSUs to tolerate short-term load excursions of several times the nominal rating, and why GPU vendors list transient headroom in their datasheets.</p>
+  <p>You know this one from practice: a fresh miner release, and the farm starts falling over at night; switching the algorithm "fixes" it. The culprit is often not the card at all — it is a PSU running without headroom, tripping its transient protection (OCP/SCP) and shutting down under load. Among farmer ailments this is the most humiliating one: the "faulty hardware" turns out to cost one decent PSU purchase, not another week of studying overclocking.</p>
+  <p>Watt headroom is precisely the reserve for these spikes. There is no neat formula here, only vendor claims — but those get re-verified on test rigs constantly (Cybenetics publishes transient data).</p>
+  </section>
+
+  <section class="block" id="rails"><h2>Rails, OCP and connectors: read the datasheet</h2>
+  <p>Inside a modern PSU there are several 12 V rails, each with its own over-current protection. The classic multi-GPU mistake is hanging every card on one rail and then wondering why the farm "does not pull" and why protection trips below the rated ceiling. Rail distribution is printed in the PSU's manual — someone on the design team sized it on purpose.</p>
+  <p>Next come cables and connectors: one 8-pin line is rated for a known current, and — through Ohm's law — extra watts on an overloaded run start as a warm connector and end as a scorched socket. The rule is simple: one cable, one card; risers get their own wire (and cheap Molex→SATA adapters are waiting to tell the same story — see our article on rig hangs).</p>
+  <p>The mirror also holds for split 12 V layouts: server-style units have their own distribution schemes that work for their design — check the datasheet of your specific PSU instead of copying "what seems right from a friend's rig".</p>
+  </section>
+
+  <section class="block" id="heat"><h2>A PSU breathing card exhaust: the 10 °C rule from our other article</h2>
+  <p>The life of electrolytic capacitors and fan bearings halves for every +10 °C above the rated operating temperature. A PSU standing in the exhaust plume of six hot cards around the clock ages at an accelerated rate. Split the air streams: the PSU's cool intake on one side of the rig, the cards and their exhaust on the other. At farm scale, that is literally years of service life difference.</p>
+  </section>
+
+  <section class="block" id="checklist"><h2>Checklist: sizing a PSU for a multi-GPU rig</h2>
+  <ol class="steps">
+    <li><h3>Count the average honestly</h3><p>Card limits + motherboard + CPU + fan hubs + risers. Not "50–60 W per card, give or take" — the actual sum of the limits you are going to set.</p></li>
+    <li><h3>Add ~25–30% headroom</h3><p>That lands you in the maximum-efficiency zone and leaves room for algorithm spikes and a possible extra card.</p></li>
+    <li><h3>Look at the curve, not the sticker</h3><p>An 80 PLUS Gold with a good curve at your actual load point beats a Platinum whose curve is bad there.</p></li>
+    <li><h3>In the datasheet: rails, transients, ambient temperature</h3><p>The ability to hold short spikes and the rated operating temperature are what the farm will actually ask of it.</p></li>
+    <li><h3>Cables per datasheet, one per card</h3><p>No Y-splitters or extensions on card lines; risers get their own power run.</p></li>
+    <li><h3>Give the PSU a cool intake, always</h3><p>And remember: the sum of the card limits is a ceiling that OCBot never crosses — distributing power across cards inside your budget is its public feature.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>How OCBot fits into this picture</h2>
+  <p>The key question of this article is not "which PSU is good" but "is the farm living on the edge": <a href="index.html">OCBot</a> never exceeds the power limit you set — it tunes each card's overclock so the rig's total stays inside the PSU budget, and reports everything to Telegram. In terms of this article that means: the PSU lives in its comfort zone, the transient reserve stays intact for years, and the cards age by reliability math instead of endless OCP trips.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public standards (80 PLUS and Cybenetics testing, the ATX 3.x specifications, PSU vendors' datasheets) and school-level physics (Ohm's law, the 10 °C rule). Mains-voltage wiring requires a qualified electrician. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

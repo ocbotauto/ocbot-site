@@ -4,13 +4,13 @@
 <script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Почему HiveOS-риг зависает намертво и что с этим делать</title>
+<title>Почему майнинг-риг зависает намертво и что с этим делать</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/guide.css">
-<meta name="description" content="Практический разбор: почему майнинг-риг на HiveOS молчит ночью или висит целиком — питание, райзеры, висящие процессы, логи только в RAM. Чек-лист диагностики и что можно отдать автоматике.">
+<meta name="description" content="Практический разбор: почему майнинг-риг молчит ночью или висит целиком — питание, райзеры, висящие процессы, логи только в RAM. Чек-лист диагностики и что можно отдать автоматике.">
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Почему HiveOS-риг зависает намертво и что с этим делать">
+<meta property="og:title" content="Почему майнинг-риг зависает намертво и что с этим делать">
 <meta property="og:description" content="Питание, райзеры, висящие процессы и логи в RAM: чек-лист диагностики зависаний майнинг-рига.">
 <meta property="og:locale" content="ru_RU">
 <link rel="canonical" href="https://ocbot.org/rig-freezes.ru.html">
@@ -27,10 +27,10 @@
 
 <main class="wrap">
   <div class="hero">
-    <h1>Почему HiveOS-риг зависает намертво и что с этим делать</h1>
-    <p class="lede">Классика фермы: вечером всё работает, утром — тишина. Риг числится в списке, но по SSH не отвечает, хешрейт пустой, а до него 40 минут дороги. Ниже — разбор того, как это выглядит на практике, откуда это берётся чаще всего, чек-лист диагностики и что из этого стоит отдать автоматике. Всё — по опыту эксплуатации многокарточных NVIDIA-ригов на HiveOS, без «магических фикс-реестров».</p>
+    <h1>Почему майнинг-риг зависает намертво и что с этим делать</h1>
+    <p class="lede">Классика фермы: вечером всё работает, утром — тишина. Риг числится в списке, но по SSH не отвечает, хешрейт пустой, а до него 40 минут дороги. Ниже — разбор того, как это выглядит на практике, откуда это берётся чаще всего, чек-лист диагностики и что из этого стоит отдать автоматике. Всё — по опыту эксплуатации многокарточных NVIDIA-ригов (мы держим их на HiveOS), без «магических фикс-реестров».</p>
   </div>
-  <ul class="chips"><li><a href="calculator.ru.html">Калькулятор доходности</a></li><li><a href="catalog.ru.html">Каталог пресетов</a></li><li><a href="guide.ru.html">Инструкция</a></li><li><a href="buy.ru.html">Попробовать</a></li></ul>
+  <ul class="chips"><li><a href="gpu-temps.ru.html">Температура и срок жизни карты</a></li><li><a href="psu-budget.ru.html">БП для фермы без «впритык»</a></li><li><a href="calculator.ru.html">Калькулятор доходности</a></li><li><a href="catalog.ru.html">Каталог пресетов</a></li></ul>
 
   <section class="block" id="symptoms"><h2>Сначала выясните, какая именно картина у вас</h2>
   <p>«Риг завис» — это три разных неисправности с разными виновниками. Проверьте, какая из них ваша:</p>
