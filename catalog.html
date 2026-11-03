@@ -211,9 +211,10 @@
     var kwhRaw = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
     var usingDefaultKwh = !kwhRaw;
     var effKwh = kwhRaw || DEFAULT_KWH;
-    $("kwhnote").textContent = usingDefaultKwh
+    var priceDisclaimer = " Revenue and profit figures are estimates: coin price and network difficulty change constantly — double-check before relying on them.";
+    $("kwhnote").textContent = (usingDefaultKwh
       ? "Electricity price not set — using the US residential average: $" + DEFAULT_KWH.toFixed(2) + "/kWh (2026). Enter your own price above for an exact estimate."
-      : "Electricity and profit are calculated at your price: $" + effKwh.toFixed(2) + "/kWh.";
+      : "Electricity and profit are calculated at your price: $" + effKwh.toFixed(2) + "/kWh.") + priceDisclaimer;
     var ser = {}; d.entries.forEach(function (e) { ser[series(clean(e.model)).title] = series(clean(e.model)).key; });
     var serKeys = Object.keys(ser).sort(function (a, b) { return ser[b] - ser[a]; });
     $("chips").innerHTML = serKeys.length > 1 ? ['All'].concat(serKeys).map(function (t) {

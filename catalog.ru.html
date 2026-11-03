@@ -212,9 +212,10 @@
     var kwhRaw = parseFloat(String($("kwh").value).replace(",", ".")) || 0;
     var usingDefaultKwh = !kwhRaw;
     var effKwh = kwhRaw || DEFAULT_KWH;
-    $("kwhnote").textContent = usingDefaultKwh
+    var priceDisclaimer = " Цифры дохода и прибыли ориентировочные: курс монеты и сложность сети меняются постоянно — перепроверяйте перед тем, как на них полагаться.";
+    $("kwhnote").textContent = (usingDefaultKwh
       ? "Цена электричества не указана — считаем по примерной среднероссийской цене: " + DEFAULT_KWH.toFixed(2) + " ₽/кВт·ч. Тарифы по регионам сильно различаются — укажите свою цену в поле выше для точного расчёта."
-      : "Электричество и прибыль считаются по вашей цене: " + effKwh.toFixed(2) + " ₽/кВт·ч.";
+      : "Электричество и прибыль считаются по вашей цене: " + effKwh.toFixed(2) + " ₽/кВт·ч.") + priceDisclaimer;
     var ser = {}; d.entries.forEach(function (e) { ser[series(clean(e.model)).title] = series(clean(e.model)).key; });
     var serKeys = Object.keys(ser).sort(function (a, b) { return ser[b] - ser[a]; });
     $("chips").innerHTML = serKeys.length > 1 ? ['Все'].concat(serKeys).map(function (t) {
