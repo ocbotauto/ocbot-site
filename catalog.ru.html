@@ -234,8 +234,9 @@
       var coin = state.coinmap[e.algo] || null;
       var price = coin ? state.prices[coin] : undefined;
       var cpd = coinsPerDay(e);
-      var revBlock = !coin || cpd == null ? '<div class="rev"><span class="na">нет сетевых данных</span></div>'
+      var revBlock = !coin ? '<div class="rev"><span class="na">нет сетевых данных</span></div>'
         : price == null ? '<div class="rev"><span class="na">курс загружается…</span></div>'
+        : cpd == null ? '<div class="rev"><span>курс</span><b>' + num(price, 4) + ' ₽</b><span class="cost">доход не считаем — нет данных о сложности сети</span></div>'
         : '<div class="rev"><span>доход, за сутки</span><b>' + num(cpd * price, 2) + ' ₽</b></div>';
       return '<div><div class="meta"><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/Вт</span>' +
         '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' Вт</div></div>' +
@@ -300,8 +301,9 @@
       var cpd = coinsPerDay(e);
       var revDay = cpd != null && price != null ? cpd * price : null;
       var profitDay = revDay != null ? revDay - (elDay || 0) : null;
-      var revCell = !coin || cpd == null ? '<span class="price-na">нет сетевых данных</span>'
+      var revCell = !coin ? '<span class="price-na">нет сетевых данных</span>'
         : price == null ? '<span class="price-na">курс грузится</span>'
+        : cpd == null ? '<b>' + num(price, 4) + ' ₽</b><span class="cost">доход не считаем — нет данных о сложности сети</span>'
         : '<b>' + num(revDay, 2) + ' ₽</b><span class="cost">прибыль ≈ ' + num(profitDay, 2) + ' ₽/сутки</span>';
       // Когда типичный пресет совпадает с лучшим (обычно при одной карте), не дублируем тот же блок
       // настроек и три кнопки копирования второй раз — это лишняя ширина таблицы без новой информации.
