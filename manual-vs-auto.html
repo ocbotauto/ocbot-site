@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual vs automatic overclocking: the arithmetic of labor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="What manual overclock tuning really costs on a farm: tuning hours per card, stability runs, repeated work after every algorithm and driver switch. A fair arithmetic comparison with the automatic approach.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Manual vs automatic overclocking: the arithmetic of labor">
+<meta property="og:description" content="Manual tuning in practice: sweeping values, hours of stability runs, redoing work after every algorithm switch. The arithmetic versus automatic tuning.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/manual-vs-auto.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/manual-vs-auto.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/manual-vs-auto.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="manual-vs-auto.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Manual vs automatic overclocking: the arithmetic of labor</h1>
+    <p class="lede">"I tuned an overclock in one evening, why would I need automation?" — sounds reasonable until you count honestly. An evening is one card, one algorithm, one driver and good spirits. A farm lives longer and works differently: cards differ even within one batch, algorithms rotate monthly, and a found point "drifts" after a week of heat or an update. Let's count how many hours the manual path takes per year, and compare.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>An overclock is not a setting, it is a mode.</strong> Cards of the same model are not twins: silicon lottery, different memory batches. What one card holds crashes its neighbor. So the work is always "per card", never "per rig".</li>
+    <li><strong>A point found in an evening is not yet a point.</strong> Values not verified over long runs turn out unstable closer to midnight — at the worst moment, while you sleep.</li>
+    <li><strong>Manual tuning lives for weeks.</strong> An algorithm switch on the pool, a driver or miner update, seasonal room-temperature drift — and part of the work must be redone.</li>
+    <li><strong>Wrong values hit revenue directly.</strong> Overcooked settings mean rig reboots and dropped cards; undercooked ones mean lost hashrate percentages around the clock.</li>
+    <li><strong>The automatic approach is not "magic" — it is the same process put on a continuous track:</strong> the same sweep, the same checks, but 24/7 and regardless of whether you have energy left in the evening.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="count"><h2>What exactly eats the manual path</h2>
+  <p>The count below is unadorned — the usual "by hand" routine.</p>
+  <h3>Sweeping values — hours per card</h3>
+  <p>Per card and per algorithm you manually sweep several axes: core, memory, power limit, fan speed. Each step — change a value, let the miner run, compare hashrate, temperatures, drops. Even "minimum effort" means dozens of iterations per card. Five cards — hundreds, each done by hand, one by one.</p>
+  <h3>Stability runs — hours that cannot be compressed</h3>
+  <p>A point that "survived 10 minutes" means nothing. Stability is confirmed by hour-long and overnight runs — otherwise you learn about instability from a silent rig at four in the morning. Confirming one point takes hours of observation; while a card is being checked, the rest either wait or run limited so as not to spoil the picture.</p>
+  <h3>The same work keeps coming back</h3>
+  <p>Pools rotate algorithms month to month, drivers arrive on their own schedule, hot seasons shift thermal points. Every such episode means sweeping and re-checking at least part of the cards again. Over a year it happens dozens of times.</p>
+  <p>The arithmetic is simple: even a miner who gives the farm an evening here and there invests dozens of hours a year into manual tuning — and that is without card swaps and heat waves. With cards moving between rigs, the count goes toward hundreds of hours.</p>
+  </section>
+
+  <section class="block" id="risks"><h2>Why mistakes cost more than time</h2>
+  <p>Time is half the trouble. The expensive part is what wrong points lead to:</p>
+  <ul>
+    <li><strong>overcooked settings</strong> — the rig reboots or cards drop off; at night it means downtime until you notice, and downtime is lost revenue, while frequent reboots wear on the hardware too;</li>
+    <li><strong>undercooked settings</strong> — you quietly lose hashrate percentages every day, all year, and never see it, because the charts look "normal";</li>
+    <li><strong>overheated memory</strong> missed due to unoptimized fan work — slow aging (see our temperature article) and scheduled pad replacements;</li>
+    <li><strong>one profile for the whole rig:</strong> you concede part of the better cards' potential, because you align to the worst card in the rack.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="auto"><h2>What the automatic approach does — and does not</h2>
+  <p>Honestly: a bot does not "invent" overclocks and there is no magic in it — it works through the same mechanisms as a human: it sweeps, measures, discards unstable settings, confirms on long runs, memorizes the best point. The difference is in three things:</p>
+  <ol class="steps">
+    <li><h3>It is always on duty</h3><p>Nights, workdays, vacations: observation is continuous, and instability is caught as it happens, not from the morning silence.</p></li>
+    <li><h3>It holds the total power budget</h3><p>Each card alone might hold more than the PSU allows. Automation distributes limits across cards so the rig stays inside your overall cap — manually this is the most tedious of the calculations.</p></li>
+    <li><h3>It remembers points</h3><p>Found values are kept per card model and survive moves between rigs: a good card travels — its profile travels with it.</p></li>
+  </ol>
+  <p>What a bot does not do: it does not fix bad economics or sloppy wiring — a reasonable tariff and decent circuits are needed in any scenario. The practical split: the manual path is a skill and a hobby; the automatic one is an operating style for a farm that must earn without your constant presence. <a href="index.html">OCBot</a> was built for the second scenario: years of experience across several of our own rigs grew into a tool that tunes per card, respects the power budget and reports to Telegram. You can try it via the trial.</p>
+  </section>
+
+  <p class="legal">This article is general information and an estimate of labor based on public practice. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon; their names are mentioned only to describe compatibility. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

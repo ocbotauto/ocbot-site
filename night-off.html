@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Should you switch a mining farm off at night? Physics and money</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="“Switching off at night to let it rest” — smart saving or expensive habit? Thermal cycling (Coffin–Manson), cold starts, off-peak tariffs, and when a shutdown is actually justified.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Should you switch a mining farm off at night? Physics and money">
+<meta property="og:description" content="What every shutdown does to a GPU rig: thermal cycles, cold starts, lost revenue. When stopping the farm is justified — and when it is the most expensive 'saving' in mining.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/night-off.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/night-off.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/night-off.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="night-off.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Should you switch a mining farm off at night? Physics and money</h1>
+    <p class="lede">Some people switch their farms off at night and before leaving town — "let it rest and stop eating electricity". Others run 24/7 and count every idle hour as lost money. Amusing answer: both are right, for different reasons. Here is what actually happens to the hardware at every shutdown, what happens to your wallet, and when the "off" button is justified. The physics is public, the math is simple.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>"Rest" gives a GPU nothing back.</strong> Wear is measured in powered hours and in operating mode, not in silent nights: a chip's rated lifetime is counted like an engine's — in hours under load.</li>
+    <li><strong>Every shutdown is a thermal cycle.</strong> Solder and PCB age from temperature swings (Coffin–Manson), and a daily "hot → cold → hot" pattern is the worst mode there is.</li>
+    <li><strong>Cold start is the hardest second of a card's life.</strong> The current inrush at power-on is among the excursions that most often trip a tired card or the PSU's protection.</li>
+    <li><strong>Night electricity savings are almost always smaller than the lost revenue</strong> — simply because overnight revenue usually exceeds the tariff cost for the same kWh. Run the calculator, don't guess.</li>
+    <li><strong>Stops are fine when they are rare and planned:</strong> repairs, moves, a genuinely bad tariff, noise. The bad thing is not a shutdown — it is the daily habit of "switching off overnight to let it rest".</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="rest"><h2>The "let it rest" myth: why resting does nothing</h2>
+  <p>Intuition says: anything running around the clock wears out, so let it rest. True for a fan, true for a car. Not true for a chip, for two reasons.</p>
+  <p>First: semiconductor life is counted in powered hours, engine-style. Vendors describe their rated duty as continuous load inside nominal temperatures: a chip that runs 24/7 at 70 °C will deliver its rated lifetime. What shortens the life is not hours but <em>mode</em>: overheating, excess current, thermal swings, dirty power — everything that accelerates aging (see our article on temperatures and lifespan).</p>
+  <p>Second: the chip is not the only thing aging. Fans and capacitors are rated in hours too, and "rest" does not reset a bearing. While the card sits idle the fan simply stops wearing — and stops earning. Meanwhile every new power-on adds stress to all nodes at once: cold starts hit the chip, the PSU, the motherboard and the disk simultaneously.</p>
+  </section>
+
+  <section class="block" id="cycles"><h2>Thermal cycles: why a nightly shutdown is the most expensive mode</h2>
+  <p>Electronics reliability science (the Coffin–Manson law — overview in our temperature article) ties the number of heat/cool cycles to failure to roughly the square of the swing. A board that passes through 25 °C → 75 °C → 25 °C daily accumulates solder fatigue many times faster than one living 24/7 in a narrow 60–72 °C band.</p>
+  <p>Then there is the money. A night is 8–10 hours: specific revenue generated and specific kWh consumed. For a shutdown "to pay off", the overnight inequality must hold: <em>savings on night electricity exceed the revenue for those same hours</em>. Occasionally it does (a very expensive tariff and a very weak coin), but usually the relation is the other way around: revenue covers the kWh with room to spare. The check takes a minute in the calculator — compare your overnight revenue against your overnight electricity bill.</p>
+  <p>And the third factor people forget: the cold start. Each morning the rig goes through inrush current at power-on, a full cold heat-up, miner restart and the climb back to the working overclock. One such event — five minutes of downtime and a speck of wear. Every single day — routine extra stress that a steady 24/7 mode simply does not create.</p>
+  </section>
+
+  <section class="block" id="when"><h2>When a shutdown is justified</h2>
+  <p>Nobody should burn electricity 24/7 out of principle. Entirely honest reasons to stop a farm:</p>
+  <ul>
+    <li><strong>service and maintenance:</strong> cleaning, thermal pad replacement, moving the rig, rebuilds;</li>
+    <li><strong>economics by calculation:</strong> the tariff genuinely eats all revenue — it happens with expensive tariffs during a long "winter" of coin prices; compute it in the calculator rather than guessing;</li>
+    <li><strong>noise and people:</strong> a farm in an apartment with a family — noise sometimes matters more than income, and that is fine;</li>
+    <li><strong>trouble:</strong> a card that keeps rebooting the rig is a reason to pull it off the line and sort things out.</li>
+  </ul>
+  <p>The short conclusion: stops should be rare, planned, and made in full awareness that you lose revenue and add one heat/cool cycle. And steer clear of both extremes — "the farm must run forever" and "switching off at night to let it rest": each is the most expensive option.</p>
+  </section>
+
+  <section class="block" id="power"><h2>If you do shut down — how to lose less</h2>
+  <ol class="steps">
+    <li><h3>Stop rarely, in blocks</h3><p>One long maintenance stop costs fewer cycles than ten short "evening" ones. Plan tech days, not daily pauses.</p></li>
+    <li><h3>Stop gently, not with a breaker</h3><p>Stop the miner, let it cool for a couple of minutes, then cut power. Killing the load abruptly and cold-starting later is avoidable stress.</p></li>
+    <li><h3>Do not power up "for five minutes"</h3><p>Short on/off cycles have the worst wear-to-benefit ratio: full heat-up, no revenue, one cycle spent.</p></li>
+    <li><h3>Count, don't feel</h3><p>Overnight revenue minus overnight electricity is a number from the calculator. If it's near zero, "to shut down or not" really is an open question. If it clearly leans one way — act accordingly.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>How we run it: around the clock, by the numbers</h2>
+  <p>Our own position comes from running rigs: <a href="index.html">OCBot</a> keeps the farm running 24/7 and watches it itself — overnight it handles hangs and faults just as it does by day, reporting to Telegram. The point is that night hours are not a "dark zone" (you sleep and learn at noon that the rig hung at 3 a.m.); they are normal working hours with the same protection as by day. And the "run or stop" decision is a money question: the <a href="calculator.html">calculator</a> works it out in a couple of minutes with your own tariff.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public reliability science (Coffin–Manson, manufacturer lifetime ratings) and simple economics. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon; their names are mentioned only to describe compatibility. Running decisions are yours; use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Articles on mining hardware: hangs, temps, PSUs, profitability</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Practical articles on mining hardware: why rigs hang, GPU temperature physics, PSU sizing, night shutdowns, fans as failure predictors, manual vs automatic overclocking, honest profitability math.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Articles on mining hardware">
+<meta property="og:description" content="Seven practical articles: rig hangs, temperature physics, power supplies, night shutdowns, fans, manual vs automatic tuning, honest profitability math.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/blog.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/blog.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/blog.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="blog.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Articles on mining hardware</h1>
+    <p class="lede">Short practical breakdowns from running multi-GPU NVIDIA rigs: physics, arithmetic and common sense — no scare stories, no magic fixes. Every article opens with a "short version" block, so the point lands in a minute.</p>
+  </div>
+
+  <section class="block"><h2>Operation and reliability</h2>
+  <ul class="steps">
+    <li><h3><a href="rig-freezes.html">Why a mining rig freezes solid — and what to do about it</a></h3>
+    <p>Power delivery, risers, hung processes, RAM-only logs. A diagnosis checklist for a silent rig and what is worth handing to automation.</p></li>
+    <li><h3><a href="gpu-temps.html">GPU temperature and lifespan: what the physics actually says</a></h3>
+    <p>Black's equation (electromigration), Coffin–Manson (thermal cycling), the 10 °C rule. Why "letting the card rest" does nothing and what power limits have to do with it.</p></li>
+    <li><h3><a href="fan-health.html">GPU fan as a failure predictor: what noise and RPM tell you</a></h3>
+    <p>The fan dies before the card — and warns in advance: creeping RPM at the same temperature, bearing rattle. How to catch it by charts and by ear.</p></li>
+    <li><h3><a href="night-off.html">Should you switch a mining farm off at night? Physics and money</a></h3>
+    <p>Every shutdown is a thermal cycle and a cold start. Night savings versus night revenue: when stopping is justified — and when it is the most expensive "saving".</p></li>
+  </ul>
+  </section>
+
+  <section class="block"><h2>Power and budget</h2>
+  <ul class="steps">
+    <li><h3><a href="psu-budget.html">A PSU for a 6–8 GPU farm: why "just enough" is the most expensive saving</a></h3>
+    <p>The 80 PLUS efficiency curve, transient load spikes and ATX 3.x, rails and OCP, one cable per card. Watt headroom is not money lying idle.</p></li>
+  </ul>
+  </section>
+
+  <section class="block"><h2>Tuning and money</h2>
+  <ul class="steps">
+    <li><h3><a href="manual-vs-auto.html">Manual vs automatic overclocking: the arithmetic of labor</a></h3>
+    <p>Tuning hours per card, stability runs, repeated work after every algorithm and driver switch. A comparison by arithmetic, not by advertising.</p></li>
+    <li><h3><a href="profit-math.html">How to compute mining profitability honestly</a></h3>
+    <p>Revenue is gross; profit comes after electricity and fees. Formulas, a worked example, the classic self-deceptions and the <a href="calculator.html">calculator</a> with your own tariff.</p></li>
+  </ul>
+  </section>
+
+  <section class="block"><h2>Where to next</h2>
+    <p>A new article goes live about once a week. If you want to suggest a topic — drop us a line; contacts are on the <a href="index.html">homepage</a>. The tool these articles grew out of is <a href="index.html">OCBot</a>: per-card auto-overclocking, the rig's power budget and 24/7 monitoring.</p>
+    <ul class="chips"><li><a href="catalog.html">Card and preset catalog</a></li><li><a href="calculator.html">Profitability calculator</a></li><li><a href="buy.html">Try OCBot</a></li></ul>
+  </section>
+
+  <p class="legal">These articles reflect hands-on experience and public sources; they are not a technical manual for your specific hardware. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

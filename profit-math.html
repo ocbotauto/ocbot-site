@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to compute mining profitability honestly: revenue, electricity, real profit</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Why the 'revenue per day' on mining sites is not your earnings: electricity, pool fees, price volatility and downtime. Formulas, a worked example, and the usual ways miners fool themselves.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to compute mining profitability honestly: revenue, electricity, real profit">
+<meta property="og:description" content="Revenue ≠ earnings: electricity, fees, volatility and downtime eat the difference. Formulas, a worked example, and the classic self-deceptions.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/profit-math.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/profit-math.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/profit-math.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="profit-math.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>How to compute mining profitability honestly: revenue, electricity, real profit</h1>
+    <p class="lede">On mining sites you see large numbers: "X coins per day", "$Y daily". That is <em>revenue</em> — gross, before every deduction. Earnings (what you can actually withdraw and spend) is smaller, and the gap between the two numbers comes from four things: electricity, fees, volatility and downtime. They can eat half of it. Here — the formulas, a worked example, and the ways miners usually fool themselves.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Revenue and profit are different things.</strong> Revenue — coins valued at the market price; profit — what remains after electricity and fees. Any honest comparison starts with this.</li>
+    <li><strong>Electricity is the largest expense in GPU mining.</strong> Over the years a farm pays an amount comparable to the price of the cards themselves; and the tariff is personal, so count with your own meter's number.</li>
+    <li><strong>Every "per day" figure is approximate.</strong> Network difficulty and coin prices move constantly: any calculation is honest only as a "under current conditions" estimate.</li>
+    <li><strong>Downtime is an expense with no line in the bill.</strong> A rig that hung from 3 a.m. lost nothing on paper — but those hours will never be earned back.</li>
+    <li><strong>The short summary:</strong> count by "profit = revenue − electricity − fees"; substituting all these numbers under your tariff is what the <a href="calculator.html">calculator</a> does.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="formula"><h2>Base arithmetic: three lines</h2>
+  <p>All of mining profitability fits into a humble chain:</p>
+  <ul>
+    <li><strong>Daily revenue</strong> = coins per day × coin price. Both are variables: coins come for hashrate at the current network difficulty, and the price drifts every hour.</li>
+    <li><strong>Daily electricity</strong> = power draw (W) × 24 / 1000 × your kWh tariff. For a rig drawing 1000 W at $0.07/kWh that is ~$1.7/day — already comparable to a card's revenue.</li>
+    <li><strong>Daily profit</strong> = revenue − electricity − fees (pools usually take 1–2%, withdrawal can cost extra). This is the line that belongs in your table, not revenue.</li>
+  </ul>
+  <p>A worked example for one card (illustrative figures — substitute your own): hashrate earns coins worth $2.30/day at the current price, the card draws 230 W, tariff $0.07/kWh. Electricity: 230 × 24 / 1000 × 0.07 ≈ $0.39. Profit: 2.30 − 0.39 − pool fee ≈ $1.86 — the card is genuinely earning. At a $0.35 tariff, though, electricity becomes ~$1.93 and profit nearly vanishes. Same card, same coins — the tariff decides. You have your own.</p>
+  </section>
+
+  <section class="block" id="mistakes"><h2>Classic ways to fool yourself</h2>
+  <ol class="steps">
+    <li><h3>Looking at revenue, not profit</h3><p>The most common one. The big numbers on sites are usually gross, before electricity. Compare hardware and tariffs in the same terms: profit only, at your own tariff.</p></li>
+    <li><h3>"I do not pay for electricity"</h3><p>If the farm is at home, power still arrives in the common bill. Do the conservative math: the rig's total draw is known, and "it dissolved into general expenses" is the same payment, just without its own line.</p></li>
+    <li><h3>Counting from memory, not from the meter</h3><p>Rated and actual draw regularly diverge by tens of percent — overclocking, summer heat and power quality. Count by what the electricity meter shows, not by remembered figures.</p></li>
+    <li><h3>Forgetting downtime</h3><p>A farm that hung from 3 a.m. until noon usually counts as "working" in these tables. Real downtime — 5–15% of the time on a farm without automation — is a permanent 5–15% off your profit; pool charts show it, and in an honest table it is its own expense line.</p></li>
+    <li><h3>Judging by one lucky day</h3><p>A well-chosen day paints any level of profitability. Look at week- or month-long averages; averaging is the only honest method when both the price and the difficulty move constantly.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="calc"><h2>Where this math lives on our site</h2>
+  <p>The <a href="calculator.html">calculator</a> implements exactly this formula: it takes cards from the <a href="catalog.html">catalog</a> with their power draw and live coin prices, then subtracts electricity at your tariff: the bold figure is revenue, and beneath it a line reads "profit ≈ N/day per card". The summary on top shows electricity, revenue and profit for the whole rig. All figures carry the same caveat: difficulty and prices change constantly, so the calculation is honest as a "now" snapshot, not a one-year promise.</p>
+  </section>
+
+  <section class="block" id="tco"><h2>Beyond the daily table</h2>
+  <p>Counting seriously, over years, adds two more layers:</p>
+  <ul>
+    <li><strong>wear and maintenance.</strong> Fans, thermal pads, cleaning — not "extra" costs but the cost of ownership. The physics of it is in our reliability article: operating mode shifts the card's lifetime;</li>
+    <li><strong>time.</strong> Tuning, watching, reboots, drives to the farm. Cheap individually, but over distance it often costs more than electricity — which is where interest in automation comes from, buying those hours back.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="auto"><h2>What of this a bot can do</h2>
+  <p>Directly, a bot does not earn money — that is decided by the tariff, the market and the coins you pick. Automation affects the part of the table that is usually underestimated: <a href="index.html">OCBot</a> keeps the cards on stable overclocks (no hashrate lost to drifting settings), watches that the rig stays inside your power budget, and cuts downtime by reacting to failures automatically instead of waiting for your morning discovery. In the daily table that reads exactly as "fewer losses" and "more working hours". Count with the <a href="calculator.html">calculator</a>, watch with the bot.</p>
+  </section>
+
+  <p class="legal">This article is general information; example figures are illustrative. Mining profitability depends on coin prices, network difficulty, tariffs and your hardware — no profitability guarantees exist. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

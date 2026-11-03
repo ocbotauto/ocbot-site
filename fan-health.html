@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GPU fan as a failure predictor: what noise and RPM tell you</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="The fan usually dies before the memory or the die — and it warns you weeks ahead: creeping RPM growth at the same temperature, bearing rattle, rising temps at the same overclock. How to catch it by ear and by charts.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPU fan as a failure predictor: what noise and RPM tell you">
+<meta property="og:description" content="Bearing wear announces itself in advance: RPM creeps up at the same load, rattle and whine appear. How to run a farm by ear and by graphs — before a card overheats.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/fan-health.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/fan-health.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/fan-health.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="fan-health.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>GPU fan as a failure predictor: what noise and RPM tell you</h1>
+    <p class="lede">When memory or the die dies, a card does it suddenly. When a fan dies, it warns you for weeks: in slowly creeping RPM, in new noise, in rising temperatures at the same overclock. The good news: this is the most "advance-notice" failure a farm gets — you can catch it without opening anything, from charts and by ear. Below: how a fan ages physically, which signals are real, which are false, and what to do once you have caught one.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>A fan is a consumable with a real rated lifetime.</strong> Bearing life is counted in thousands of hours; in a 24/7 mode fans wear out first — before memory and the die.</li>
+    <li><strong>The earliest signal is RPM creeping up at the same temperature.</strong> Dust or a worn bearing makes the impeller move air worse, so the controller spins it faster to keep the same cooling. All of it shows in ordinary miner logs.</li>
+    <li><strong>Noise is telemetry too.</strong> Humming, rattling, interrupted whine — sleeve-wear symptoms appear before the stop: a bearing does not die instantly.</li>
+    <li><strong>A dead fan = whole-node overheating.</strong> The card gets hot, and the lost airflow heats the whole rig row — up to thermal throttling.</li>
+    <li><strong>Catch the degradation — schedule the replacement</strong> (or the whole cooler's), do not wait until "the rig is silent". A fan is cheap; a planned swap is an hour with a screwdriver. An emergency one means overheating, fallen-off cards and a day of downtime.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="bearings"><h2>How a bearing ages: simple physics</h2>
+  <p>Most budget and mid-range card fans use sleeve bearings: a shaft spinning inside a bushing through a thin lubricant film. The aging mechanics are plain: the lubricant dries out from heat and constant rotation, the clearance grows, the shaft starts to wobble, friction rises — and with it noise, power draw and temperature.</p>
+  <p>Pricier cards and PSUs carry ball bearings or fluid-dynamic ones (FDB): they live longer and behave more predictably, but are not immortal — just on another timescale. The rated life (MTBF) of mass-market card fans is around 30–70 thousand hours; at 24/7 that is 3–8 years, and with chronic overheating considerably less. How exactly your fleet is doing — your temperature charts will tell.</p>
+  </section>
+
+  <section class="block" id="signals"><h2>Which signals are real</h2>
+  <h3>RPM creeping up at the same temperature — real</h3>
+  <p>The logic is simple: the fan holds a temperature. If, at the same overclock and the same room temperature, RPM gradually climbs over weeks — cooling is degrading: the bearing, dust in the heatsink, or dried-out thermal interface. All three are fixable if caught in time.</p>
+  <h3>Cyclic hum and rattle — real</h3>
+  <p>A bearing announces death in advance: periodic clicking, grinding, whine during spool-up. If the sound changes when the impeller reaches its cruise speed, that is mechanics, not "just how it hums".</p>
+  <h3>Temperatures climbing at the same overclock — real (but general)</h3>
+  <p>Rising temperature at an unchanged power limit and overclock is the most general sign of cooling degradation: dust, bearing, thermal pads, or all at once. It does not point specifically at the fan, but it certainly deserves an inspection.</p>
+  <h3>One-off RPM spikes — false alarm</h3>
+  <p>Single bursts after a driver restart or during a cold start are normal. The bad sign is a weeks-long upward trend, not one loud night.</p>
+  </section>
+
+  <section class="block" id="listen"><h2>How to catch it: ear, eyes, charts</h2>
+  <ol class="steps">
+    <li><h3>Listen during planned visits</h3><p>Stand by the rig for a minute and listen: grinding, wobble-flicker, "machine-gun" sounds of a tired bearing are audible even through the farm's overall noise. Once a month is enough.</p></li>
+    <li><h3>Watch RPM trends, not absolute values</h3><p>There are no universal RPM norms: cards from the same batch differ. Track direction: if RPM at the same temperature keeps stepping up, cooling is degrading.</p></li>
+    <li><h3>Keep dust in check</h3><p>Dust is accomplice No. 1: it adds drag to the impeller and insulates the heatsinks. A quarterly blast of compressed air saves both bearings and radiators.</p></li>
+    <li><h3>Replace fans at the first real signals</h3><p>Planned replacement is a couple of inexpensive fans and an hour with a screwdriver. Emergency replacement is overheating, fallen cards, a day of downtime. The second costs an order of magnitude more.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>Where automation fits</h2>
+  <p>This is exactly where automated monitoring beats monthly walk-bys: <a href="index.html">OCBot</a> watches temperatures and per-card metrics around the clock and reports anything drifting outside the routine to Telegram — so cooling degradation, visible in rising temperatures, surfaces before the card starts hitting its thermal limits. What exactly the bot tracks and which triggers it uses is technical detail we do not disclose publicly; for a farm owner the essential part is one: you learn about problems from a messenger, not from a silent rig.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice (bearing types, fan lifetime ratings, causes of rising temperatures). OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon; their names are mentioned only to describe compatibility. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
