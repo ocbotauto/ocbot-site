@@ -58,11 +58,11 @@
     <p>Эквайринг платежей: адрес кошелька — тот, который вы видите на странице покупки; ключ активации выдаётся автоматически тем же сервером продаж в момент оплаты.</p>
   </section>
 
-  <section style="margin-top:18px">
+  <section id="virustotal" style="margin-top:18px">
     <h2>Проверка VirusTotal</h2>
     <div class="vtcard">
       <div class="ring"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
-      <div class="txt"><b><span class="score">0 / 60</span> антивирусов ничего не нашли</b><span>Файл дистрибутива <span class="pre">ocbot.zip</span> проверен всеми движками VirusTotal (Avast, BitDefender, Kaspersky и др.) — ни один не пометил его как вредоносный. <a href="https://www.virustotal.com/gui/file/c68f4a50807fb4ab2dbe1472b1668635b05c0342978cf8a91a541f59b15a848e" target="_blank" rel="noopener">Открыть полный отчёт →</a></span></div>
+      <div class="txt"><b><span class="score" data-vt-score>проверка идёт</span> антивирусов ничего не нашли</b><span>Каждый релиз <span class="pre">ocbot.zip</span> перед публикацией автоматически прогоняется через все движки VirusTotal (Avast, BitDefender, Kaspersky и др.) — сборка публикуется, только если ни один из них не пометил её как вредоносную. <a data-vt-link href="https://github.com/ocbotauto/ocbot-dist" target="_blank" rel="noopener">Открыть полный отчёт →</a></span></div>
     </div>
   </section>
 
@@ -76,5 +76,6 @@
 
   <footer>OCBot не аффилирован с HiveOS/Hiveon, NVIDIA, Telegram. HiveOS и NVIDIA — товарные знаки их владельцев, упомянуты по контексту совместимости. <a href="guide.ru.html#terms">Все условия</a>.</footer>
 </main>
+<script src="assets/vt-status.js"></script>
 </body>
 </html>

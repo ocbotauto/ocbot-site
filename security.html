@@ -58,11 +58,11 @@
     <p>Payments go to the wallet address shown on the Buy page; the license key is issued by the same sales worker at the moment of payment.</p>
   </section>
 
-  <section style="margin-top:18px">
+  <section id="virustotal" style="margin-top:18px">
     <h2>VirusTotal scan</h2>
     <div class="vtcard">
       <div class="ring"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
-      <div class="txt"><b><span class="score">0 / 60</span> antivirus engines flagged nothing</b><span>The distribution file <span class="pre">ocbot.zip</span> was scanned by every VirusTotal engine (Avast, BitDefender, Kaspersky, and others) — none flagged it as malicious. <a href="https://www.virustotal.com/gui/file/c68f4a50807fb4ab2dbe1472b1668635b05c0342978cf8a91a541f59b15a848e" target="_blank" rel="noopener">Open the full report →</a></span></div>
+      <div class="txt"><b><span class="score" data-vt-score>scanning</span> antivirus engines flagged nothing</b><span>Every release of <span class="pre">ocbot.zip</span> is automatically scanned by every VirusTotal engine (Avast, BitDefender, Kaspersky, and others) before it's published — a build only ships if none of them flag it as malicious. <a data-vt-link href="https://github.com/ocbotauto/ocbot-dist" target="_blank" rel="noopener">Open the full report →</a></span></div>
     </div>
   </section>
 
@@ -76,5 +76,6 @@
 
   <footer>OCBot is not affiliated with HiveOS/Hiveon, NVIDIA or Telegram. Their names belong to their owners and are mentioned only to describe compatibility. <a href="guide.html#terms">Terms</a>.</footer>
 </main>
+<script src="assets/vt-status.js"></script>
 </body>
 </html>
