@@ -10,7 +10,7 @@
 <title>OCBot: auto-overclock</title>
 <meta name="description" content="The bot tunes the overclock of every NVIDIA card on HiveOS (AMD support is coming), verifies it for 2 hours, keeps the power supply within limits and reboots the rig after card drops on its own. Controlled from Telegram.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/index.css?v=vt1">
+<link rel="stylesheet" href="assets/index.css?v=vt2">
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="website">
 <meta property="og:title" content="OCBot: auto-overclock">
@@ -35,11 +35,16 @@
 <main class="wrap">
   <header class="hero">
     <div>
-      <div class="tags"><span class="eyebrow"><i class="dot"></i>For rigs with mixed cards</span><a class="vtbadge" data-vt-link href="security.html#virustotal" target="_blank" rel="noopener"><span class="ok" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>VirusTotal: <span data-vt-score>scanning</span></a></div>
+      <span class="eyebrow"><i class="dot"></i>For rigs with mixed cards</span>
       <h1>The bot watches the whole farm <em>and tunes every card itself</em></h1>
       <p class="lede">Especially useful on rigs with many different cards at once: 3070, 3090, 4070 side by side. The bot searches core, memory and power limit separately for each one, verifies the result for two hours, and keeps watching afterwards — if a card drops, it diagnoses the cause itself, reboots the rig through an escalating sequence of actions, and restores a safe preset without you lifting a finger. Reports arrive in Telegram.</p>
       <div class="cta"><a class="btn primary" href="guide.html#install">Install in a few minutes</a><a class="btn" href="catalog.html">Preset catalog</a><a class="btn" href="calculator.html">Revenue calculator</a></div>
     </div>
+    <div>
+    <a class="vthero" data-vt-link href="security.html#virustotal" target="_blank" rel="noopener">
+      <span class="vthero-ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+      <span class="vthero-txt"><b>Verified</b><span>VirusTotal — <b class="score" data-vt-score>scanning</b> engines, nothing found</span></span>
+    </a>
     <div class="term" aria-label="Example bot messages">
       <div class="bar"><i></i><i></i><i></i><span>rig · ocbot</span></div>
 <pre><span class="m">$</span> /status
@@ -50,6 +55,7 @@
 <span class="y">GPU 4</span>  verifying candidate <span class="m">1h 12m of 2h</span>
 <span class="m">PSU 1200 W · headroom OK</span>
 <span class="g">preset verified</span> <span class="m">(120 min)</span></pre>
+    </div>
     </div>
   </header>
 
