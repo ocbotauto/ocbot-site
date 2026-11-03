@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why a HiveOS rig freezes solid — and what to do about it</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A practical breakdown of why a GPU mining rig on HiveOS goes silent overnight: power delivery, risers, hung processes, RAM-only logs. Includes a diagnosis checklist and what you can hand to automation.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why a HiveOS rig freezes solid — and what to do about it">
+<meta property="og:description" content="Power delivery, risers, hung processes and RAM-only logs: a checklist for diagnosing a mining rig that goes silent overnight.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/rig-freezes.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-freezes.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-freezes.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="security.html">Security</a>
+  <a href="rig-freezes.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Why a HiveOS rig freezes solid — and what to do about it</h1>
+    <p class="lede">A farm classic: everything works in the evening, and in the morning the rig is silent. It still shows in the panel, but SSH is dead, hashrate is zero, and the farm is a 40-minute drive away. Below: what a hang actually looks like, where it usually comes from, a diagnosis checklist, and what is worth handing to automation. Everything is based on running multi-GPU NVIDIA rigs on HiveOS — no magic registry fixes involved.</p>
+  </div>
+  <ul class="chips"><li><a href="calculator.html">Profitability calculator</a></li><li><a href="catalog.html">Preset catalog</a></li><li><a href="guide.html">Guide</a></li><li><a href="buy.html">Try it</a></li></ul>
+
+  <section class="block" id="symptoms"><h2>First, figure out which picture you have</h2>
+  <p>"The rig froze" describes three different faults with different culprits. Check which one is yours:</p>
+  <div class="card" style="margin-top:12px"><h3>The rig went silent entirely</h3><p>The rig is in the panel, but SSH and the interface do not respond, and the local console is dead too. Formally the system is "running" — but part of it is stuck somewhere it rarely climbs out of on its own. The only reliable exit is a forced reboot (a button on site, a smart plug, or wake-on-LAN — whatever you have). You can only diagnose it afterwards, from logs saved in advance.</p></div>
+  <div class="card" style="margin-top:12px"><h3>The rig is alive but the miner is dead</h3><p>SSH answers, temperatures are there, but hashrate is zero — on one card or all of them. This is the mildest case: restarting the miner from within HiveOS usually restores hashing in a minute, without rebooting the whole rig. If the miner keeps dying regularly, that is a symptom, not a coincidence.</p></div>
+  <div class="card" style="margin-top:12px"><h3>Floating, intermittent hangs</h3><p>Once every few days, mostly at night. The nastiest picture: you cannot reproduce it on demand, and it quietly eats your uptime. This one is only solved with logs — which you must be saving <strong>before</strong> the next event.</p></div>
+  </section>
+
+  <section class="block" id="power"><h2>Power delivery — suspect #1</h2>
+  <p>If the whole rig goes down regularly, start with power. A multi-GPU rig is several hundred watts per card plus a start-up peak when all cards wake at once. Typical mistakes rigs pay for overnight:</p>
+  <ul>
+    <li><strong>One cable chain feeding several cards.</strong> Cables and PSU connectors are rated for a specific current: what "held two cards" last year may fail at tomorrow's peak. Each heavy card deserves its own cable run from the PSU — not a three-way splitter.</li>
+    <li><strong>Molex→SATA adapters on risers.</strong> SATA connectors are not built for riser current; melted and scorched adapters are a standard find. Power risers with a proper PCIe cable off the PSU.</li>
+    <li><strong>Extension cords and cheap power strips.</strong> Their contact groups are consumables. Try a direct connection or a decent strip for a week and compare.</li>
+    <li><strong>No headroom.</strong> A PSU sized exactly to the cards' limits runs on the edge, especially in summer heat and on days with mains voltage dips. Measure the actual peak with a wall wattmeter and keep a reserve.</li>
+  </ul>
+  <p>Cheap and fast: plug a household wattmeter into the wall for 20–30 minutes at peak. One such check often replaces a week of guessing.</p>
+  </section>
+
+  <section class="block" id="risers"><h2>Risers and slots — suspect #2</h2>
+  <p>Cheap USB risers and crowded motherboards are the second most common source of overnight silences. Checks, in order:</p>
+  <ul>
+    <li>Power each riser from its own PCIe cable off the PSU (see the adapters note above).</li>
+    <li>Reseat the riser and the card, then try a neighbouring slot. If the problem "follows" the riser — the riser is guilty; if it stays on the slot — look at that slot's power line or the motherboard.</li>
+    <li>Budget risers from the same thin batch tend to fail in batches: if a couple of them came together, replace both rather than only "the one that looks worse".</li>
+    <li>Do not forget seating and contact quality: a tilted riser or an oxidized connector gives exactly the same result — a rig that is silent at night and looks normal by day.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="hang"><h2>Hung processes and the annoying truth about HiveOS logs</h2>
+  <p>The most deceptive case: the miner process ends up in a state where the rig looks alive over SSH, but the miner itself does not answer and cannot be killed the usual way — such a process holds the kernel in uninterruptible wait, and nvidia-smi stops responding along with it. There is exactly one treatment: a forced reboot.</p>
+  <p>Right next to it sits the most frustrating HiveOS trap: <strong>system logs live in RAM</strong>. A normal reboot wipes them along with the cause. Unless you enabled persistent logging (logs-on or a dedicated log partition), you are not investigating "yesterday's" hang — you are investigating a mystery with no evidence. Turn on log persistence <em>before</em> the next failure; after the reboot there is nothing to turn it on for.</p>
+  <p>And miner versions matter: updates sometimes change driver behaviour on the very same cards. If hangs started with a fresh miner release, read other people's reports carefully before blaming your hardware.</p>
+  </section>
+
+  <section class="block" id="checklist"><h2>Checklist: look for a pattern, not a miracle</h2>
+  <ol class="steps">
+    <li><h3>Stock presets for a week</h3><p>Put the cards back to stock (or safe factory profiles). Hangs on stock? Then overclocking is not the culprit at all — it is hardware, power, or software. No hangs on stock but hangs on your profile? Your search area is found — trim offsets back, one card at a time.</p></li>
+    <li><h3>One card at a time</h3><p>The practical rule: run on the minimum set of cards for a few days, adding one card per day. When the hangs return, the culprit sits in the last added combination (card + riser + slot).</p></li>
+    <li><h3>Wattmeter at peak</h3><p>Compare the actual maximum against the PSU rating and the state of the line.</p></li>
+    <li><h3>Rotate risers</h3><p>Swap risers across slots and cards: whatever travels with the card is the card; whatever stays with the slot is the riser or its power.</p></li>
+    <li><h3>Logs — in advance</h3><p>Enable persistent logging before the next failure; the trail is lost after a reboot.</p></li>
+    <li><h3>Do not leave the rig silent until morning</h3><p>Once you know the likely causes, act on them: the rig needs something that notices a failure before you do and does not sleep at night. That job can be done by automation.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>What is worth handing to automation</h2>
+  <p>Even a farm with spotless hardware leaves two "human" problems: failures happen at night, and a manual decision about a reboot means a drive to the farm or a wake-on-LAN round trip — always slower than losing a few minutes of hashrate. Automation solves exactly this:</p>
+  <ul>
+    <li>rig status and failures arrive in Telegram instead of being "discovered in the morning";</li>
+    <li>one-off glitches are told apart from real problems: no reboots over trivia, and a real failure is handled without driving to the farm;</li>
+    <li>the rig is back to work within minutes — a setting tweak, a miner restart, a reboot, or a rollback to the last verified preset, depending on what actually happened.</li>
+  </ul>
+  <p>That is exactly what <a href="index.html">OCBot</a> does: the bot runs on the rig itself, no external server, with control and reports in Telegram. It also tunes a stable overclock for each card on its own — verified over long runs, not "it worked for five minutes". <a href="buy.html">A 3-day trial is enabled automatically at install</a>, no payment needed.</p>
+  </section>
+
+  <p class="legal">OCBot is an independent project: not affiliated with Hiveon or HiveOS, not endorsed or sponsored by them; their names are mentioned only to describe compatibility and belong to their owners. Everything in this article is general information, follow electrical safety practices when working with hardware; use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
