@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Testing Overclock Stability: Why Ten Minutes Is Not a Test</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="&quot;Ran fine for ten minutes&quot; proves nothing. What a real stability run looks like, which signs of instability to watch, and why the log beats gut feeling.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Testing Overclock Stability: Why Ten Minutes Is Not a Test">
+<meta property="og:description" content="An overclock that survives an hour can fail once a day. How to run a preset properly, what counts as instability, and how long a test must last before you can trust it.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/stability-testing.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/stability-testing.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/stability-testing.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="stability-testing.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Testing Overclock Stability: Why Ten Minutes Is Not a Test</h1>
+    <p class="lede">You set a preset, it holds for ten minutes without crashing — &quot;stable, ship it&quot;. Three days later the rig restarts every night. Instability rarely shows itself immediately: it hides in rare events that only a long run with a log can catch.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>A short test only catches gross overshoot.</strong> Subtle instability shows up as rare errors — once every few hours or days.</li>
+    <li><strong>A reference run is at least 24 hours of real work</strong> on the preset, with a log of errors, restarts and temperatures.</li>
+    <li><strong>Signs of instability:</strong> compute errors counted by the miner, restarts, a rising share of stale shares, drifting hashrate.</li>
+    <li><strong>Change one parameter at a time</strong>, with a fresh run after each change — otherwise you never learn what helped.</li>
+    <li><strong>Stability must be re-verified</strong> after every algorithm, miner or driver change — and after seasonal warming.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="why-long"><h2>Why short tests lie</h2>
+  <p>Overclock errors are probabilistic events. A preset &quot;on the edge&quot; may produce one error per hour: in ten minutes you see nothing, but over a week that is 170 errors and several restarts. Worse, some errors do not crash the miner — they just get rejected by the pool, while the &quot;rig-side&quot; hashrate looks great (see <a href="hashrate-variance.html">the pool-vs-rig article</a>).</p>
+  <p>The second reason is temperature. A card reaches full heat in 20–40 minutes; the room and enclosure take hours. A preset that is stable &quot;cold&quot; may drift by evening, once everything around it has soaked. A short cold test measures a different system than the one that will run for weeks.</p>
+  <p>And third: mining load is not constant. Different tasks stress the card differently, and a borderline preset crashes exactly on the &quot;awkward&quot; work — which may simply not occur within ten minutes.</p>
+  </section>
+
+  <section class="block" id="signs"><h2>What counts as instability</h2>
+  <ul>
+    <li><strong>Compute errors counted by the miner.</strong> A small background level is tolerable on aggressive memory, but growth is a direct signal to step memory back.</li>
+    <li><strong>Miner or rig restarts.</strong> One restart per day is already instability, not a &quot;glitch&quot;. Causes vary, and the preset is only one of them (the hang checklist is <a href="rig-freezes.html">here</a>).</li>
+    <li><strong>A rise in stale and rejected shares</strong> with an unchanged network — the card finishes the math but gets it wrong.</li>
+    <li><strong>Drifting hashrate</strong> with no external cause: the card keeps dropping into self-protection and recovering (throttling looks similar — <a href="throttling.html">how to tell them apart</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="protocol"><h2>The run protocol and the log</h2>
+  <p>The working protocol is simple: apply the preset → 24 hours of work → read the log. Clean — the preset is accepted. An error or a restart — roll back the last step and repeat for 24 hours. Yes, it is slow: full manual tuning stretches into weeks exactly this way (the arithmetic is in <a href="manual-vs-auto.html">the manual-vs-auto article</a>).</p>
+  <p>The log beats gut feeling: &quot;seems fine&quot; does not survive against records. The minimum set — time, card, event (error, restart), temperature at the moment of the event. The log also reveals patterns: errors every hot night are temperature, not tuning; errors after a preset change are tuning.</p>
+  <p>And remember re-verification: presets &quot;expire&quot;. An algorithm change (see <a href="core-vs-mem.html">core vs memory</a>), a miner update (<a href="miner-updates.html">when to update</a>), a new card in the rig (<a href="new-gpu-check.html">the burn-in</a>), summer heat — each is a reason for a fresh run, not for faith in the old one.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A long logged run is a perfect job for automation: boring, slow, demanding discipline. <a href="index.html">OCBot</a> validates every tuned preset through extended operation rather than a ten-minute glance, and keeps a per-card event history — patterns appear without a hand-written diary. If a preset drifts a month later, you see it in the log, not in fallen revenue.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; actual stability limits depend on your GPU and algorithm. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

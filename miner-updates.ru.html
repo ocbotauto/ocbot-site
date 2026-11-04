@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Обновление майнеров и драйверов: когда надо, а когда лучше не трогать</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="«Работает — не трогай» против «сидеть на старом». Когда обновление майнера или драйвера реально даёт деньги, когда это лишний риск, и как обновляться, не уронив ферму.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Обновление майнеров и драйверов: когда надо, а когда лучше не трогать">
+<meta property="og:description" content="Дисциплина обновлений для фермы: что читать в чейнджлогах, почему «последняя версия» не всегда лучшая, и чек-лист обновления — по одному ригу, с бэкапом и путём отката.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/miner-updates.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/miner-updates.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/miner-updates.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="miner-updates.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Обновление майнеров и драйверов: когда надо, а когда лучше не трогать</h1>
+    <p class="lede">Каждый чейнджлог обещает «+5% и стабильность», каждый форум полон историй «обновился — всё сломалось». Правда посередине: обновления бывают нужными и бывают вредными, и отличать их можно заранее. Разбираем дисциплину обновлений для работающей фермы.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Обновляться стоит по причине, а не по расписанию:</strong> новый алгоритм, фикс именно вашей проблемы, безопасность. «Вышла новая версия» — не причина.</li>
+    <li><strong>Стабильный риг на старой версии зарабатывает больше</strong>, чем риг на новой версии, который сутки настраивают.</li>
+    <li><strong>Правило одного рига:</strong> сначала обновляется одна машина, наблюдение пару дней — потом остальные.</li>
+    <li><strong>Перед обновлением — бэкап конфигурации и известный путь отката.</strong> Без этого обновление — необратимый эксперимент.</li>
+    <li><strong>Майнеры качаются только с официальных источников.</strong> «Сборка с форума» — самый популярный способ потерять ферму.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="why"><h2>Когда обновление реально даёт деньги</h2>
+  <p>Три уважительных причины. Первая — <strong>новый алгоритм или монета</strong>: майнер, который не умеет ваш алгоритм, зарабатывает ровно ноль. Вторая — <strong>фикс вашей конкретной проблемы</strong>: чейнджлог прямо упоминает вашу модель карт или ваш симптом (отвалы, ошибки памяти, несовместимость с пулом). Третья — <strong>безопасность</strong>: закрытые уязвимости в софте, который круглосуточно смотрит в интернет.</p>
+  <p>Отдельный случай — смена тарифа разработчика майнера: новая версия с меньшей комиссией — это прямые деньги; «улучшенная» версия с большей комиссией, съедающей весь прирост хешрейта, — нет. Считайте итог до кошелька, как в <a href="pool-fees.ru.html">статье про комиссии</a>.</p>
+  <p>Драйверы — та же логика, но консервативнее: драйвер трогает всё железо сразу. Поводом для обновления драйвера является требование новой версии майнера или исправленный баг вашей серии карт, а не «новый игровой драйвер вышел».</p>
+  </section>
+
+  <section class="block" id="when-not"><h2>Когда лучше не трогать</h2>
+  <p>Ферма стабильна неделями, алгоритм не менялся, чейнджлог новой версии про чужие карты и чужие системы — не обновляйтесь. Каждое обновление — это риск и время: перезагрузки, переподбор разгона, проверка стабильности. Стоимость простоя легко съедает мифические «+3%» из чейнджлога: сутки нестабильности восьмикартного рига стоят больше, чем месяц трёхпроцентного прироста.</p>
+  <p>Особенно опасно обновляться «за компанию» перед отъездом или в пятницу вечером: если что-то сломается, чинить придётся дистанционно и в спешке. Обновления планируются на время, когда вы рядом и не торопитесь.</p>
+  </section>
+
+  <section class="block" id="how"><h2>Как обновляться безопасно: чек-лист</h2>
+  <ul>
+    <li><strong>Прочитайте чейнджлог целиком</strong> — ищите своё: свои карты, свой алгоритм, свои симптомы. Ничего своего нет — отложите.</li>
+    <li><strong>Сохраните текущую конфигурацию</strong> и версии софта, чтобы откат был делом минут, а не восстановлением по памяти.</li>
+    <li><strong>Обновите один риг</strong> и наблюдайте минимум пару дней: хешрейт, ошибки, стабильность. Всё чисто — раскатывайте на остальные.</li>
+    <li><strong>После обновления перепроверьте разгон:</strong> новая версия майнера может по-другому нагружать карту, и старый пресет окажется за гранью (как проверять — в <a href="stability-testing.ru.html">статье про стабильность</a>).</li>
+    <li><strong>Качайте только с официальных источников</strong> и сверяйте контрольные суммы, если они публикуются. Майнер с правами на всю ферму — идеальная точка для кражи.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>После обновления майнера разгон часто нужно перепроверить — и это самая утомительная часть. <a href="index.ru.html">OCBot</a> повторно подбирает рабочую точку под новую версию и сразу показывает, если хешрейт или стабильность просели относительно «до». А когда что-то пошло не так ночью, вы узнаёте из уведомления, а не из пустого графика утром.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретное поведение версий зависит от вашего софта и железа. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

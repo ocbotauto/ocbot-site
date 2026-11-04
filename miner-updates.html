@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Updating Miners and Drivers: When to Do It and When to Leave It Alone</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="&quot;If it works, don't touch it&quot; versus &quot;stop running old versions&quot;. When a miner or driver update actually makes money, when it is pure risk, and how to update without killing the farm.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Updating Miners and Drivers: When to Do It and When to Leave It Alone">
+<meta property="og:description" content="Update discipline for a running farm: what to look for in changelogs, why the latest version is not always the best, and the update checklist — one rig first, with backup and a rollback path.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/miner-updates.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/miner-updates.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/miner-updates.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="miner-updates.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Updating Miners and Drivers: When to Do It and When to Leave It Alone</h1>
+    <p class="lede">Every changelog promises &quot;+5% and stability&quot;, every forum is full of &quot;updated — everything broke&quot;. The truth sits in between: some updates are necessary, others are harmful, and you can tell them apart in advance. Here is an update discipline for a working farm.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Update for a reason, not on a schedule:</strong> a new algorithm, a fix for your specific problem, security. &quot;A new version is out&quot; is not a reason.</li>
+    <li><strong>A stable rig on an old version earns more</strong> than a rig on a new version that spends a day being reconfigured.</li>
+    <li><strong>The one-rig rule:</strong> update one machine first, watch it for a couple of days — then the rest.</li>
+    <li><strong>Before updating — a config backup and a known rollback path.</strong> Without that, an update is an irreversible experiment.</li>
+    <li><strong>Download miners only from official sources.</strong> A &quot;forum build&quot; is the most popular way to lose a farm.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="why"><h2>When an update actually makes money</h2>
+  <p>Three valid reasons. First — <strong>a new algorithm or coin</strong>: a miner that does not support your algorithm earns exactly zero. Second — <strong>a fix for your specific problem</strong>: the changelog explicitly mentions your GPU model or your symptom (drop-offs, memory errors, pool incompatibility). Third — <strong>security</strong>: closed vulnerabilities in software that faces the internet around the clock.</p>
+  <p>A special case is the developer-fee change: a new version with a lower fee is direct money; an &quot;improved&quot; version whose higher fee eats the entire hashrate gain is not. Count what reaches the wallet, as in <a href="pool-fees.html">the fees article</a>.</p>
+  <p>Drivers follow the same logic but more conservatively: a driver touches all hardware at once. The reason to update a driver is a requirement of the new miner version or a bug fixed for your GPU series — not &quot;a new game driver dropped&quot;.</p>
+  </section>
+
+  <section class="block" id="when-not"><h2>When to leave it alone</h2>
+  <p>The farm has been stable for weeks, the algorithm has not changed, the new changelog is about other people's cards and other people's systems — do not update. Every update is risk and time: reboots, re-tuning, stability checks. The cost of downtime easily eats the mythical &quot;+3%&quot; from a changelog: one unstable day on an eight-GPU rig costs more than a month of a three-percent gain.</p>
+  <p>It is especially dangerous to update &quot;while at it&quot; before a trip or on a Friday night: if something breaks, you will be fixing it remotely and in a hurry. Updates are scheduled for when you are nearby and unhurried.</p>
+  </section>
+
+  <section class="block" id="how"><h2>How to update safely: the checklist</h2>
+  <ul>
+    <li><strong>Read the changelog in full</strong> — look for yours: your cards, your algorithm, your symptoms. Nothing of yours — postpone.</li>
+    <li><strong>Save the current configuration</strong> and software versions, so a rollback takes minutes instead of reconstruction from memory.</li>
+    <li><strong>Update one rig</strong> and watch it for at least a couple of days: hashrate, errors, stability. All clean — roll out to the rest.</li>
+    <li><strong>Re-verify the overclock after updating:</strong> a new miner version may load the card differently, and the old preset may end up past the edge (see <a href="stability-testing.html">the stability article</a>).</li>
+    <li><strong>Download only from official sources</strong> and verify checksums where published. A miner with rights over the whole farm is a perfect theft vector.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>After a miner update the overclock usually needs re-checking — and that is the most tedious part. <a href="index.html">OCBot</a> re-tunes the working point for the new version and immediately shows if hashrate or stability sagged compared to &quot;before&quot;. And when something goes wrong at night, you learn it from a notification, not from an empty chart in the morning.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; actual version behavior depends on your software and hardware. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

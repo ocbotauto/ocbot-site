@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Articles on mining hardware">
-<meta property="og:description" content="Twenty-seven practical articles: rig hangs, risers, missing GPUs, throttling, hot GDDR6X memory, temperature physics, power supplies, home wiring, UPS, maintenance, rig noise, rig networking, relocation, summer heat, buying and burning in GPUs, night shutdowns, fans, pools and fees, pool vs rig hashrate, network difficulty, coin vs rig, scaling to a second rig, core vs memory tuning, manual vs automatic tuning, honest profitability, the mining winter.">
+<meta property="og:description" content="Thirty practical articles: rig hangs, risers, missing GPUs, throttling, hot GDDR6X memory, temperature physics, power supplies, home wiring, UPS, the power bill, maintenance, rig noise, rig networking, relocation, summer heat, buying and burning in GPUs, night shutdowns, fans, pools and fees, pool vs rig hashrate, network difficulty, coin vs rig, scaling to a second rig, core vs memory tuning, stability testing, miner updates, honest profitability, the mining winter.">
 <meta property="og:locale" content="en_US">
 <link rel="canonical" href="https://ocbot.org/blog.html">
 <link rel="alternate" hreflang="en" href="https://ocbot.org/blog.html">
@@ -59,6 +59,8 @@
     <p>Thermal and power throttling: how to tell them apart on charts, what fixes each, and why a voluntary minus 10% of watts beats a forced one.</p></li>
     <li><h3><a href="gpu-missing.html">Rig sees 5 of 6 GPUs: a checklist for finding the missing one</a></h3>
     <p>A missing card is almost never a dead card. Power, riser, slot, driver and the swap test as the verdict: find the culprit in one evening.</p></li>
+    <li><h3><a href="miner-updates.html">Updating miners and drivers: when to do it and when to leave it alone</a></h3>
+    <p>Update for a reason, not on a schedule; the one-rig rule, a backup and a rollback path, official sources only.</p></li>
   </ul>
   </section>
 
@@ -70,6 +72,8 @@
     <p>A 2 kW rig is a permanent 24/7 load. One outlet per rig, why extension cords overheat, a dedicated circuit with its own breaker, a warm plug as an alarm.</p></li>
     <li><h3><a href="ups-power.html">A UPS for a mining rig: do you need one, which type, and when it pays off</a></h3>
     <p>A UPS guards against one-second flickers, not long blackouts. UPS types, watts vs volt-amps, pure sine wave, and when a voltage relay is enough.</p></li>
+    <li><h3><a href="power-bill.html">Your mining rig's power bill: where the number comes from and how to verify it</a></h3>
+    <p>Wall draw exceeds the sum of GPU watts: PSU efficiency, overhead, seasonality. A smart plug, time-of-use metering and an honest number for the profitability math.</p></li>
   </ul>
   </section>
 
@@ -102,6 +106,8 @@
     <p>What doubles fully (heat, noise, wiring), what scales for free (knowledge, presets, spares), and the checklist before rig number two.</p></li>
     <li><h3><a href="core-vs-mem.html">Core or memory: what to tune for different mining algorithms</a></h3>
     <p>Memory-bound vs core-bound algorithms: which knob drives hashrate, why no universal preset exists, and what watts spent in the wrong place cost.</p></li>
+    <li><h3><a href="stability-testing.html">Testing overclock stability: why ten minutes is not a test</a></h3>
+    <p>A short test only catches gross overshoot. A 24-hour logged run, the signs of instability, and when a preset must be re-verified.</p></li>
   </ul>
   </section>
 

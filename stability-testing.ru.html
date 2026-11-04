@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проверка стабильности разгона: почему десять минут — не тест</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="«Десять минут постояло — стабильно» не работает. Как устроен настоящий прогон разгона, какие признаки нестабильности смотреть и почему журнал важнее ощущений.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Проверка стабильности разгона: почему десять минут — не тест">
+<meta property="og:description" content="Разгон, который держится час, может падать раз в сутки. Как правильно прогонять пресет, что считать признаками нестабильности и сколько времени достаточно для вывода.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/stability-testing.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/stability-testing.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/stability-testing.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="stability-testing.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Проверка стабильности разгона: почему десять минут — не тест</h1>
+    <p class="lede">Выставили пресет, постояло десять минут без падений — «стабильно, погнали». А через три дня риг перезапускается каждую ночь. Нестабильность редко показывает себя сразу: она прячется в редких событиях, которые и ловит только длинный прогон с журналом.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Короткий тест ловит только грубый перебор.</strong> Тонкая нестабильность проявляется редкими ошибками — раз в часы или сутки.</li>
+    <li><strong>Эталонный прогон — минимум сутки реальной работы</strong> под пресетом с журналом ошибок, перезапусков и температур.</li>
+    <li><strong>Признаки нестабильности:</strong> ошибки вычислений в майнере, перезапуски, выросшая доля устаревших шар, «плывущий» хешрейт.</li>
+    <li><strong>Меняйте один параметр за раз</strong> и после каждого изменения — новый прогон, иначе вы не узнаете, что помогло.</li>
+    <li><strong>Стабильность проверяется заново</strong> после смены алгоритма, майнера, драйвера и сезонного потепления.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="why-long"><h2>Почему короткие тесты врут</h2>
+  <p>Ошибки разгона — события вероятностные. Пресет «на грани» может выдавать одну ошибку в час: за десять минут вы её не увидите, а за неделю набежит 170 ошибок и несколько перезапусков. Хуже того, часть ошибок не роняет майнер, а просто отбраковывается пулом — хешрейт «в риге» при этом выглядит отлично (про разницу цифр — <a href="hashrate-variance.ru.html">статья про пул и риг</a>).</p>
+  <p>Вторая причина — температура. Карта прогревается полностью за 20–40 минут, а комната и корпус — за часы. Пресет, стабильный «на холодную», может плыть к вечеру, когда всё вокруг прогрелось. Короткий тест из холодного состояния — это тест другой системы, не той, что будет работать неделями.</p>
+  <p>И третья: нагрузка в майнинге не постоянна. Разные задачи по-разному грузят карту, и граничный пресет падает именно на «неудобной» работе — которая в десятиминутку может просто не попасться.</p>
+  </section>
+
+  <section class="block" id="signs"><h2>Что считать признаками нестабильности</h2>
+  <ul>
+    <li><strong>Ошибки вычислений, которые считает майнер.</strong> Небольшой фон допустим на агрессивной памяти, но рост — это прямой сигнал откатить память на шаг.</li>
+    <li><strong>Перезапуски майнера или рига.</strong> Один перезапуск в сутки — уже нестабильность, а не «глюк». Причины бывают разные, и перебор пресета — только одна из них (чек-лист зависаний — <a href="rig-freezes.ru.html">здесь</a>).</li>
+    <li><strong>Рост устаревших и отклонённых шар</strong> при неизменной сети — карта успевает посчитать, но считает неправильно.</li>
+    <li><strong>Плавающий хешрейт</strong> без внешних причин: карта уходит в самозащиту и возвращается (так выглядит и троттлинг — <a href="throttling.ru.html">отличить просто</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="protocol"><h2>Протокол прогона и журнал</h2>
+  <p>Рабочий протокол простой: применили пресет → сутки работы → смотрим журнал. Чисто — пресет принят. Ошибки или перезапуск — откатываем последний шаг и повторяем сутки. Да, это медленно: полный подбор вручную так и растягивается на недели (арифметика — в <a href="manual-vs-auto.ru.html">статье про ручной подбор</a>).</p>
+  <p>Журнал важнее ощущений: «вроде всё нормально» не выживает против записей. Минимальный набор — время, карта, событие (ошибка, перезапуск), температура на момент события. По журналу видны и паттерны: ошибки каждую ночь в жару — это не разгон, а температура; ошибки после смены пресета — это разгон.</p>
+  <p>И помните про повторную проверку: пресет «истекает». Смена алгоритма (про разные типы — <a href="core-vs-mem.ru.html">ядро или память</a>), обновление майнера (<a href="miner-updates.ru.html">когда обновляться</a>), новая карта в риге (<a href="new-gpu-check.ru.html">обкатка</a>), летняя жара — всё это повод для нового прогона, а не для веры в старый.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Длинный прогон с журналом — идеальная задача для автоматики: скучно, долго, требует дисциплины. <a href="index.ru.html">OCBot</a> проверяет каждый подобранный пресет длительной работой, а не десятиминуткой, и держит историю событий по картам — паттерны видны без ручного дневника. Если пресет «поплыл» через месяц, это видно по журналу, а не по упавшему доходу.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные пределы стабильности зависят от вашей карты и алгоритма. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

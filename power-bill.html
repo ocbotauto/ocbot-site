@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Mining Rig's Power Bill: Where the Number Comes From and How to Verify It</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="The rig should draw a kilowatt, but the bill says more. How calculated consumption differs from real draw, how to measure a farm honestly, and what to do with the number.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Your Mining Rig's Power Bill: Where the Number Comes From and How to Verify It">
+<meta property="og:description" content="Summed GPU watts versus the wall meter: PSU losses, forgotten consumers, smart plugs and time-of-use tariffs. How to measure a farm honestly and feed the number into profitability math.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/power-bill.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/power-bill.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/power-bill.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="power-bill.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Your Mining Rig's Power Bill: Where the Number Comes From and How to Verify It</h1>
+    <p class="lede">You did the math: eight cards at 120 W each, roughly a kilowatt. Then the bill arrives — noticeably larger. Here is where the &quot;extra&quot; kilowatt-hours go, how to measure the farm honestly, and why profitability math without this measurement is guesswork.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>The wall draw exceeds the sum of GPU watts</strong> — the PSU has an efficiency curve, and the rig has a motherboard, fans and other overhead.</li>
+    <li><strong>Measure at the wall, not in monitoring:</strong> only the input-side reading is honest.</li>
+    <li><strong>A cheap smart plug pays for itself with the first measurement</strong> — it shows watts, kilowatt-hours and history.</li>
+    <li><strong>A time-of-use meter often pays off for a farm:</strong> night power is cheaper, and a rig runs all night without complaint.</li>
+    <li><strong>Feed the measured number into profitability math</strong> — replace the estimate in your calculator with the fact, and the conclusions may change.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="gap"><h2>Where the gap comes from: math versus the outlet</h2>
+  <p>Monitoring shows GPU consumption — but the rig is fed from the wall, and a PSU sits in between. At roughly 90% efficiency, every 900 W delivered to the cards means 1000 W from the outlet. On a cheap or hot PSU the gap widens: efficiency drops both under overload and under light load (details in <a href="psu-budget.html">the PSU sizing article</a>).</p>
+  <p>Then come the small things that are not small at 24/7: motherboard, CPU, RAM and storage (30–60 W), case fans and exhaust, the router next to the farm. Together that is another 50–100 W. At $0.07/kWh, every unnoticed 100 W is 72 kWh and about $5 a month.</p>
+  <p>Finally, seasonality: in summer cards hold more watts because of the heat (<a href="summer-heat.html">the summer article</a>), fans spin faster — July and January bills differ at &quot;the same settings&quot;.</p>
+  </section>
+
+  <section class="block" id="measure"><h2>How to measure honestly</h2>
+  <p><strong>The easy way — a metering smart plug.</strong> It sits between the wall and the rig and shows instant watts plus accumulated kilowatt-hours. Measure a week of operation: you get both average power and the real monthly figure. Important: the plug must be rated for the rig's load with margin — a 2 kW rig is a continuous load, not a ten-minute vacuum cleaner (see <a href="rig-wiring.html">the wiring article</a>).</p>
+  <p><strong>The free way — your home meter.</strong> Record the reading, switch off everything except the rig for an hour or two — the difference is the honest consumption. Cruder, but free and software-independent.</p>
+  <p><strong>What to do with the number.</strong> Compare the wall figure against the monitoring sum. A 10–15% gap is normal (efficiency plus overhead). A 25–30% gap is a reason to dig: an underloaded PSU with poor efficiency, a forgotten load on the same line, or cards drawing more than their preset (a wiped overclock, drifted watts).</p>
+  </section>
+
+  <section class="block" id="tariff"><h2>The tariff: a meter that works for you</h2>
+  <p>If you are on a flat rate, ask your utility about time-of-use metering: night power is noticeably cheaper, and unlike people, a farm runs all night without complaining. The meter swap usually pays back within a few months — the bigger the rig, the faster.</p>
+  <p>The flip side: the daytime rate under time-of-use billing is slightly higher than the flat rate. If people are home during the day using plenty (cooking, laundry, air conditioning), calculate the household's total balance, not just the farm's.</p>
+  <p>And feed the real measured tariff and real measured watts into your profitability math — the electricity field in the <a href="calculator.html">calculator</a> and the <a href="profit-math.html">honest-math article</a> are exactly about this.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>The plug shows the fact but not the cause. <a href="index.html">OCBot</a> holds the other half of the picture: how many watts each card actually holds under its presets and whether settings have drifted. When the wall number diverges from expectations, comparing it against settings shows where the watts leak — in the cards or in the overhead.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; tariffs and metering options depend on your region and utility. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
