@@ -28,7 +28,15 @@
   }
   function add(cls, node) { var m = document.createElement("div"); m.className = "ocw-m " + cls; m.appendChild(node); list.appendChild(m); list.scrollTop = list.scrollHeight; }
   var t = function (s) { return document.createTextNode(s); };
-  add("ocw-a", t("Здравствуйте! Спросите про установку, команды, ключи или оплату."));
+  var hello = document.createElement("div");
+  hello.appendChild(t("Здравствуйте! Спросите про установку, команды, ключи или оплату. Если что-то не нашлось — "));
+  var a1 = document.createElement("a"); a1.href = TG_LINK; a1.target = "_blank"; a1.rel = "noopener"; a1.textContent = "Telegram-бот поддержки";
+  hello.appendChild(a1);
+  hello.appendChild(t(", а новости и статьи — в канале "));
+  var a2 = document.createElement("a"); a2.href = "https://t.me/ocbotauto"; a2.target = "_blank"; a2.rel = "noopener"; a2.textContent = "t.me/ocbotauto";
+  hello.appendChild(a2);
+  hello.appendChild(t("."));
+  add("ocw-a", hello);
   b.onclick = function () { p.classList.toggle("on"); if (p.classList.contains("on")) inp.focus(); };
   form.onsubmit = function (e) {
     e.preventDefault(); var q = inp.value.trim(); if (!q) return; inp.value = ""; add("ocw-u", t(q));

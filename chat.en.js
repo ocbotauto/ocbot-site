@@ -28,7 +28,15 @@
   }
   function add(cls, node) { var m = document.createElement("div"); m.className = "ocw-m " + cls; m.appendChild(node); list.appendChild(m); list.scrollTop = list.scrollHeight; }
   var t = function (s) { return document.createTextNode(s); };
-  add("ocw-a", t("Hello! Ask about installation, commands, keys or payment."));
+  var hello = document.createElement("div");
+  hello.appendChild(t("Hello! Ask about installation, commands, keys or payment. Not covered? Message the "));
+  var a1 = document.createElement("a"); a1.href = TG_LINK; a1.target = "_blank"; a1.rel = "noopener"; a1.textContent = "Telegram support bot";
+  hello.appendChild(a1);
+  hello.appendChild(t("; news and articles are in our channel "));
+  var a2 = document.createElement("a"); a2.href = "https://t.me/ocbotauto"; a2.target = "_blank"; a2.rel = "noopener"; a2.textContent = "t.me/ocbotauto";
+  hello.appendChild(a2);
+  hello.appendChild(t("."));
+  add("ocw-a", hello);
   b.onclick = function () { p.classList.toggle("on"); if (p.classList.contains("on")) inp.focus(); };
   form.onsubmit = function (e) {
     e.preventDefault(); var q = inp.value.trim(); if (!q) return; inp.value = ""; add("ocw-u", t(q));
