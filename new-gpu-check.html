@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Breaking In a New GPU: The First Two Weeks in Your Rig</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A new GPU should not go straight into the rig and be forgotten. Why the first two weeks decide everything, how to stress-test at stock clocks, and why seals stay untouched until burn-in is over.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Breaking In a New GPU: The First Two Weeks in Your Rig">
+<meta property="og:description" content="The bathtub failure curve, stress tests at stock clocks, temperature checks and warranty rules: how to burn in a new GPU so hidden defects surface while returns are still possible.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/new-gpu-check.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/new-gpu-check.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/new-gpu-check.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="new-gpu-check.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Breaking In a New GPU: The First Two Weeks in Your Rig</h1>
+    <p class="lede">A new card arrives and your hands itch to drop it into the rig with your battle-tested overclock. Hold on: the first days of operation reveal nearly all factory defects, and right now you hold the strongest warranty position. A burn-in takes two weeks and almost none of your time — but it can save months of arguing with the seller.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Most hidden defects surface in the first days.</strong> A card that survives two weeks under load will most likely work for years.</li>
+    <li><strong>Stock first, overclock later.</strong> Validate at factory clocks: a defect at stock is a clear warranty case; a defect &quot;after overclocking&quot; invites disputes.</li>
+    <li><strong>Stress tests and mining are different loads.</strong> Run both: some defects only appear in synthetic tests, others only in real work.</li>
+    <li><strong>Seals and box stay until burn-in ends.</strong> No repasting or teardown before the return window closes.</li>
+    <li><strong>Record the baseline.</strong> Screenshots of temps and hashrate from day one are your insurance if the card degrades later.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="bathtub"><h2>Why two weeks: the bathtub curve</h2>
+  <p>Electronics reliability follows the &quot;bathtub curve&quot;: failure probability is high at the very start (factory defects, micro-cracks in solder joints, marginal memory chips), then drops sharply and stays low for years, then rises again with wear at end of life.</p>
+  <p>The practical takeaway: if a card carries a hidden defect, load will expose it within days — artifacts, freezes, memory errors, overheating. The point of burn-in is to force that failure now, while returns and warranty still work, rather than six months later inside a production rig.</p>
+  <p>This is why the rookie instinct of &quot;babying the new card at first&quot; is the worst strategy. The correct approach is the opposite: for the first two weeks the card works hard and under observation.</p>
+  </section>
+
+  <section class="block" id="tests"><h2>How to test: stress at stock clocks</h2>
+  <ul>
+    <li><strong>Days 1–2: synthetic stress at factory clocks.</strong> Rendering loops and benchmarks quickly expose chip and memory instability. A driver crash or artifacts at stock means an immediate return — do not try to &quot;cure&quot; it with undervolting.</li>
+    <li><strong>Days 3–14: real mining.</strong> Put the card in the rig at stock settings and watch core and memory temperatures, hashrate versus identical cards, and the absence of recurring faults. Compare with its neighbors — &quot;15 degrees hotter than everyone else&quot; is also a defect (poor heatsink contact).</li>
+    <li><strong>Only after burn-in — overclock.</strong> Two weeks at stock, then clock tuning. That way you know any instability came from your settings, not from the factory.</li>
+    <li><strong>Around-the-clock is fine.</strong> Mining is a continuous stress test; the card needs no scheduled &quot;rest&quot;.</li>
+  </ul>
+  <p>Test the memory specifically under load: new production batches sometimes ship chips with poor frequency headroom — clean at stock, error-prone in mining. If that surfaces during burn-in, it is a warranty case.</p>
+  </section>
+
+  <section class="block" id="warranty"><h2>Warranty, seals and evidence</h2>
+  <p>Until burn-in is over, keep the card in &quot;returnable&quot; condition: no broken seals, no repasting, no cooler removal, keep the box and accessories. All of that comes after the card has proven itself.</p>
+  <p>On day one, take a few screenshots: temperatures, clocks, hashrate, serial number. If the card starts degrading a month later (temps rising, stability falling), those shots are your only proof that &quot;it was not like this originally&quot;.</p>
+  <p>One more thing: if you bought several cards at once, burn them in simultaneously but label each one and note which slot it sat in. A week later you will not remember which of the eight ran hot. It also helps if you later decide to <a href="rig-relocation.html">relocate</a> or rebuild the rig.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>Once burn-in is done and it is time to tune, <a href="index.html">OCBot</a> removes the routine: it picks clocks for the new card informed by what the two stock weeks showed, validates stability on long runs, and keeps watch so temps and hashrate stay put. Degradation showing up a month later is visible in monitoring immediately — while the comparison with day one is still fresh.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; warranty terms depend on your seller and card manufacturer. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

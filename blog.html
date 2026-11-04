@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Articles on mining hardware">
-<meta property="og:description" content="Twenty-three practical articles: rig hangs, risers, hot GDDR6X memory, temperature physics, power supplies, home wiring, UPS, maintenance, rig noise, rig networking, relocation, summer heat, buying used GPUs, night shutdowns, fans, pools and fees, pool vs rig hashrate, network difficulty, coin vs rig, scaling to a second rig, manual vs automatic tuning, honest profitability, the mining winter.">
+<meta property="og:description" content="Twenty-seven practical articles: rig hangs, risers, missing GPUs, throttling, hot GDDR6X memory, temperature physics, power supplies, home wiring, UPS, maintenance, rig noise, rig networking, relocation, summer heat, buying and burning in GPUs, night shutdowns, fans, pools and fees, pool vs rig hashrate, network difficulty, coin vs rig, scaling to a second rig, core vs memory tuning, manual vs automatic tuning, honest profitability, the mining winter.">
 <meta property="og:locale" content="en_US">
 <link rel="canonical" href="https://ocbot.org/blog.html">
 <link rel="alternate" hreflang="en" href="https://ocbot.org/blog.html">
@@ -55,6 +55,10 @@
     <p>Mining needs kilobytes, not gigabits: latency and packet loss decide. Ethernet vs Wi-Fi vs USB dongles, stale shares and a backup link.</p></li>
     <li><h3><a href="rig-relocation.html">Relocating a mining rig: balcony, garage, or a rented space</a></h3>
     <p>Humidity, dust and temperature at the new site; condensation on cold hardware, wiring and network before the move, and safe card transport.</p></li>
+    <li><h3><a href="throttling.html">Throttling: why a GPU lowers its own clocks</a></h3>
+    <p>Thermal and power throttling: how to tell them apart on charts, what fixes each, and why a voluntary minus 10% of watts beats a forced one.</p></li>
+    <li><h3><a href="gpu-missing.html">Rig sees 5 of 6 GPUs: a checklist for finding the missing one</a></h3>
+    <p>A missing card is almost never a dead card. Power, riser, slot, driver and the swap test as the verdict: find the culprit in one evening.</p></li>
   </ul>
   </section>
 
@@ -73,6 +77,8 @@
   <ul class="steps">
     <li><h3><a href="used-gpu.html">Buying a used GPU for mining: how to avoid a dead one</a></h3>
     <p>The "killed by mining" myth, an inspection and 30-minute test checklist, brands and revisions, and why Samsung/Micron/Hynix memory beats the logo on the shroud.</p></li>
+    <li><h3><a href="new-gpu-check.html">Breaking in a new GPU: the first two weeks in your rig</a></h3>
+    <p>The bathtub failure curve, stress tests at stock clocks, seals untouched until burn-in ends, and screenshots as insurance: let hidden defects surface while returns still work.</p></li>
   </ul>
   </section>
 
@@ -94,6 +100,8 @@
     <p>The coin is a pure price bet; the rig is the same bet plus cash flow and resale value, minus expenses. Scenario arithmetic and break-even points.</p></li>
     <li><h3><a href="scaling.html">A second mining rig: what actually changes when you scale</a></h3>
     <p>What doubles fully (heat, noise, wiring), what scales for free (knowledge, presets, spares), and the checklist before rig number two.</p></li>
+    <li><h3><a href="core-vs-mem.html">Core or memory: what to tune for different mining algorithms</a></h3>
+    <p>Memory-bound vs core-bound algorithms: which knob drives hashrate, why no universal preset exists, and what watts spent in the wrong place cost.</p></li>
   </ul>
   </section>
 

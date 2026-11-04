@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rig Sees 5 of 6 GPUs: A Checklist for Finding the Missing One</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="The card is physically in the rig, fans are spinning, yet the system does not see it. A step-by-step checklist: power, riser, slot, driver, swap testing — find the culprit in one evening.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rig Sees 5 of 6 GPUs: A Checklist for Finding the Missing One">
+<meta property="og:description" content="A GPU missing from the system is almost never a dead card. A checklist from riser power to slot swaps that finds the real culprit methodically, without panic.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/gpu-missing.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/gpu-missing.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/gpu-missing.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="gpu-missing.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Rig Sees 5 of 6 GPUs: A Checklist for Finding the Missing One</h1>
+    <p class="lede">The card sits in the rig, its fans spin, the RGB glows — and the system reports five GPUs out of six. Bad news: something in the &quot;card → riser → slot → driver&quot; chain is broken. Good news: nine times out of ten it is not the card itself. Here is a methodical checklist that finds the culprit in one evening.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>&quot;Card not detected&quot; almost never means &quot;dead card&quot;.</strong> The usual suspects are the riser, its power feed, or slot contact.</li>
+    <li><strong>Work from simple to complex:</strong> power → riser → slot → driver → swap test. Do not disassemble half the rig before checking a cable.</li>
+    <li><strong>The key diagnostic move is swapping:</strong> exchange the suspect card with a working one. If the problem travels with the card — the card is guilty; if it stays on the slot — the wiring is.</li>
+    <li><strong>Change one element at a time.</strong> Otherwise you will not know what fixed it, and the problem will return.</li>
+    <li><strong>An intermittently vanishing card is worse than a dead one:</strong> it is usually a degrading contact that will become permanent over time.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="power"><h2>Step 1: power to the card and riser</h2>
+  <p>Start with what your hands can check without a single tool. On the missing card, verify every power connector: on the card itself and on the riser. A plug seated &quot;almost all the way&quot; looks connected but makes no contact — and the fans may still spin from slot power, creating the illusion of a live card.</p>
+  <p>Inspect the cable itself: kinks near the connector, scorch marks, melted plastic. Power lines feeding two cards, or a card plus a riser, are the prime suspects — we covered load distribution in the <a href="rig-wiring.html">wiring article</a> and the <a href="psu-budget.html">PSU budget article</a>.</p>
+  <p>A quick test: move the missing card's power feed to a line known to work. If it comes alive, the line or cable was guilty.</p>
+  </section>
+
+  <section class="block" id="riser"><h2>Step 2: the riser — prime suspect</h2>
+  <p>Risers are the weakest link of a modern rig (we have a <a href="risers.html">dedicated article on them</a>). The USB cable, the riser board, the board connector — every element dies more often than a GPU. Symptoms of a riser problem: the card vanishes out of nowhere, vanishes and reappears after reboots, and it is always the same card even though the card itself is fine.</p>
+  <p>Replacement order: the USB cable first (cheapest and most worn), then the whole riser board. Keep one or two known-good risers in stock — they are the most-consumed spare part on any farm.</p>
+  <p>While you are there, look at the motherboard slot itself: dust and oxidation on contacts are cured by blowing it out and reseating the riser a couple of times — replugging cleans the contact by itself.</p>
+  </section>
+
+  <section class="block" id="driver"><h2>Step 3: driver and operating system</h2>
+  <p>If the hardware side is clean, look at software. The card may be visible to the system but fail driver initialization — then it shows up in the device list with an error while the miner ignores it. Reinstalling the driver with a full cleanup of the previous one usually helps.</p>
+  <p>Classic software causes of a missing GPU: an over-the-air driver update mid-operation, a conflict after adding a new card to the rig, a card-count limit in an older OS, or PCIe settings reset in BIOS (Above 4G mode, link speed). If the disappearance coincided with an update — roll back and check.</p>
+  </section>
+
+  <section class="block" id="swap"><h2>Step 4: the swap test as the verdict</h2>
+  <p>When indirect checks are exhausted, move to swapping — it gives an unambiguous answer. Take the missing card together with its riser and swap places with a working card-plus-riser pair:</p>
+  <ul>
+    <li><strong>The problem moved to the new slot with the card</strong> — the card or its riser is guilty. Split them: working card on this riser, this card on a working riser. Now you know exactly which of the two it is.</li>
+    <li><strong>The problem stayed on the old slot</strong> — the slot, cable, power line or motherboard is guilty. Test them one by one.</li>
+    <li><strong>Everything started working after the swap</strong> — it was a bad contact. Do not celebrate early: watch it for a couple of days, degrading contacts love to come back.</li>
+  </ul>
+  <p>Write down which card sat where and what you changed. Without notes, day three of debugging becomes &quot;did I already swap this or not?&quot;.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A missing card is minus one sixth of the rig's income for as long as it takes you to notice. <a href="index.html">OCBot</a> sees a card drop immediately and sends a notification instead of waiting for you to check the dashboard. For intermittent cards this is especially valuable: the drop log shows the card vanishing every night at three — which is nearly a diagnosis by itself (power or contact, not driver).</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; actual causes depend on your hardware. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

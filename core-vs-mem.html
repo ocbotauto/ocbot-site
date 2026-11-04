@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='ru'){location.replace(location.pathname.replace(/\.html$/,'.ru.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Core or Memory: What to Tune for Different Mining Algorithms</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Some algorithms need fast memory, others need core clocks. How to tell which knob matters, why there is no universal preset, and what watts spent in the wrong place actually cost.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Core or Memory: What to Tune for Different Mining Algorithms">
+<meta property="og:description" content="Memory-bound vs core-bound algorithms: how they differ, how to tune clocks for each, and why extra watts in the wrong place are just a bigger power bill.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/core-vs-mem.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/core-vs-mem.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/core-vs-mem.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site sections"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclocking</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Blog</a><a href="security.html">Security</a>
+  <a href="core-vs-mem.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Русский</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Core or Memory: What to Tune for Different Mining Algorithms</h1>
+    <p class="lede">Overclocking is not &quot;max out every slider&quot;. Some algorithms need fast memory and barely touch the core; others are the opposite. Turning the wrong knob means burning watts for nothing: the hashrate stays flat while the power bill grows. Here is how to tell which knob your algorithm actually cares about.</p>
+  </div>
+
+  <section class="block"><h2>TL;DR (for those skipping the read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Algorithms come in two types:</strong> memory-bound and core-bound. A preset built for one type is almost always bad for the other.</li>
+    <li><strong>Memory-bound:</strong> push memory clocks up, drop the core noticeably — hashrate won't fall, but watts and degrees will.</li>
+    <li><strong>Core-bound:</strong> keep memory moderate; hashrate is decided by core clock — but raise it together with power control.</li>
+    <li><strong>Watts spent in the wrong place are pure loss:</strong> 30 wasted watts per card is over $12 a month on an eight-GPU rig, for zero extra hash.</li>
+    <li><strong>Switching coins means switching presets.</strong> A &quot;forever overclock&quot; only lasts until the algorithm changes.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="two-types"><h2>The two algorithm types</h2>
+  <p><strong>Memory-bound.</strong> The algorithm constantly streams data through VRAM: the core spends most of its time waiting for memory to respond. Hashrate scales almost linearly with memory clock and barely depends on core clock. Classic examples are the Ethash/Etchash family.</p>
+  <p><strong>Core-bound.</strong> The algorithm computes on the chip itself, with modest memory traffic. Hashrate grows with core clock, while hot memory just adds watts and degrees. Examples include Autolykos, kHeavyHash and most &quot;compute-heavy&quot; algorithms.</p>
+  <p>There are mixed cases where both matter — but one knob almost always matters more. A simple way to tell your coin's type: look at the core clocks other owners of the same GPU use for it. If everyone runs the core low and memory high, it's memory-bound — and vice versa.</p>
+  </section>
+
+  <section class="block" id="tuning"><h2>What to tune in each case</h2>
+  <p><strong>For memory-bound:</strong> raise memory in small steps up to the stability edge, and lower the core. Cutting the core by 200–300 MHz from stock often leaves hashrate untouched while removing tens of watts and several degrees. Afterwards the power limit can go down too — the card will stop leaning against it (we cover the limit and throttling in <a href="throttling.html">a separate article</a>).</p>
+  <p><strong>For core-bound:</strong> keep memory moderate — extra memory clock gives no hashrate here but heats the VRAM chips (especially GDDR6X, see <a href="vram-heat.html">the hot-memory article</a>). Raise the core while hashrate grows and no errors appear, and watch the watts: past a certain point, every extra megahertz costs more than the last.</p>
+  <p><strong>A shared rule for both types:</strong> change one knob at a time and validate with a long run, not a five-minute glance. Instant hashrate lies — see the article on <a href="hashrate-variance.html">hashrate variance</a> for why.</p>
+  </section>
+
+  <section class="block" id="watts"><h2>The economics: watts in the wrong place are just a bill</h2>
+  <p>A typical memory-bound mistake is leaving the core at stock. That's 25–40 W of extra heat per card producing zero hashes. At $0.07/kWh: 30 W × 24 h = 0.72 kWh/day ≈ $0.05/day ≈ $1.50/month per card. An eight-GPU rig wastes about $12 a month heating the room.</p>
+  <p>The mirror mistake on core-bound coins is overheated memory. The cost isn't only watts: VRAM chips live at their limit, fans spin faster, wear accelerates. A preset tuned for the specific algorithm is almost always cooler, quieter and cheaper than a &quot;universal&quot; one — and more stable in hashrate too.</p>
+  <p>If you mine several coins in rotation, keep several presets — one per algorithm. Switching between them is cheaper than a compromise that is bad for all of them (we covered this in <a href="mode-compromise.html">the article on tuning modes</a>).</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>Figuring out an algorithm's type and finding its working point is exactly what <a href="index.html">OCBot</a> does instead of manual trial and error: it sweeps core and memory clock combinations for the specific coin, discards unstable ones, and keeps the variant with the best hashrate per watt. When the algorithm changes, it re-tunes instead of reusing an old preset on hope.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing common practice; actual clocks and limits depend on your GPU model and algorithm. OCBot is an independent project, not affiliated with NVIDIA or HiveOS/Hiveon. Use at your own risk: <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

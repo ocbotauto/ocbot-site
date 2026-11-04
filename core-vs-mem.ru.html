@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ядро или память: что крутить в разгоне под разные алгоритмы</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Одним алгоритмам нужна быстрая память, другим — частота ядра. Как понять, что крутить, почему универсального пресета не бывает и сколько стоят лишние ватты не в том месте.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ядро или память: что крутить в разгоне под разные алгоритмы">
+<meta property="og:description" content="Memory-bound и core-bound алгоритмы: чем они отличаются, как под каждый подбирать частоты и почему лишние ватты в неправильном месте — это просто счёт за свет.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/core-vs-mem.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/core-vs-mem.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/core-vs-mem.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="core-vs-mem.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Ядро или память: что крутить в разгоне под разные алгоритмы</h1>
+    <p class="lede">Разгон — это не «добавить везде по максимуму». Одним алгоритмам нужна быстрая память и почти не нужно ядро, другим — наоборот. Крутить не ту ручку означает жечь ватты впустую: хешрейт не растёт, а счёт за свет растёт. Разбираем, как понять, что важно вашему алгоритму.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Алгоритмы делятся на два типа:</strong> одни упираются в память (memory-bound), другие — в ядро (core-bound). Пресет под один тип почти всегда плох для другого.</li>
+    <li><strong>Memory-bound:</strong> крутите память вверх, ядро можно заметно снижать — хешрейт не упадёт, а ватты и градусы уйдут.</li>
+    <li><strong>Core-bound:</strong> память на умеренных значениях, хешрейт решает частота ядра — но растить её надо вместе с контролем ватт.</li>
+    <li><strong>Лишние ватты не в том месте — чистый убыток:</strong> 30 Вт впустую на карту — это больше 800 ₽ в месяц с восьмикартного рига просто так.</li>
+    <li><strong>При смене монеты пресет меняется тоже.</strong> «Вечный разгон» существует только до смены алгоритма.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="two-types"><h2>Два типа алгоритмов</h2>
+  <p><strong>Memory-bound (упор в память).</strong> Алгоритм постоянно гоняет данные через видеопамять: ядро большую часть времени ждёт, пока память ответит. Хешрейт почти линейно зависит от частоты памяти и почти не зависит от частоты ядра. Классические примеры — алгоритмы семейства Ethash/Etchash.</p>
+  <p><strong>Core-bound (упор в ядро).</strong> Алгоритм считает на самом чипе, а память нужна умеренно. Хешрейт растёт с частотой ядра, а перегретая память только добавляет ватт и градусов. Сюда относятся, например, Autolykos, kHeavyHash и большинство «процессорных по духу» алгоритмов.</p>
+  <p>Бывают и промежуточные случаи, где важно и то, и другое — но почти всегда одна из ручек даёт больше. Понять тип своей монеты можно по простому признаку: посмотрите, на каких частотах ядра майнят её владельцы таких же карт. Если у всех ядро занижено, а память поднята — это memory-bound, и наоборот.</p>
+  </section>
+
+  <section class="block" id="tuning"><h2>Что крутить в каждом случае</h2>
+  <p><strong>Для memory-bound:</strong> память — вверх мелкими шагами до границы стабильности, ядро — вниз. Снижение ядра на 200–300 МГц от стока часто вообще не трогает хешрейт, зато снимает десятки ватт и несколько градусов. Лимит мощности после этого можно опустить ещё — карта перестанет упираться в него (про упор в лимит и троттлинг — <a href="throttling.ru.html">отдельная статья</a>).</p>
+  <p><strong>Для core-bound:</strong> память держите умеренной — лишний разгон памяти здесь не даёт хешрейта, но греет чипы памяти (особенно GDDR6X, см. <a href="vram-heat.ru.html">про горячую память</a>). Растите ядро, пока растёт хешрейт и не появляются ошибки, и следите за ваттами: после некоторой точки каждый следующий мегагерц стоит всё дороже.</p>
+  <p><strong>Общее правило для обоих типов:</strong> меняйте одну ручку за раз и проверяйте результат длительным прогоном, а не пятиминуткой. Хешрейт «в моменте» врёт — о чём подробно в статье про <a href="hashrate-variance.ru.html">плавающий хешрейт</a>.</p>
+  </section>
+
+  <section class="block" id="watts"><h2>Экономика: ватты не в том месте — это счёт за свет</h2>
+  <p>Типичная ошибка на memory-bound алгоритме — ядро на стоковых частотах. Это 25–40 Вт лишнего тепла на карту, не дающие ни одного хеша. Считаем по тарифу 4,92 ₽/кВт·ч: 30 Вт × 24 часа = 0,72 кВт·ч в сутки ≈ 3,5 ₽ в день ≈ 106 ₽ в месяц с карты. Восьмикартный риг — около 850 ₽ в месяц, потраченных просто на обогрев комнаты.</p>
+  <p>Обратная ошибка на core-bound — перегретая память. Там цена не только в ваттах: чипы памяти живут на пределе, вентиляторы крутятся быстрее, износ выше. Правильный пресет под конкретный алгоритм почти всегда и холоднее, и тише, и дешевле «универсального» — а по хешрейту ещё и стабильнее.</p>
+  <p>Если майните несколько монет попеременно, пресетов должно быть несколько — по одному под каждый алгоритм. Переключение между ними дешевле, чем компромисс, который плох для всех сразу (мы разбирали это в <a href="mode-compromise.ru.html">статье про режимы</a>).</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Определить тип алгоритма и найти рабочую точку под него — это ровно то, что делает <a href="index.ru.html">OCBot</a> вместо ручного подбора: перебирает сочетания частот ядра и памяти под конкретную монету, отбрасывает нестабильные и оставляет вариант с лучшим хешрейтом на ватт. При смене алгоритма — новый подбор, а не старый пресет «на авось».</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные частоты и пределы зависят от модели вашей карты и алгоритма. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
