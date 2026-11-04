@@ -156,6 +156,10 @@
 
   function render() {
     var d = state.data;
+    // Hashrate unit depends on the algorithm (pearl = TH/s, noid = MH/s — per hashrate_to_hs from network.json).
+    var UNIT_BY_SCALE = { 1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s" };
+    function unitOf(e) { var n = netw(e); return (n && UNIT_BY_SCALE[n.hashrate_to_hs]) || "TH/s"; }
+    function effUnit(e) { return unitOf(e).split("/")[0] + "/W"; }
     var counts = { efficiency: 0, compromise: 0, hashrate: 0 };
     d.entries.forEach(function (e) { counts[obj(e)] = (counts[obj(e)] || 0) + 1; });
     if (!state.mode || (!counts[state.mode] && state.modeAuto !== false)) {
@@ -283,11 +287,6 @@
     }
     function slugOf(e) { return (clean(e.model) + " " + (e.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
     function netw(e) { return state.network[e.algo] || null; }
-    // Единица хэшрейта зависит от алгоритма (pearl = TH/s, noid = MH/s — по hashrate_to_hs из network.json);
-    // раньше везде было захардкожено "TH/s", и записи noid показывались с неверной подписью.
-    var UNIT_BY_SCALE = { 1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s" };
-    function unitOf(e) { var n = netw(e); return (n && UNIT_BY_SCALE[n.hashrate_to_hs]) || "TH/s"; }
-    function effUnit(e) { return unitOf(e).split("/")[0] + "/W"; }
     function coinsPerDay(e) {
       var n = netw(e);
       if (!n || !e.hashrate) return null;
