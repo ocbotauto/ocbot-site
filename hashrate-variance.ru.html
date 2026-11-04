@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Хешрейт на пуле ниже, чем на риге: куда деваются проценты</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Риг показывает 600, пул — 570: кто врёт? Окна усреднения, удача, устаревшие и отклонённые шары — разбираем, куда на самом деле уходят проценты и как сравнивать цифры честно.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Хешрейт на пуле ниже, чем на риге: куда деваются проценты">
+<meta property="og:description" content="Reported против effective: окна усреднения, удача пула, стейлы и реджекты. Какие потери нормальны, какие — сигнал беды, и как сравнивать по суткам, а не по минутам.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/hashrate-variance.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/hashrate-variance.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/hashrate-variance.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="hashrate-variance.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Хешрейт на пуле ниже, чем на риге: куда деваются проценты</h1>
+    <p class="lede">Майнер показывает 600, пул рисует 570, а выплата как будто от 550. Классическая сцена — и классический повод обвинить пул. Иногда даже заслуженно. Но чаще цифры «не сходятся» потому, что это три разных числа, измеренных тремя разными способами. Разберём, куда реально уходят проценты и какие расхождения — норма, а какие — сигнал беды.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Хешрейт на риге и на пуле — разные измерения.</strong> Риг меряет, сколько он считает; пул — сколько шар от вас дошло. Это как спидометр и одометр: оба про скорость, но не одно и то же.</li>
+    <li><strong>Смотреть надо суточное среднее, а не текущую цифру.</strong> Почасовые графики пула гуляют на десятки процентов от удачи — это математика, а не жульничество.</li>
+    <li><strong>Устаревшие и отклонённые шары — реальные потери.</strong> Один-два процента — норма; стабильно больше — разбирайтесь с сетью и разгоном.</li>
+    <li><strong>Простои майнера видны на пуле и не видны в среднем рига.</strong> Каждая перезагрузка — это минуты нулевого хешрейта, которые пул честно считает.</li>
+    <li><strong>Комиссия пула — отдельная строка</strong>, она не входит в «график хешрейта», но входит в выплату (подробно — в <a href="pool-fees.ru.html">статье про пулы</a>).</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="two-numbers"><h2>Два числа, три способа измерения</h2>
+  <p>Майнер считает хешрейт напрямую: сколько решений в секунду перебирают карты. Это <em>reported</em> — заявленный хешрейт. Пул видит другое: сколько шар вы прислали, и пересчитывает их в хешрейт по сложности. Это <em>effective</em> — эффективный. Между ними всегда есть зазор, и вот из чего он состоит:</p>
+  <ul>
+    <li><strong>удача.</strong> Шары — процесс случайный: как подбрасывание монетки, серия «решок» никого не обманывает. На окне в час разброс большой, на сутках он сжимается, на неделе — почти исчезает;</li>
+    <li><strong>окна усреднения.</strong> Пул показывает среднее за 15 минут, час, сутки — и в каждом окне своя цифра. Сравнивать «текущий reported» с «часовым effective» бессмысленно по определению;</li>
+    <li><strong>простои.</strong> Майнер перезапускался десять минут? В reported этого не видно — он меряет, только когда работает. Пул видит дыру честно.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="losses"><h2>Реальные потери: стейлы, реджекты, простои</h2>
+  <p>Кроме статистического шума есть потери настоящие — их и стоит минимизировать:</p>
+  <ul>
+    <li><strong>устаревшие шары (stale).</strong> Шара посчитана честно, но дошла до пула, когда задача уже сменилась. Причина — задержка сети: пинг до пула, Wi-Fi с потерями (разбирали в <a href="rig-network.ru.html">статье про сеть</a>). Процент стейлов — прямая скидка с дохода;</li>
+    <li><strong>отклонённые шары (rejected).</strong> Пул получил шару и отверг: решение не сошлось. Типичный источник — слишком агрессивный разгон памяти: карта считает быстро, но с ошибками. Такие шары вы уже оплатили электричеством;</li>
+    <li><strong>простои при перезапусках.</strong> Каждый рестарт майнера, смена пресета, ребут — минуты нулевого дохода. Пять перезапусков по три минуты в сутки — это уже процент.</li>
+  </ul>
+  <p>Ориентир простой: разрыв суточного effective от reported в пределах 1–3% — жизнь; стабильно 5%+ — ищите причину в сети, разгоне или стабильности майнера.</p>
+  </section>
+
+  <section class="block" id="compare"><h2>Как сравнивать честно</h2>
+  <ul>
+    <li><strong>Одно окно — одно сравнение.</strong> Суточный effective против суточного reported, неделя к неделе. Скриншоты «сейчас 570 при 600» не доказывают ничего.</li>
+    <li><strong>Считайте доход, а не хешрейт.</strong> Финальная проверка — сколько монет пришло за неделю против расчётного. Формулы — в статье <a href="profit-math.ru.html">как считать доходность</a>, а живой расчёт — в <a href="calculator.ru.html">калькуляторе</a>.</li>
+    <li><strong>Меняйте одно за раз.</strong> Новый пул, новый разгон, новая сеть — если поменять всё сразу, вы никогда не узнаете, что сработало.</li>
+    <li><strong>Дайте изменению время.</strong> Сутки минимум, лучше неделя. Удача пула выравнивается только на длинных окнах.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Две из трёх реальных потерь — реджекты от жадного разгона и простои от перезапусков — это ровно то, что <a href="index.ru.html">OCBot</a> подавляет по работе: пресет принимается только после длинной проверки стабильности, поэтому «быстро, но с ошибками» не проходит отбора, а разгон подбирается под конкретную карту, а не «усреднённый с форума». Меньше отклонённых шар и меньше перезапусков — эффективный хешрейт ползёт к заявленному сам.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные цифры зависят от вашего пула, сети и железа. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

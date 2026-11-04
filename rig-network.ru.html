@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wi-Fi или кабель для майнинг-рига: что важно на самом деле</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Майнингу нужны килобайты, а не гигабиты: важны не скорость, а стабильность и пинг до пула. Кабель против Wi-Fi, почему USB-адаптеры — лотерея, откуда берутся отклонённые шары и как настроить резерв.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wi-Fi или кабель для майнинг-рига: что важно на самом деле">
+<meta property="og:description" content="Скорость канала почти не влияет на доход — влияют пинг и потери пакетов. Кабель vs Wi-Fi vs USB-свистки, устаревшие шары и резервный канал.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/rig-network.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-network.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-network.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="rig-network.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Wi-Fi или кабель для майнинг-рига: что важно на самом деле</h1>
+    <p class="lede">Вокруг сети для рига две крайности: одни тащат гигабитный кабель «для скорости», другие годами майнят на USB-свистке через две стены и удивляются отклонённым шарам. Правда посередине: майнингу не нужна скорость — ему нужны стабильность и пинг. Разберём, что именно ездит по сети и как выбрать канал без переплат и без потерь.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Майнингу хватает килобайт в секунду.</strong> «Быстрый интернет» на доход почти не влияет — влияют задержка и потери пакетов.</li>
+    <li><strong>Кабель — выбор по умолчанию.</strong> Дёшево, предсказуемо, не зависит от соседских роутеров и микроволновки.</li>
+    <li><strong>Wi-Fi нормален при хорошем сигнале</strong> и нормальном адаптере. Дешёвый USB-свисток — лотерея с отвалами посреди ночи.</li>
+    <li><strong>Пинг до пула важнее скорости:</strong> большая задержка = устаревшие шары = вы майнили впустую. Выбирайте ближайший сервер пула.</li>
+    <li><strong>Резервный канал окупается первым же отвалом.</strong> Второй провайдер или LTE-роутер — это страховка дохода, а не роскошь.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="traffic"><h2>Что на самом деле ездит по сети</h2>
+  <p>Риг общается с пулом короткими сообщениями: получил задачу — отправил решение (шару). Это считанные килобайты в секунду; по объёму трафика майнинг сопоставим с мессенджером. Поэтому тариф «гигабит» для рига — переплата, а вот три характеристики решают всё:</p>
+  <ul>
+    <li><strong>задержка (пинг) до сервера пула.</strong> Шара, дошедшая до пула слишком поздно — когда задача уже сменилась, — засчитывается как устаревшая или не засчитывается вовсе. Десятки миллисекунд — отлично, сотни — уже потери;</li>
+    <li><strong>потери пакетов.</strong> Даже редкие потери превращаются в отклонённые шары. Процент отклонённых шар — это прямой процент скидки с дохода;</li>
+    <li><strong>стабильность.</strong> Канал, который исчезает на минуту раз в час, стоит дороже, чем кажется: реконнекты, перезапуски майнера, дыры в статистике.</li>
+  </ul>
+  <p>Как это связано с деньгами на выходе — в статье <a href="pool-fees.ru.html">про пулы и выплаты</a>.</p>
+  </section>
+
+  <section class="block" id="options"><h2>Кабель, Wi-Fi, USB-свистки и PLC</h2>
+  <ul>
+    <li><strong>Витая пара</strong> — эталон: предсказуемая задержка, нулевые потери, не зависит от радиоэфира. Если до рига можно докинуть кабель — докиньте, вопрос закрыт навсегда.</li>
+    <li><strong>Wi-Fi с хорошим сигналом</strong> — рабочий вариант: встроенный модуль или нормальный адаптер, роутер в той же комнате или за одной стеной, сеть 5 ГГц в стороне от соседских. Проверяется просто: пинг до роутера без потерь сутками.</li>
+    <li><strong>Дешёвые USB-адаптеры</strong> — главный источник мистики «риг сам по себе отваливался»: перегрев, просадки по питанию порта, отвалы драйвера. Если Wi-Fi нужен, берите адаптер с внешней антенной или ставьте роутер-репитер с кабелем в риг.</li>
+    <li><strong>PLC (сеть по розеткам)</strong> — лотерея, зависящая от вашей проводки. В старом фонде обычно плохо; если рассматриваете — тестируйте до покупки фермы, а не после.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="setup"><h2>Настройка и резерв</h2>
+  <ul>
+    <li><strong>Выберите ближайший сервер пула.</strong> У больших пулов серверы на нескольких континентах; разница в пинге — десятки миллисекунд, и они идут прямо в долю устаревших шар.</li>
+    <li><strong>Смотрите статистику отклонённых шар</strong> в майнере, а не только хешрейт. Это самый честный индикатор здоровья канала.</li>
+    <li><strong>Резервный канал.</strong> LTE-роутер как запасной интернет стоит копейки на фоне рига и включается редко — но именно он решает, будет ли ночной отвал провайдера часом простоя или нулём.</li>
+    <li><strong>Локалка тоже часть сети.</strong> Мониторинг и управление ригом ходят по вашей же сети: роутер на бесперебойнике (мы разбирали в <a href="ups-power.ru.html">статье про ИБП</a>) означает, что при моргании света вы хотя бы видите, что происходит.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Сеть умирает по-разному: пул недоступен, шары отклоняются, сам риг жив, но молчит. <a href="index.ru.html">OCBot</a> следит за тем, что риг реально добывает, а не просто включён, и шлёт отчёты в Telegram — пока жив хоть какой-то канал, вы в курсе. А полное молчание рига в боте — само по себе сигнал: смотрите сеть и питание в первую очередь.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные цифры зависят от вашего провайдера и пула. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pool hashrate lower than rig hashrate: where the percent goes</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="The rig shows 600, the pool shows 570 — who is lying? Averaging windows, luck, stale and rejected shares: where the percent really goes and how to compare the numbers honestly.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pool hashrate lower than rig hashrate: where the percent goes">
+<meta property="og:description" content="Reported vs effective: averaging windows, pool luck, stales and rejects. Which losses are normal, which are a red flag, and how to compare by days, not minutes.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/hashrate-variance.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/hashrate-variance.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/hashrate-variance.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="hashrate-variance.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Pool hashrate lower than rig hashrate: where the percent goes</h1>
+    <p class="lede">The miner shows 600, the pool draws 570, and the payout feels like 550. A classic scene — and a classic reason to blame the pool. Sometimes deservedly. But more often the numbers "disagree" because they are three different numbers measured three different ways. Here is where the percent really goes, which gaps are normal, and which are a red flag.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Rig hashrate and pool hashrate are different measurements.</strong> The rig measures how much it computes; the pool — how many shares arrived. A speedometer and an odometer: both about speed, not the same thing.</li>
+    <li><strong>Compare daily averages, not the current figure.</strong> The pool's hourly charts swing by tens of percent on luck alone — that is math, not cheating.</li>
+    <li><strong>Stale and rejected shares are real losses.</strong> One or two percent is normal; consistently more — investigate the network and the overclock.</li>
+    <li><strong>Miner downtime is visible to the pool and invisible in the rig's average.</strong> Every restart is minutes of zero hashrate that the pool honestly counts.</li>
+    <li><strong>The pool fee is a separate line</strong> — absent from the "hashrate chart" but present in the payout (details in the <a href="pool-fees.html">pool article</a>).</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="two-numbers"><h2>Two numbers, three ways of measuring</h2>
+  <p>The miner measures hashrate directly: how many solutions per second the cards chew through. That is the <em>reported</em> hashrate. The pool sees something else: how many shares you submitted, converted to hashrate via difficulty. That is the <em>effective</em> hashrate. There is always a gap between them, and here is what it is made of:</p>
+  <ul>
+    <li><strong>luck.</strong> Shares are a random process: like coin flips, a streak of "tails" cheats nobody. Over an hour the spread is large, over a day it compresses, over a week it nearly vanishes;</li>
+    <li><strong>averaging windows.</strong> The pool shows averages over 15 minutes, an hour, a day — a different number in each window. Comparing "current reported" with "hourly effective" is meaningless by definition;</li>
+    <li><strong>downtime.</strong> The miner restarted for ten minutes? Invisible in reported — it only measures while it runs. The pool sees the gap honestly.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="losses"><h2>The real losses: stales, rejects, downtime</h2>
+  <p>Beyond statistical noise there are genuine losses — the ones worth minimizing:</p>
+  <ul>
+    <li><strong>stale shares.</strong> The share was computed honestly but reached the pool after the job had changed. The cause is network delay: pool latency, lossy Wi-Fi (covered in the <a href="rig-network.html">network article</a>). A percent of stales is a straight percent off revenue;</li>
+    <li><strong>rejected shares.</strong> The pool received the share and turned it down: the solution did not check out. The typical source is an over-aggressive memory overclock: the card computes fast but with errors. Those shares were already paid for in electricity;</li>
+    <li><strong>restart downtime.</strong> Every miner restart, preset change, reboot — minutes of zero revenue. Five three-minute restarts a day is already a percent.</li>
+  </ul>
+  <p>A simple benchmark: a daily effective-vs-reported gap within 1–3% is life; a consistent 5%+ means looking for the cause in the network, the overclock or the miner's stability.</p>
+  </section>
+
+  <section class="block" id="compare"><h2>How to compare honestly</h2>
+  <ul>
+    <li><strong>One window — one comparison.</strong> Daily effective against daily reported, week to week. Screenshots of "570 right now at 600" prove nothing.</li>
+    <li><strong>Count revenue, not hashrate.</strong> The final check is coins received per week versus the estimate. Formulas in the <a href="profit-math.html">profitability article</a>, live numbers in the <a href="calculator.html">calculator</a>.</li>
+    <li><strong>Change one thing at a time.</strong> New pool, new overclock, new network — change everything at once and you will never learn what worked.</li>
+    <li><strong>Give a change time.</strong> A day at minimum, a week is better. Pool luck only evens out over long windows.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>Two of the three real losses — rejects from a greedy overclock and downtime from restarts — are exactly what <a href="index.html">OCBot</a> suppresses by design: a preset is accepted only after a long stability run, so "fast but error-prone" does not survive selection, and the overclock is tuned to the specific card, not an "average from a forum". Fewer rejected shares and fewer restarts — and the effective hashrate creeps toward the reported one by itself.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual numbers depend on your pool, network and hardware. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

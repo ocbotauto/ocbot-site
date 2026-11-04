@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A UPS for a mining rig: do you need one, which type, and when it pays off</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A UPS under a rig is not for &quot;mining through an outage&quot; — it is for surviving one-second flickers. UPS types in plain language, why volt-amps lie about watts, pure sine wave for modern PSUs, and when a cheap protection relay is enough.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A UPS for a mining rig: do you need one, which type, and when it pays off">
+<meta property="og:description" content="A one-second flicker costs hours of downtime; a surge costs a power supply. UPS types, watts vs volt-amps, pure sine for modern PSUs, and honest economics.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/ups-power.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/ups-power.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/ups-power.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="ups-power.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>A UPS for a mining rig: do you need one, which type, and when it pays off</h1>
+    <p class="lede">The grid flickers for a second — and the rig sits silent until morning because you were asleep. A familiar story, and it is exactly what sells UPS units for farms. But a UPS under a rig is not obvious: its job differs from an office one, and the price of a mistake is a fried power supply. Let's go through when you need one, which kind, and when a protection relay for a tenth of the price is enough.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>A rig UPS exists to survive one-second flickers</strong>, not to "mine through an outage" — an hour of autonomy at 2 kW costs unjustifiably much.</li>
+    <li><strong>Modern PSUs need a pure sine wave.</strong> A cheap UPS with "stepped approximation" may not save the PSU — it may kill it.</li>
+    <li><strong>Volt-amps on the box are not watts.</strong> A "1500 VA" UPS usually holds about 900 W. Size by watts with a third of headroom.</li>
+    <li><strong>Against surges and phase imbalance the answer is a voltage relay</strong>, not a UPS — and it costs times less. Often the right answer is the relay.</li>
+    <li><strong>Autonomy beats the battery:</strong> if the rig returns to work by itself after a flicker, half the reasons to buy a UPS disappear.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="threats"><h2>What actually threatens a rig from the outlet</h2>
+  <p>Household power has four problems, and they have four different fixes:</p>
+  <ul>
+    <li><strong>Flickers (0.1–2 seconds).</strong> The most common one. For a rig that is a full stop: the miner dies, the system may reboot. The damage is not "a second" — it is hours of downtime if you are not around.</li>
+    <li><strong>Sags.</strong> Voltage drops for minutes to hours (evening peaks, old grids). A PSU with a wide input range survives it but runs hotter.</li>
+    <li><strong>Surges and spikes.</strong> Lightning, a neighbor's welder, switching in the panel. They hit the power supply directly — and through it, the cards.</li>
+    <li><strong>Full outages.</strong> Here a UPS only helps to bridge the pause: 5–10 minutes is enough to wait out the return of power or shut the rig down cleanly.</li>
+  </ul>
+  <p>Note: three of the four are not about "a long blackout". That is what drives the choice.</p>
+  </section>
+
+  <section class="block" id="types"><h2>UPS types, and why watts ≠ volt-amps</h2>
+  <ul>
+    <li><strong>Off-line (standby).</strong> The cheapest: the load runs straight off the grid, switching to battery in 4–10 ms. A modern PSU usually rides through that switch, but the output waveform is stepped — and a PSU with active power-factor correction (nearly every decent one) may drop out or wear faster.</li>
+    <li><strong>Line-interactive.</strong> The same plus sag correction. A reasonable minimum for a rig — provided it outputs a pure sine on battery.</li>
+    <li><strong>On-line (double conversion).</strong> The grid is rebuilt from scratch at all times: no switching at all, perfect output. The right choice for a farm — priced accordingly.</li>
+  </ul>
+  <p>Separately, on ratings. The box says volt-amps; a UPS's watts are usually 0.6–0.7 of the VA figure. "1500 VA" means roughly 900 W of load. A 1.5 kW rig needs a 2.5–3 kVA pure-sine unit — real money. That is exactly why large farms rarely put everything on a UPS: the system and the router go on the battery, and the cards ride out flickers thanks to a fast automatic restart.</p>
+  </section>
+
+  <section class="block" id="economics"><h2>Honest economics and the alternatives</h2>
+  <p>Before buying an on-line UPS priced like a graphics card, count what you are actually insuring. A monthly flicker discovered in the morning is a night of downtime. If the rig picks itself up when power returns and is back on proven presets within minutes, the damage from a flicker shrinks to those minutes — and the expensive UPS stops paying for itself.</p>
+  <ul>
+    <li><strong>A voltage relay</strong> in the panel (or a protection outlet) — against surges and phase imbalance. Cheap, and it closes the most destructive scenario.</li>
+    <li><strong>A small UPS for the router and the motherboard</strong> — notifications and control stay alive even when the cards go dark.</li>
+    <li><strong>An on-line UPS for the whole rig</strong> — justified where the grid flickers several times a week and every minute of downtime is expensive.</li>
+  </ul>
+  <p>On the wiring around the farm — outlets, cable gauges and breakers — we have a <a href="rig-wiring.html">dedicated article</a>, and on PSU headroom — <a href="psu-budget.html">the PSU article</a>.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A rig sitting silent after a flicker is the scenario that sells most UPS units. <a href="index.html">OCBot</a> starts automatically after a reboot, restores the cards' proven presets, and reports to Telegram that the rig survived the outage and is mining again. The grid flickered — minutes later the rig is back at work, and you already know instead of guessing.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; equipment choice depends on your grid and load. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Шум домашней майнинг-фермы: откуда берётся и как снизить</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Шум рига — это вентиляторы, а вентиляторы — это ватты. Почему минус 100 Вт на карту слышнее любого «тихого кулера», чем шумят подшипники и стеллаж, и когда помогает шумоизоляционный бокс, а когда он вредит.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Шум домашней майнинг-фермы: откуда берётся и как снизить">
+<meta property="og:description" content="Главный глушитель рига — не корпус и не «тихие» вентиляторы, а ватты. Разбираем источники шума, связь ватт с децибелами и честные способы жить с фермой в одной квартире.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/rig-noise.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-noise.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-noise.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="rig-noise.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Шум домашней майнинг-фермы: откуда берётся и как снизить</h1>
+    <p class="lede">Ферма в квартире упирается не в доход и не в электрику, а в децибелы. Хорошая новость: шум рига — это почти целиком вентиляторы, а обороты вентиляторов — это ватты. Поэтому самый эффективный «глушитель» — не корпус с шумкой, а грамотное снижение потребления. Разберём источники шума и что реально работает.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Шум = вентиляторы = ватты.</strong> Минус 100 Вт на карту слышнее, чем любой «тихий» кулер той же модели.</li>
+    <li><strong>Выше ~80% оборотов шум растёт резко.</strong> Карта на 60% оборотов вдвое тише той же карты на 90% — при разнице в хешрейте в единицы процентов.</li>
+    <li><strong>Треск и биение — не «шумно», а «умирает подшипник».</strong> Это уже не про комфорт, а про скорую замену вентилятора.</li>
+    <li><strong>Бокс с шумоизоляцией помогает, только если у него есть вытяжка.</strong> Закрытый ящик без воздуха превращается в духовку.</li>
+    <li><strong>Стеллаж и пол — тоже источники:</strong> резонанс и вибрация через ножки иногда слышнее самих вентиляторов.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="sources"><h2>Откуда берётся шум</h2>
+  <p>Источников четыре, и давить их надо разными способами:</p>
+  <ul>
+    <li><strong>Аэродинамический шум вентиляторов</strong> — основной. Зависит от оборотов нелинейно: разница между 60% и 90% оборотов — это разница между «фоновым гулом» и «пылесосом».</li>
+    <li><strong>Подшипники.</strong> Новый вентилятор шумит воздухом, уставший — механикой: треск, стрекот, биение. Это симптом, а не «особенность» (подробнее — <a href="fan-health.ru.html">статья про вентиляторы</a>).</li>
+    <li><strong>Резонанс.</strong> Стеллаж, листы кожуха и пол подхватывают вибрацию и работают как мембрана. Резиновые прокладки под картами и ножками стеллажа снимают удивительно много.</li>
+    <li><strong>Помехи от питания.</strong> Редко, но слышно: писк дросселей (coil whine) на некоторых картах зависит от нагрузки и частот. Меняется с разгоном — иногда в лучшую сторону.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="watts"><h2>Ватты — главный регулятор громкости</h2>
+  <p>Вентилятор гонит воздух, чтобы увести тепло. Тепло — это ватты. Снизили потребление карты — карте нужно меньше воздуха — вентиляторы сбавили обороты. Цепочка прямая, и работает она заметно: переход с максимального разгона на экономичный обычно убирает четверть-треть потребления, и риг из «слышно через стенку» переходит в «слышно в комнате».</p>
+  <p>При этом хешрейт страдает несильно: последние проценты разгона самые дорогие и по ваттам, и по децибелам. Экономика такого решения — та же, что в <a href="crypto-winter.ru.html">статье про зиму майнинга</a>: сначала считаем, потом жертвуем хешем, а не наоборот.</p>
+  <p>Практический ориентир: если вентиляторы карт держатся выше ~80% оборотов постоянно — вы платите шумом и сроком жизни подшипников за единицы процентов хешрейта. Обычно это плохая сделка.</p>
+  </section>
+
+  <section class="block" id="box"><h2>Боксы, корпуса и расстановка</h2>
+  <ul>
+    <li><strong>Шумоизоляционный бокс работает — с вытяжкой.</strong> Пенопластовый лабиринт на выходе воздуха глушит высокие частоты; без канального вентилятора бокс за полчаса становится духовкой, и вентиляторы взвывают сильнее, чем до бокса.</li>
+    <li><strong>Расстояние и стены — бесплатно.</strong> Перенос рига из жилой комнаты на балкон/в коридор даёт больше, чем любые прокладки. Учтите только температуру и влажность.</li>
+    <li><strong>Не глушите впуск.</strong> Ковёр под ригом и занавеска перед ним «приглушают» так, что карты начинают задыхаться. Шум должен уходить, воздух — приходить.</li>
+    <li><strong>Пыль делает риг громче</strong> по той же цепочке: пыль → жарче → выше обороты. Регулярная <a href="maintenance.ru.html">продувка</a> — это и про тишину тоже.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Тихий пресет — это компромисс между хешем, ваттами и оборотами, и для каждой карты он свой. <a href="index.ru.html">OCBot</a> подбирает стабильный разгон в выбранном стиле (compromise / efficiency / hashrate) и держит карты в нём без ручной возни: efficiency-режим — это и есть «ночной/тихий режим», только честно посчитанный. А если вентилятор начнёт умирать и обороты поползут вверх — вы увидите это в сводке раньше, чем услышите.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные цифры зависят от ваших карт и помещения. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

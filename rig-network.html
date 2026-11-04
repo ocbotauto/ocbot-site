@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wi-Fi or Ethernet for a mining rig: what actually matters</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Mining needs kilobytes, not gigabits: stability and pool latency matter, not speed. Ethernet vs Wi-Fi, why cheap USB adapters are a lottery, where rejected shares come from, and how to set up a backup link.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wi-Fi or Ethernet for a mining rig: what actually matters">
+<meta property="og:description" content="Bandwidth barely affects revenue — latency and packet loss do. Ethernet vs Wi-Fi vs USB dongles, stale shares, and a backup link that pays for itself.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/rig-network.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-network.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-network.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="rig-network.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Wi-Fi or Ethernet for a mining rig: what actually matters</h1>
+    <p class="lede">Opinions about rig networking come in two extremes: some drag gigabit Ethernet "for speed", others mine for years on a USB dongle behind two walls and wonder about rejected shares. The truth sits in between: mining does not need speed — it needs stability and latency. Here is what actually travels over the link and how to pick one without overpaying and without losses.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Mining runs on kilobytes per second.</strong> "Fast internet" barely affects revenue — latency and packet loss do.</li>
+    <li><strong>Ethernet is the default choice.</strong> Cheap, predictable, immune to the neighbors' routers and the microwave.</li>
+    <li><strong>Wi-Fi is fine with a good signal</strong> and a decent adapter. A bargain USB dongle is a lottery of midnight drop-offs.</li>
+    <li><strong>Pool latency matters more than speed:</strong> high delay = stale shares = work done for nothing. Pick the pool's nearest server.</li>
+    <li><strong>A backup link pays for itself on the first outage.</strong> A second provider or an LTE router is insurance on your revenue, not a luxury.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="traffic"><h2>What actually travels over the link</h2>
+  <p>A rig talks to the pool in short messages: it receives a job and sends back solutions (shares). That is a few kilobytes per second; by traffic volume, mining is comparable to a chat app. So a gigabit plan for a rig is overpaying — while three characteristics decide everything:</p>
+  <ul>
+    <li><strong>latency (ping) to the pool server.</strong> A share that arrives after the job has changed counts as stale or does not count at all. Tens of milliseconds is great; hundreds are losses;</li>
+    <li><strong>packet loss.</strong> Even rare loss turns into rejected shares. A percent of rejected shares is a straight percent off your revenue;</li>
+    <li><strong>stability.</strong> A link that vanishes for a minute every hour costs more than it seems: reconnects, miner restarts, gaps in the stats.</li>
+  </ul>
+  <p>How this connects to the money at the end — in the article on <a href="pool-fees.html">pools and payouts</a>.</p>
+  </section>
+
+  <section class="block" id="options"><h2>Ethernet, Wi-Fi, USB dongles and powerline</h2>
+  <ul>
+    <li><strong>Ethernet cable</strong> — the benchmark: predictable latency, zero loss, independent of the radio spectrum. If you can run a cable to the rig — run it, question closed forever.</li>
+    <li><strong>Wi-Fi with a good signal</strong> — a working option: the built-in module or a decent adapter, the router in the same room or one wall away, a 5 GHz network clear of the neighbors'. Easy to verify: ping the router for a day with zero loss.</li>
+    <li><strong>Cheap USB adapters</strong> — the top source of "the rig just dropped by itself" mysteries: overheating, port power sag, driver drop-offs. If you need Wi-Fi, get an adapter with an external antenna, or put a router in repeater mode with a cable into the rig.</li>
+    <li><strong>Powerline (network over outlets)</strong> — a lottery that depends on your wiring. Usually bad in older buildings; if you are considering it, test before building the farm, not after.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="setup"><h2>Setup and backup</h2>
+  <ul>
+    <li><strong>Pick the pool's nearest server.</strong> Big pools run servers on several continents; the latency difference is tens of milliseconds, and it goes straight into your stale-share rate.</li>
+    <li><strong>Watch the rejected-share stats</strong> in the miner, not just the hashrate. It is the most honest indicator of link health.</li>
+    <li><strong>A backup link.</strong> An LTE router as standby internet costs pennies next to a rig and rarely kicks in — but it is what decides whether a provider's night outage means an hour of downtime or none.</li>
+    <li><strong>The LAN is part of the network too.</strong> Monitoring and control travel over your own network: a router on a UPS (we covered that in the <a href="ups-power.html">UPS article</a>) means that when the lights flicker, you at least see what is happening.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A network dies in different ways: the pool unreachable, shares rejected, the rig alive but silent. <a href="index.html">OCBot</a> tracks what the rig is actually mining, not just whether it is powered, and sends reports to Telegram — while any channel is alive, you stay informed. And a rig going completely silent in the bot is a signal in itself: check the network and power first.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual numbers depend on your provider and pool. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

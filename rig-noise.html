@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home mining farm noise: where it comes from and how to cut it</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Rig noise is fans, and fans are watts. Why minus 100 W per card is more audible than any quiet cooler, what bearing rattle and rack resonance mean, and when a soundproofed box helps — or hurts.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Home mining farm noise: where it comes from and how to cut it">
+<meta property="og:description" content="The best muffler for a rig is not a case or quiet fans — it is watts. The sources of noise, the watts-to-decibels link, and honest ways to live with a farm in one apartment.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/rig-noise.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-noise.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-noise.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="rig-noise.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Home mining farm noise: where it comes from and how to cut it</h1>
+    <p class="lede">A farm in an apartment hits its limit not on revenue or wiring, but on decibels. The good news: rig noise is almost entirely fans, and fan speed is watts. So the most effective "muffler" is not a soundproofed case — it is a sane cut in power draw. Let's go through the noise sources and what actually works.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Noise = fans = watts.</strong> Minus 100 W per card is more audible than any "quiet" cooler of the same model.</li>
+    <li><strong>Above ~80% fan speed, noise climbs steeply.</strong> A card at 60% fan is half as loud as the same card at 90% — for a hashrate difference of single-digit percent.</li>
+    <li><strong>Rattling and pulsing is not "loud" — it is a dying bearing.</strong> That is no longer about comfort, it is about an upcoming fan replacement.</li>
+    <li><strong>A soundproofed box only helps with exhaust.</strong> A closed box without airflow turns into an oven.</li>
+    <li><strong>The rack and the floor are sources too:</strong> resonance and vibration through the feet can be more audible than the fans themselves.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="sources"><h2>Where the noise comes from</h2>
+  <p>There are four sources, and each takes a different fix:</p>
+  <ul>
+    <li><strong>Aerodynamic fan noise</strong> — the main one. It scales non-linearly with RPM: the difference between 60% and 90% speed is the difference between "background hum" and "vacuum cleaner".</li>
+    <li><strong>Bearings.</strong> A new fan makes air noise; a tired one makes mechanical noise: rattle, chatter, pulsing. That is a symptom, not a "feature" (details in the <a href="fan-health.html">fan article</a>).</li>
+    <li><strong>Resonance.</strong> The rack, shroud panels and the floor pick up vibration and act like a drum membrane. Rubber pads under the cards and the rack feet remove a surprising amount.</li>
+    <li><strong>Electrical noise.</strong> Rarely, but audibly: coil whine on some cards depends on load and clocks. It changes with the overclock — sometimes for the better.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="watts"><h2>Watts are the master volume knob</h2>
+  <p>A fan moves air to carry heat away. Heat is watts. Cut the card's consumption — the card needs less air — the fans spin down. The chain is direct, and the effect is visible: moving from maximum overclock to an economical one usually removes a quarter to a third of the draw, and the rig goes from "audible through the wall" to "audible in the room".</p>
+  <p>Meanwhile hashrate barely suffers: the last few percent of an overclock are the most expensive in both watts and decibels. The economics of that trade is the same as in the <a href="crypto-winter.html">mining winter article</a>: count first, then give up hash — not the other way around.</p>
+  <p>A practical marker: if the cards' fans sit above ~80% permanently, you are paying in noise and bearing lifespan for single-digit percent of hashrate. Usually a bad deal.</p>
+  </section>
+
+  <section class="block" id="box"><h2>Boxes, cases and placement</h2>
+  <ul>
+    <li><strong>A soundproofed box works — with exhaust.</strong> A foam labyrinth on the air outlet muffles high frequencies; without a duct fan the box becomes an oven in half an hour, and the fans scream louder than before the box.</li>
+    <li><strong>Distance and walls are free.</strong> Moving the rig from the living room to a balcony or hallway beats any padding. Just watch the temperature and humidity.</li>
+    <li><strong>Do not muffle the intake.</strong> A carpet under the rig and a curtain in front of it "quiet things down" by choking the cards. Noise should leave; air should arrive.</li>
+    <li><strong>Dust makes the rig louder</strong> by the same chain: dust → hotter → higher RPM. A regular <a href="maintenance.html">blow-out</a> is about quiet too.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A quiet preset is a trade-off between hash, watts and fan speed, and every card has its own. <a href="index.html">OCBot</a> tunes a stable overclock in the chosen style (compromise / efficiency / hashrate) and holds the cards to it without manual work: efficiency mode is the honest "night/quiet mode", computed rather than guessed. And if a fan starts dying and its RPM creeps up, you will see it in the summary before you hear it.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual numbers depend on your cards and room. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

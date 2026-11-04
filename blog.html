@@ -7,11 +7,11 @@
 <title>Articles on mining hardware: hangs, temps, PSUs, profitability</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/guide.css">
-<meta name="description" content="Practical articles on mining hardware: why rigs hang, risers and \"random\" failures, hot GDDR6X memory, GPU temperature physics, PSU sizing, home wiring, maintenance and dust, summer heat, buying used GPUs, pools and fees, honest profitability math and the mining winter.">
+<meta name="description" content="Practical articles on mining hardware: why rigs hang, risers and \"random\" failures, hot GDDR6X memory, GPU temperature physics, PSU sizing, home wiring, UPS choice, maintenance and dust, rig noise, rig networking, summer heat, buying used GPUs, pools and fees, pool vs rig hashrate, honest profitability math and the mining winter.">
 <meta name="theme-color" content="#0f7a64">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Articles on mining hardware">
-<meta property="og:description" content="Fifteen practical articles: rig hangs, risers, hot GDDR6X memory, temperature physics, power supplies, home wiring, maintenance, summer heat, buying used GPUs, night shutdowns, fans, pools and fees, manual vs automatic tuning, honest profitability, the mining winter.">
+<meta property="og:description" content="Nineteen practical articles: rig hangs, risers, hot GDDR6X memory, temperature physics, power supplies, home wiring, UPS, maintenance, rig noise, rig networking, summer heat, buying used GPUs, night shutdowns, fans, pools and fees, pool vs rig hashrate, manual vs automatic tuning, honest profitability, the mining winter.">
 <meta property="og:locale" content="en_US">
 <link rel="canonical" href="https://ocbot.org/blog.html">
 <link rel="alternate" hreflang="en" href="https://ocbot.org/blog.html">
@@ -49,6 +49,10 @@
     <p>Dust is a blanket on the heatsink: +5–15 °C after a year without cleaning. Blow-out every 1–3 months, paste and pads every 2–3 years, a temperature log as the alarm clock.</p></li>
     <li><h3><a href="summer-heat.html">A mining rig in the heat: how to survive summer without losses</a></h3>
     <p>Every +10 °C in the room is +10 °C on the cards. Exhaust beats air conditioning, a summer mode with reduced watts, and the fall inspection.</p></li>
+    <li><h3><a href="rig-noise.html">Home mining farm noise: where it comes from and how to cut it</a></h3>
+    <p>Noise = fans = watts. Why minus 100 W per card beats a quiet cooler, bearing rattle as a symptom, soundproofed boxes with exhaust and rack resonance.</p></li>
+    <li><h3><a href="rig-network.html">Wi-Fi or Ethernet for a mining rig: what actually matters</a></h3>
+    <p>Mining needs kilobytes, not gigabits: latency and packet loss decide. Ethernet vs Wi-Fi vs USB dongles, stale shares and a backup link.</p></li>
   </ul>
   </section>
 
@@ -58,6 +62,8 @@
     <p>The 80 PLUS efficiency curve, transient load spikes and ATX 3.x, rails and OCP, one cable per card. Watt headroom is not money lying idle.</p></li>
     <li><h3><a href="rig-wiring.html">Home wiring for a mining rig: outlets, cables and breakers</a></h3>
     <p>A 2 kW rig is a permanent 24/7 load. One outlet per rig, why extension cords overheat, a dedicated circuit with its own breaker, a warm plug as an alarm.</p></li>
+    <li><h3><a href="ups-power.html">A UPS for a mining rig: do you need one, which type, and when it pays off</a></h3>
+    <p>A UPS guards against one-second flickers, not long blackouts. UPS types, watts vs volt-amps, pure sine wave, and when a voltage relay is enough.</p></li>
   </ul>
   </section>
 
@@ -78,6 +84,8 @@
     <p>The price drops and per-card revenue sinks below its electricity. Honest arithmetic, efficiency mode instead of chasing hashrate, when the rig should sleep — and why not to sell at the bottom.</p></li>
     <li><h3><a href="profit-math.html">How to compute mining profitability honestly</a></h3>
     <p>Revenue is gross; profit comes after electricity and fees. Formulas, a worked example, the classic self-deceptions and the <a href="calculator.html">calculator</a> with your own tariff.</p></li>
+    <li><h3><a href="hashrate-variance.html">Pool hashrate lower than rig hashrate: where the percent goes</a></h3>
+    <p>Reported vs effective: averaging windows, pool luck, stales and rejects. Which losses are normal, which are a red flag, and how to compare by days.</p></li>
   </ul>
   </section>
 
