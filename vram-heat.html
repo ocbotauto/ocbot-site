@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GDDR6X memory: why it runs hotter than the die and what to do about it</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="On GDDR6X cards the usual sensors mislead: the die reads cool while the memory is at its limit. What the memory hotspot is, how to see it, why thermal pads matter, and how memory clocks relate to heat.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GDDR6X memory: why it runs hotter than the die and what to do about it">
+<meta property="og:description" content="The die shows 70 while the memory is working at its ceiling: how the GDDR6X hotspot looks, how to measure it, when to change thermal pads, and what memory OC does to heat.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/vram-heat.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/vram-heat.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/vram-heat.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="vram-heat.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>GDDR6X memory: why it runs hotter than the die and what to do about it</h1>
+    <p class="lede">A community classic: sensors read "70 and below", miner looks calm — and a year later the card is tired, because the actual hotspot was not where anyone looked. On GDDR6X cards the hottest node is not the graphics die but the memory itself: high heat density and the worst path of escaping the board. Here is why, how to see the real memory temperature, and what an ordinary owner can do to cool it.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>GDDR6X runs hotter than the die.</strong> The PAM4 signaling scheme moves more data per clock and burns more power: more heat in the same little package than the GPU's core generates.</li>
+    <li><strong>The sensor you usually watch is the die's sensor.</strong> Many cards do not expose memory temperature at all, or expose it as a separate field (junction temperature) in advanced monitoring tools; miner logs often omit it entirely.</li>
+    <li><strong>Memory heat escapes through thermal pads.</strong> Factory pads that are thin or dried out leave the memory tens of degrees hotter than necessary; replacing pads is the single most effective non-overclocking "upgrade".</li>
+    <li><strong>Memory OC is a direct heater.</strong> Higher memory clocks mean higher memory power draw and temperature. Physics does not do exceptions — see our article on temperatures and lifespan.</li>
+    <li><strong>Overheating memory means errors and decay.</strong> Exact thresholds are not published by vendors, but "hot memory — slipping stability" is familiar to anyone who chased crashes in summer.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="why"><h2>Why the memory runs hotter</h2>
+  <p>Once upon a time the GPU die was the only hot node: GDDR5 was modest in its appetites. GDDR6X introduced PAM4 signaling: more data per clock than the classical scheme — faster, and... hotter. Add placement density: the memory chips sit shoulder-to-shoulder near the core, and their heat has to travel outward through a multilayered PCB.</p>
+  <p>The practical consequence: a card whose die reads 70 °C may carry memory at 90–100 °C — with everything on the surface looking "fine". Remember: the die temperature you see reflects a well-cooled heatsink plate; the memory underneath lives its own life.</p>
+  </section>
+
+  <section class="block" id="see"><h2>How to see the real memory temperature</h2>
+  <ol class="steps">
+    <li><h3>Look for the junction field</h3><p>On many GDDR6X cards, monitoring tools (HWiNFO64, several miners) expose "memory junction temperature" as a separate value. If the field exists — watch it, not the usual die temperature.</p></li>
+    <li><h3>Compare it with the die</h3><p>Memory 20–30 °C above the die is a normal GDDR6X picture. A wider gap means degraded pads and/or airflow.</p></li>
+    <li><h3>Watch the trend, not one value</h3><p>A single number is a moment; the interesting part is whether memory temperature is creeping up at the same overclock over weeks. Growth = cooling path degradation (see our <a href="fan-health.html">fans article</a>).</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="pads"><h2>Thermal pads: the memory's main "upgrade"</h2>
+  <p>Memory pushes its heat through pads into the cooler plate, and from there into the air. Factory pads are made as cheaply as possible: thin, stiff, low thermal conductivity. The result — the memory runs a dozen-plus degrees hotter than it could.</p>
+  <p>Replacing pads is the most effective non-tuning procedure for GDDR6X cards:</p>
+  <ul>
+    <li><strong>thickness matters</strong> — too thin and there is no contact, too thick and the gap is stressed; match it to the specific card;</li>
+    <li><strong>thermal conductivity is not marketing.</strong> The difference between "1 W/m·K" and "12 W/m·K" is real and visible in degrees;</li>
+    <li><strong>check the die's interface too</strong> — that one is paste, not pads; refreshing it in the same visit makes sense;</li>
+    <li><strong>dust and fans on schedule</strong> — a dusty heatsink nullifies even perfect pads.</li>
+  </ul>
+  <p>The procedure takes about an hour and usually surprises more than any OC: minus 10–15 °C on the memory is an ordinary, not extreme, result.</p>
+  </section>
+
+  <section class="block" id="clock"><h2>Memory OC and temperature: a direct link</h2>
+  <p>Raising memory frequency increases the memory's power draw and temperature — a miner may still choose to OC, but should know what it costs in heat. Practical guidance:</p>
+  <ul>
+    <li>find the point where hashrate no longer rises with memory: past it you add only heat;</li>
+    <li>in summer heat, backing off the memory overclock buys back degrees with almost no hashrate loss;</li>
+    <li>read it in combination: raised memory, memory temperature climbed without a hashrate gain — the point was unnecessary.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="auto"><h2>Where automation fits</h2>
+  <p>Nobody can watch memory around the clock; a human opens charts occasionally. That is the job of <a href="index.html">OCBot</a>: it tracks per-card metrics continuously and reports deviations from the normal run in Telegram. Our internal thresholds and reaction logic are implementation details we do not disclose publicly. What is worth knowing: cooling degradation is visible in trends long before a failure — and trends are exactly what automation tracks.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public knowledge about GDDR6X memory and thermal interfaces. Each card's exact temperature limits are in its specification. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon; their names are mentioned only to describe compatibility. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

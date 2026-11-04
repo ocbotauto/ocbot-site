@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mining rig risers: why they are the usual suspects in "random" failures</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A riser is the bridge between GPU and motherboard — and a classic source of "random" rig failures. Riser power (SATA vs 6-pin), the USB cable, seating in slots: how to test risers and cut half of the mysterious crashes.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mining rig risers: why they are the usual suspects in "random" failures">
+<meta property="og:description" content="Riser power delivery, cheap USB cables, loose seating: how exotic rig failures reduce to a cheap part — and how to test risers methodically.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/risers.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/risers.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/risers.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="risers.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Mining rig risers: why they are the usual suspects in "random" failures</h1>
+    <p class="lede">Six cards in a rig mean six risers: small boards that connect the cards to the motherboard through a USB cable. A part that costs lunch — and one of the most common sources of "magic": the card or the whole rig drops at night, with no pattern, and a reboot fixes it. Here is how a riser is built, where it fails, and how to rule it out of the suspect list. Public community experience only.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>A riser is not "just a cable".</strong> It converts PCIe x16 into x1 over a long run: link quality depends on the riser chip, the cable, and the power feed.</li>
+    <li><strong>Riser power is the key choice.</strong> A SATA connector is rated for 4.5 A total — marginal even for mid-range cards. A 6-pin (PCIe) feed is the sane default; "it survived on SATA" is a lottery.</li>
+    <li><strong>A cheap USB cable is the classic cause of overnight drop-offs.</strong> When the link goes, the card vanishes from the system entirely. Everyone knows the symptom: rig alive, half the cards showing zero.</li>
+    <li><strong>The fix costs pennies: swap cable, power connector, reseat everything</strong> — before you touch overclocking.</li>
+    <li><strong>Testing a riser = swapping parts.</strong> Exchange cable/riser/slot between cards and watch whether the problem moves with the part. Free and reliable.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="how"><h2>Anatomy of a riser and what breaks</h2>
+  <p>A standard mining riser is three parts: a board with a chip and a PCIe x16 socket, a short USB cable, and a dedicated power connector. The card's signal goes through the riser chip and the cable to an x1 slot on the motherboard, while the 12 V feed comes from the separate power connector (correctly so: an x1 slot cannot power a card under load by itself).</p>
+  <p>What fails:</p>
+  <ul>
+    <li><strong>poor contact in sockets.</strong> Dust, oxidation, incomplete seating of the card into the riser's x16 socket or of the riser into the motherboard's x1 slot. Typical symptom: the card appears and disappears;</li>
+    <li><strong>the cable.</strong> Cheap cables do not hold the signal: the link gets noisy and collapses under sustained load. You see no errors — the card simply disappears;</li>
+    <li><strong>power.</strong> Undervoltage or a bad contact in the power connector: the card runs but behaves unpredictably — reboots, failures at load peaks;</li>
+    <li><strong>the riser chip.</strong> No-name chips are consistently worse than certified solutions; the gap shows on overnight runs, not five-minute tests.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="power"><h2>Riser power: the choice that matters</h2>
+  <p>Per the SATA spec, the connector is rated about 1.5 A per contact (three 12 V contacts, ~4.5 A total) — that is the ceiling, not the operating point. Cards take tens of watts on the slot feed; a power-hungry card lives on a SATA-powered riser only with a wide margin. The community rule of thumb:</p>
+  <ul>
+    <li><strong>6-pin (PCIe) riser power is the default.</strong> Higher rated current, better contact, straight from the PSU;</li>
+    <li><strong>SATA is acceptable for power-light cards</strong> — and even then with thick (non-split) runs and a hand check of connector heat;</li>
+    <li><strong>never take 12 V for a riser from a Molex branch</strong> already carrying other devices: Molex daisy-chains are a source of voltage drops.</li>
+  </ul>
+  <p>Connector warmth is a free sensor: warm is normal, hot (uncomfortable for a finger) is a warning. A melted riser connector is a classic cause of "a rig that reboots out of nowhere" (more in our <a href="psu-budget.html">PSU article</a>).</p>
+  </section>
+
+  <section class="block" id="check"><h2>How to rule the riser out: test order</h2>
+  <ol class="steps">
+    <li><h3>Swap parts by links</h3><p>Card + cable + riser + slot — four links. Put another card in the same riser: if the trouble moved with the card, it is the card; if it stayed, it is the cable–riser–slot chain.</p></li>
+    <li><h3>Change one thing at a time</h3><p>Replace the cable, then the riser, then consider the motherboard slot. One change per step tells you exactly who is guilty.</p></li>
+    <li><h3>Check seating and dust</h3><p>Reseat the card in the riser socket and the riser in the motherboard; blow out the slots. Half of "dead risers" are cured by reseating.</p></li>
+    <li><h3>Read the connector by hand</h3><p>Warm is fine, hot means bad contact or an overloaded run. Move the power line to another PSU branch and check again in an hour.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>Why "overnight drop-off" is the riser's signature</h2>
+  <p>Link failures depend on temperature (contacts expand) and on voltage sag under load. Recognition pattern: the rig is alive, the miner runs, but some cards sit at zero — or the rig reboots, and a restart "fixes" it until next time. Automation does not replace hardware swaps — it is needed for another reason: <a href="index.html">OCBot</a> reports dropped cards in Telegram immediately, not at noon, and avoids pointless reboots when the failure yields to a lighter intervention. The rest is your swap-by-order above.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice (connector current ratings, community rules of thumb); riser brands are deliberately not named. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Mains-level work requires care; use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

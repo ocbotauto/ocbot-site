@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mining pools: fees, payouts, and what is subtracted between rig and wallet</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Pool fees, payout schemes (PPS/PPLNS), minimum payout thresholds, network and exchange fees: how much actually reaches the wallet. How to compare pools by facts, not by marketing numbers.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mining pools: fees, payouts, and what is subtracted between rig and wallet">
+<meta property="og:description" content="Site revenue and wallet deposits are different numbers. Pool fee, PPLNS vs PPS, min-payout thresholds and withdrawal fees: what eats the difference and how to compare pools honestly.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/pool-fees.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/pool-fees.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/pool-fees.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="pool-fees.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Mining pools: fees, payouts, and what is subtracted between rig and wallet</h1>
+    <p class="lede">The rig generates revenue, but less arrives in the wallet — the pool, the network and the exchange each take their cut along the way, each with its own rules. The gap between the "revenue" on mining sites and "what actually arrived" is normally a few percent; over a farm's year it is real money. Here is a breakdown of every deduction and a sane way to compare pools.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>The pool charges a fee on revenue</strong> — typically 1–2%; it is usually printed in small print next to the "0 fee" banner.</li>
+    <li><strong>The payout scheme (PPS vs PPLNS) changes the smoothness</strong> of income and the risk of "empty" windows, but not the long-run sum — pick by stability, not "more right now".</li>
+    <li><strong>Minimum payout and withdrawal fees are hidden costs.</strong> Withdrawing small balances costs proportionally more: part of the revenue goes into network transfer fees.</li>
+    <li><strong>The pool's uptime is also a cost</strong>: while it is unreachable, shares are lost and nothing compensates them.</li>
+    <li><strong>Compare pools by the wallet, not by websites.</strong> Two pools with identical fees produce different facts; count from a month of actual deposits.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="chain"><h2>The coin's journey: who deducts what</h2>
+  <p>The coin passes through four links, and each can lose some:</p>
+  <ol class="steps">
+    <li><h3>The pool</h3><p>Aggregates the hashrate of thousands of miners, finds blocks and splits their revenue. It takes a fee (usually 1–2%) and sometimes charges for early withdrawals. There are "0%" pools — read their mechanics: a zero fee usually hides other income sources or less favorable schemes.</p></li>
+    <li><h3>The coin's network</h3><p>Transferring from the wallet costs a network fee; at small withdrawal amounts it becomes a noticeable share of the sum.</p></li>
+    <li><h3>The exchange</h3><p>Converting the coin to fiat — another fee plus the price spread. Withdrawal speed and limits depend on the venue; compare in advance.</p></li>
+    <li><h3>The rig's time</h3><p>Downtime is not a line in the bill, but a direct loss of revenue; its price is broken down in our <a href="profit-math.html">profitability article</a>.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="schemes"><h2>PPLNS vs PPS: the practical difference</h2>
+  <p>Payout schemes define how the pool splits block revenue among miners:</p>
+  <ul>
+    <li><strong>PPS (Pay-Per-Share)</strong> — pays for every share immediately, regardless of whether the pool found a block. Smooth, predictable income; the fee is usually slightly higher;</li>
+    <li><strong>PPLNS (Pay-Per-Last-N-Shares)</strong> — splits the revenue of actually found blocks. Averaged over distance, income is close to PPS, but individual windows may be empty or rich — the revenue "wobbles" more.</li>
+  </ul>
+  <p>Practical takeaway: a small farm usually finds PPS more comfortable (predictability); over a long horizon the options are comparable — count your own numbers from monthly payouts.</p>
+  </section>
+
+  <section class="block" id="threshold"><h2>Min-payout and withdrawal fees: the quiet costs</h2>
+  <p>Every pool has a minimum balance for withdrawal. The network fee is roughly the same regardless of the amount — so ten withdrawals of 5 coins cost more than one withdrawal of 50. On small balances, the transfer fee can eat a noticeable share of revenue.</p>
+  <ul>
+    <li>accumulate to a larger amount if the price is not critical — you pay the network fee less often;</li>
+    <li>if the pool charges for early withdrawal — calculate whether it pays off at your volume;</li>
+    <li>check whether the min-payout changes by tier or over time — that is part of the "fee" too.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="compare"><h2>How to compare pools honestly</h2>
+  <ol class="steps">
+    <li><h3>Count by facts, not by websites</h3><p>Stay on two pools for at least a couple of weeks and compare wallet deposits with an identical rig. Identical "paper" fees produce different facts because of schemes and lost blocks.</p></li>
+    <li><h3>Compare monitoring comfort too</h3><p>Each pool has its own web interface and status pages; the difference between "updates once a minute" and "once an hour" is a real difference in daily experience.</p></li>
+    <li><h3>Another factor: uptime and server proximity</h3><p>A pool with good uptime and servers near you loses fewer shares — especially relevant on unstable internet.</p></li>
+  </ol>
+  </section>
+
+  <section class="block" id="auto"><h2>The bot's part in this</h2>
+  <p>Choosing a pool is your decision; the bot does not make it for you. Its role is not losing what you have already earned: <a href="index.html">OCBot</a> prevents the rig from silently idling and reports failures in Telegram. And folding every pool deduction into profit is the job of the <a href="calculator.html">calculator</a>, with your own tariff and a clean per-card line.</p>
+  </section>
+
+  <p class="legal">This article is general information about mining pool mechanics; fees and payout schemes at specific pools change over time — check their terms. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon, and does not recommend specific pools. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
