@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вторая ферма: что меняется при масштабировании</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Вторая ферма — это не «в два раза больше того же». Что масштабируется плохо (электрика, тепло, шум), что — хорошо (знания, пресеты, запчасти) и чек-лист перед покупкой второго рига.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Вторая ферма: что меняется при масштабировании">
+<meta property="og:description" content="Квартира имеет потолок по киловаттам, а вы — по времени. Что реально удваивается при второй ферме, а что удваивать не нужно, и почему сначала стабилизируют первую.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/scaling.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/scaling.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/scaling.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="scaling.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Вторая ферма: что меняется при масштабировании</h1>
+    <p class="lede">Первый риг работает, доход капает, руки чешутся взять второй. Логично — но вторая ферма не равна «первая умножить на два». Часть вещей масштабируется бесплатно, часть упирается в жёсткие физические лимиты квартиры, а часть превращается в отдельную работу. Разберём по порядку, чтобы второй риг приносил доход, а не удвоенные проблемы.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Электрика масштабируется хуже всего.</strong> У квартиры есть физический потолок по киловаттам — узнайте свой до покупки карт, а не после.</li>
+    <li><strong>Сначала стабилизируйте первую ферму.</strong> Копия нестабильного рига — это два нестабильных рига и вдвое больше ночных отвалов.</li>
+    <li><strong>Знания и пресеты масштабируются бесплатно:</strong> вторая ферма на тех же картах настраивается в разы быстрее первой.</li>
+    <li><strong>Тепло и шум удваиваются полностью.</strong> Если один риг уже «под шумок», два не влезут ни в комнату, ни в семью.</li>
+    <li><strong>Запчасти начинают окупаться:</strong> с двумя ригами держать запасной райзер, кабель и вентилятор уже не паранойя, а норма.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="hard"><h2>Что масштабируется плохо: электрика, тепло, шум</h2>
+  <p>Три лимита, которые не двигаются деньгами на карты:</p>
+  <ul>
+    <li><strong>Лимит сети.</strong> Квартира со стандартным вводом держит постоянную нагрузку в считанные киловатты. Один риг на 1,5 кВт — нормально, два — уже на грани бытовой проводки, особенно с бойлером и кондиционером. Считайте бюджет по нашей <a href="rig-wiring.ru.html">статье про электрику</a> и при необходимости тяните отдельную линию до покупки.</li>
+    <li><strong>Тепло.</strong> Два рига — это два обогревателя по полтора киловатта. Летом комната без вытяжки станет необитаемой (решения — в <a href="summer-heat.ru.html">летней статье</a>).</li>
+    <li><strong>Шум.</strong> Децибелы не складываются линейно, но два рига слышно почти вдвое лучше одного. Если первый стоит в жилой комнате, второй туда уже не поставить — думайте о месте заранее (варианты — в <a href="rig-relocation.ru.html">статье про переезд</a>, шум — в <a href="rig-noise.ru.html">статье про тишину</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="easy"><h2>Что масштабируется хорошо: знания, пресеты, запчасти</h2>
+  <p>Приятная часть масштабирования — почти всё интеллектуальное бесплатно:</p>
+  <ul>
+    <li><strong>пресеты.</strong> Разгон подобран под модель и память карты, а не под конкретный экземпляр навсегда: вторая ферма на тех же картах стартует с готовых проверенных точек. Наш <a href="catalog.ru.html">каталог</a> как раз про это;</li>
+    <li><strong>опыт диагностики.</strong> Ночной отвал на втором риге вы разберёте за минуты — чек-листы уже есть (от <a href="rig-freezes.ru.html">зависаний</a> до <a href="risers.ru.html">райзеров</a>);</li>
+    <li><strong>запчасти.</strong> Один запасной райзер и пара кабелей страхуют уже два рига — стоимость страховки на риг падает вдвое;</li>
+    <li><strong>инфраструктура.</strong> Роутер, мониторинг, калькулятор тарифа — общие на всё хозяйство.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="checklist"><h2>Чек-лист перед второй фермой</h2>
+  <ul>
+    <li><strong>Первая ферма стабильна месяц+</strong> без ручных вмешательств. Если нет — сначала добейте её: удвоить хаос легко, разбирать его вдвойне дороже.</li>
+    <li><strong>Электрика посчитана:</strong> суммарная нагрузка с запасом, линии и автоматы известны, розетки проверены.</li>
+    <li><strong>Место решено:</strong> куда девать тепло и шум второго рига — до его покупки.</li>
+    <li><strong>Управление не привязано к вашему присутствию:</strong> перезагрузка, смена пресетов, уведомления — всё должно делаться удалённо, иначе два рига привяжут вас к дому.</li>
+    <li><strong>Доход посчитан честно:</strong> по своему тарифу и текущей сложности (<a href="difficulty.ru.html">про сложность сети</a> и <a href="profit-math.ru.html">как считать</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Ручной подход масштабируется хуже всего: два рига руками — это вдвое больше подборов, проверок и ночных поездок. <a href="index.ru.html">OCBot</a> ставится на каждый риг, а управляется всё из одного Telegram: подбор разгона, реакция на сбои, уведомления — по каждой ферме отдельно. Пресеты хороших карт переезжают между ригами, так что вторая ферма настраивается в разы быстрее первой — это и есть правильное масштабирование.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные решения зависят от вашей проводки, помещения и тарифа. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

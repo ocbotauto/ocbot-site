@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A second mining rig: what actually changes when you scale</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A second rig is not &quot;twice the same thing&quot;. What scales badly (wiring, heat, noise), what scales for free (knowledge, presets, spares), and a checklist to run before buying rig number two.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A second mining rig: what actually changes when you scale">
+<meta property="og:description" content="An apartment has a kilowatt ceiling, and you have a time ceiling. What truly doubles with a second rig, what does not need doubling, and why rig one gets stabilized first.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/scaling.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/scaling.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/scaling.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="scaling.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>A second mining rig: what actually changes when you scale</h1>
+    <p class="lede">The first rig runs, revenue drips in, and the hands itch for a second one. Fair enough — but a second rig is not "the first one times two". Some things scale for free, some hit the hard physical limits of your home, and some turn into a separate job. Let's go through it in order, so rig number two brings revenue instead of doubled problems.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Wiring scales the worst.</strong> A home has a physical kilowatt ceiling — learn yours before buying cards, not after.</li>
+    <li><strong>Stabilize the first rig first.</strong> A copy of an unstable rig is two unstable rigs and twice the midnight failures.</li>
+    <li><strong>Knowledge and presets scale for free:</strong> a second rig on the same cards gets configured several times faster than the first.</li>
+    <li><strong>Heat and noise double completely.</strong> If one rig is already "barely tolerated", two will fit neither the room nor the family.</li>
+    <li><strong>Spare parts start paying off:</strong> with two rigs, keeping a spare riser, cable and fan stops being paranoia and becomes normal.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="hard"><h2>What scales badly: wiring, heat, noise</h2>
+  <p>Three limits that money spent on cards cannot move:</p>
+  <ul>
+    <li><strong>The grid limit.</strong> A standard home connection holds a continuous load of a few kilowatts. One 1.5 kW rig is fine; two already push household wiring to the edge, especially with a water heater and AC. Work out the budget with our <a href="rig-wiring.html">wiring article</a> and run a dedicated circuit before buying, if needed.</li>
+    <li><strong>Heat.</strong> Two rigs are two 1.5 kW heaters. In summer a room without exhaust becomes uninhabitable (solutions in the <a href="summer-heat.html">summer article</a>).</li>
+    <li><strong>Noise.</strong> Decibels do not add linearly, but two rigs are almost twice as audible. If rig one lives in a living room, rig two will not fit there — plan the location early (options in the <a href="rig-relocation.html">relocation article</a>, noise in the <a href="rig-noise.html">quiet article</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="easy"><h2>What scales well: knowledge, presets, spares</h2>
+  <p>The pleasant side of scaling — almost everything intellectual is free:</p>
+  <ul>
+    <li><strong>presets.</strong> An overclock is tuned to the card model and memory, not bound to one specific card forever: a second rig on the same cards starts from proven working points. Our <a href="catalog.html">catalog</a> is exactly about that;</li>
+    <li><strong>diagnostic experience.</strong> You will dissect a midnight failure on the second rig in minutes — the checklists exist already (from <a href="rig-freezes.html">hangs</a> to <a href="risers.html">risers</a>);</li>
+    <li><strong>spare parts.</strong> One spare riser and a couple of cables now insure two rigs — the insurance cost per rig halves;</li>
+    <li><strong>infrastructure.</strong> The router, monitoring and tariff calculations are shared across the whole operation.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="checklist"><h2>The pre-second-rig checklist</h2>
+  <ul>
+    <li><strong>Rig one stable for a month+</strong> without manual intervention. If not — finish it first: doubling chaos is easy, untangling it costs twice as much.</li>
+    <li><strong>Wiring calculated:</strong> total load with headroom, circuits and breakers known, outlets checked.</li>
+    <li><strong>Location solved:</strong> where the second rig's heat and noise go — decided before the purchase.</li>
+    <li><strong>Management untied from your presence:</strong> reboots, preset changes, notifications — all must work remotely, or two rigs will chain you to the house.</li>
+    <li><strong>Revenue counted honestly:</strong> at your tariff and current difficulty (<a href="difficulty.html">on network difficulty</a> and <a href="profit-math.html">how to count</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>The manual approach scales worst of all: two rigs by hand means twice the tuning, twice the checks, twice the midnight drives. <a href="index.html">OCBot</a> installs per rig, and everything is managed from one Telegram: overclock tuning, failure handling, notifications — per farm, separately. Good presets travel between rigs, so the second one gets configured several times faster than the first — that is what proper scaling looks like.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual decisions depend on your wiring, space and tariff. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

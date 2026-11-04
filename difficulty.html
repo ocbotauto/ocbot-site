@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Network difficulty: why revenue drops at the same hashrate</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="The rig is unchanged, yet fewer coins arrive — network difficulty is to blame. What it is in plain terms, why it chases the price upward, and how to track coin revenue separately from price.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Network difficulty: why revenue drops at the same hashrate">
+<meta property="og:description" content="Your slice of the pie is your hashrate divided by the network's. The network grows — your slice shrinks, even with a perfect rig. How to track it and what you can actually do.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/difficulty.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/difficulty.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/difficulty.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="difficulty.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Network difficulty: why revenue drops at the same hashrate</h1>
+    <p class="lede">A familiar picture: the rig untouched, hashrate the same, temperatures normal — yet fewer coins arrive than last month. The first suspicion falls on the pool, the miner, "something broke". Usually nothing broke: the network difficulty went up. Let's cover what it is, why it almost always grows, and what you can actually do about it.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Your coin revenue = your hashrate divided by the network's hashrate.</strong> The network grew — your slice shrank, even with a perfect rig.</li>
+    <li><strong>Difficulty almost always follows price upward.</strong> A coin appreciates → more miners join → everyone gets less.</li>
+    <li><strong>Track revenue in coins and in money separately.</strong> "Fewer coins" and "less money" are different stories with different causes.</li>
+    <li><strong>The difficulty chart is an indicator like the price chart.</strong> Checking it weekly is normal, not paranoia.</li>
+    <li><strong>The only thing you control is the numerator:</strong> your own hashrate and uptime. Everything else is weather.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="what"><h2>What difficulty is, in plain terms</h2>
+  <p>Every coin's network is built so that blocks are found on a schedule — say, once a minute — no matter how many miners are working. If twice as many miners join, the network simply makes the task twice as "hard", and the schedule holds. That self-adjusting parameter is difficulty.</p>
+  <p>The block reward, meanwhile, is fixed by the protocol. So the total daily "pie" is roughly constant, and your slice is your share of the global hashrate. A rig delivers a steady 600, the network grows from 200 Th/s to 240 — your coin revenue drops 17% without you touching a single setting. All fair: there are simply more eaters.</p>
+  </section>
+
+  <section class="block" id="why"><h2>Why difficulty grows — and when it falls</h2>
+  <p>Difficulty is a mirror of the crowd. The mechanics are simple:</p>
+  <ul>
+    <li><strong>price rises</strong> → mining pays better → new cards and ASICs join → difficulty chases the price, usually lagging by days to weeks;</li>
+    <li><strong>price falls</strong> → the rigs with the most expensive power shut down → difficulty drops, and the survivors' share grows back a little (covered in the <a href="crypto-winter.html">winter article</a>);</li>
+    <li><strong>new hardware</strong> → the launch of more efficient cards or devices raises network hashrate even without a price rally.</li>
+  </ul>
+  <p>The key conclusion: "my rig mines X coins a day" is not a constant but a function of two variables. The second one is out of your hands.</p>
+  </section>
+
+  <section class="block" id="todo"><h2>What to do about it</h2>
+  <ul>
+    <li><strong>Keep books in coins.</strong> Revenue in money is a product of two random variables; the coin figure shows the erosion of your share. If coins decline for months, that is difficulty, not a breakdown.</li>
+    <li><strong>Compare coins against each other</strong> by revenue on your hardware, not by hype. That is what a <a href="calculator.html">calculator</a> with an honest formula is for (how to count — <a href="profit-math.html">here</a>).</li>
+    <li><strong>Hold the numerator.</strong> The only lever you have is your own hashrate and uptime: a stable overclock, minimal downtime, no hours of "lying silent".</li>
+    <li><strong>Do not chase reconfigurations.</strong> Switching coins every week over difficulty moves means paying in downtime and fees for an imaginary gain.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>Against network difficulty a bot is powerless — that is weather. But your share is hashrate multiplied by time at work, and that is where automation decides: <a href="index.html">OCBot</a> keeps the cards on a stable overclock and handles crashes and hangs by itself, bringing the rig back within minutes. Hours of "the rig hung while everyone slept" are the same lost slice of the pie — except that one can actually be saved.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual numbers depend on the coin, the network and your tariff. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

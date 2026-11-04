@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сложность сети: почему доход падает при том же хешрейте</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Риг не изменился, а монет стало меньше — виновата сложность сети. Что это такое на пальцах, почему она растёт после роста курса, и как считать доход в монетах отдельно от курса.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Сложность сети: почему доход падает при том же хешрейте">
+<meta property="og:description" content="Ваш кусок пирога — это ваш хешрейт, делённый на хешрейт всей сети. Сеть растёт — кусок тает, даже если риг работает идеально. Как это отслеживать и что реально можно сделать.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/difficulty.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/difficulty.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/difficulty.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="difficulty.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Сложность сети: почему доход падает при том же хешрейте</h1>
+    <p class="lede">Знакомая картина: риг не трогали, хешрейт тот же, температура в норме — а монет приходит меньше, чем в прошлом месяце. Первое подозрение падает на пул, на майнер, на «что-то сломалось». Обычно не сломалось ничего: просто выросла сложность сети. Разберём, что это, почему она почти всегда растёт и что с этим можно сделать.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Ваш доход в монетах = ваш хешрейт, поделённый на хешрейт всей сети.</strong> Сеть выросла — ваша доля уменьшилась, даже если риг идеален.</li>
+    <li><strong>Сложность почти всегда растёт за ценой.</strong> Монета дорожает → майнеров становится больше → каждому достаётся меньше.</li>
+    <li><strong>Считайте доход в монетах и в деньгах отдельно.</strong> «Монет стало меньше» и «стало меньше денег» — разные истории с разными причинами.</li>
+    <li><strong>График сложности — такой же показатель, как курс.</strong> Смотреть на него раз в неделю — норма, а не паранойя.</li>
+    <li><strong>Единственное, что вы контролируете — числитель:</strong> свой хешрейт и время работы. Всё остальное — погода.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="what"><h2>Что такое сложность, на пальцах</h2>
+  <p>Сеть любой монеты устроена так, чтобы блоки находились по расписанию — например, раз в минуту, независимо от того, сколько майнеров работает. Если майнеров стало вдвое больше, сеть просто делает задачу вдвое «труднее», и расписание сохраняется. Этот самонастраивающийся параметр и есть сложность.</p>
+  <p>Награда за блок при этом фиксирована протоколом. Значит, общий «пирог» в сутки примерно постоянен, а ваш кусок — это ваша доля в общем хешрейте. Риг выдаёт стабильные 600, сеть выросла с 200 Th/s до 240 — ваш доход в монетах упал на 17%, хотя вы не меняли ни единой настройки. Всё честно: просто едоков стало больше.</p>
+  </section>
+
+  <section class="block" id="why"><h2>Почему сложность растёт — и когда падает</h2>
+  <p>Сложность — это отражение толпы. Механика простая:</p>
+  <ul>
+    <li><strong>курс растёт</strong> → майнить выгоднее → к сети подключаются новые карты и асики → сложность растёт вслед за ценой, обычно с запазданием в дни-недели;</li>
+    <li><strong>курс падает</strong> → самые дорогие по электричеству риги гаснут → сложность снижается, и у выживших доля чуть отрастает (об этом — <a href="crypto-winter.ru.html">статья про зиму</a>);</li>
+    <li><strong>новое железо</strong> → выход более эффективных карт или устройств поднимает сетевой хешрейт даже без роста цены.</li>
+  </ul>
+  <p>Важный вывод: «мой риг добывает X монет в сутки» — не константа, а функция от двух переменных. Вторая из них вам неподконтрольна.</p>
+  </section>
+
+  <section class="block" id="todo"><h2>Что с этим делать</h2>
+  <ul>
+    <li><strong>Ведите учёт в монетах.</strong> Доход в рублях — произведение двух случайных величин; в монетах видно именно деградацию доли. Если монет падает месяцами — это сложность, а не поломка.</li>
+    <li><strong>Сравнивайте монеты между собой</strong> по доходу на вашем железе, а не по «хайпу». Для этого и нужен <a href="calculator.ru.html">калькулятор</a> с честной формулой (как считать — <a href="profit-math.ru.html">здесь</a>).</li>
+    <li><strong>Держите числитель.</strong> Единственный доступный рычаг — ваш собственный хешрейт и аптайм: стабильный разгон, минимум простоев, никаких часов «лежал молча».</li>
+    <li><strong>Не гонитесь за перестройками.</strong> Менять монету каждую неделю из-за движения сложности — значит платить простоями и комиссиями за мнимый выигрыш.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Против сложности сети бот бессилен — это погода. Но ваша доля — это хешрейт, умноженный на время в работе, и вот тут решает автоматика: <a href="index.ru.html">OCBot</a> держит карты на стабильном разгоне, а сбои и зависания обрабатывает сам, возвращая риг в работу за минуты. Часы «риг висел, пока все спали» — это та же потерянная доля пирога, только её можно не терять.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные цифры зависят от монеты, сети и вашего тарифа. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
