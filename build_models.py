@@ -52,6 +52,17 @@ def num(v, d):
     return "—" if v is None else f"{float(v):.{d}f}"
 
 
+# Единица хэшрейта на странице определяется алгоритмом — по его hashrate_to_hs из network.json
+# (pearl/pearlhash = 1e12 → TH/s, noid = 1e6 → MH/s и т.д.). Раньше "TH/s" был захардкожен
+# для всех алгоритмов, и у noid (реально MH/s) подпись в таблице и графиках была неверной.
+UNIT_BY_SCALE = {1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s"}
+
+
+def algo_unit(algo, network):
+    n = (network or {}).get(algo) or {}
+    return UNIT_BY_SCALE.get(n.get("hashrate_to_hs"), "TH/s")
+
+
 def coins_per_day(en, network):
     n = network.get(en.get("algo"))
     if not n or not en.get("hashrate"):
@@ -71,7 +82,7 @@ def row(en, lang, network):
         lock = f"<br><i>{word}</i> {e(b.get('core_lock') or '—')} / {e(b.get('mem_lock') or '—')} {unit_mhz}"
     else:
         lock = ""
-    unit_h, unit_w = ("TH/s", "Вт") if lang == "ru" else ("TH/s", "W")
+    unit_h, unit_w = algo_unit(en.get("algo"), network), ("Вт" if lang == "ru" else "W")
     was = ""
     was_word = "было" if lang == "ru" else "was"
     if en.get("stock_hashrate"):
@@ -246,9 +257,13 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
     t = CURVE_TXT[lang]
     network = network or {}
     curves = sorted(curves, key=lambda g: (-g["cards"], -max(sum(1 for r in g["axes"][a]["rows"] if r["ok"]) for a in ("core", "mem"))))
+    # Подпись единицы в плитках калькулятора одна на секцию — берём от первой (показываемой по
+    # умолчанию) кривой; графики и таблицы каждой кривой подписываются своей единицей ниже.
+    unit_h = algo_unit(curves[0]["algo"], network)
     opts, panes, data = [], [], []
     for gi, g in enumerate(curves):
         g["_i"] = gi
+        gu = algo_unit(g["algo"], network)
         label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {_cards_word(g["cards"], lang)}'
         opts.append(f'<option value="{gi}">{e(label)}</option>')
         okn = {a: sum(1 for r in g["axes"][a]["rows"] if r["ok"]) for a in ("core", "mem")}
@@ -258,8 +273,8 @@ def curve_section(curves, lang, network=None, unit_h="TH/s"):
         g["axis"] = max(axes_ok, key=lambda a: (okn[a], a == "core"))
         for axis in axes_ok:
             hidden = "" if (gi == 0 and axis == g["axis"]) else " hidden"
-            panes.append(f'<div class="cpane" data-g="{gi}" data-axis="{axis}"{hidden}>{_curve_chart(g, axis, lang, unit_h)}'
-                         f'<details class="ctable" open><summary>{e(t["table"])}</summary>{_curve_table(g, axis, lang, unit_h)}</details></div>')
+            panes.append(f'<div class="cpane" data-g="{gi}" data-axis="{axis}"{hidden}>{_curve_chart(g, axis, lang, gu)}'
+                         f'<details class="ctable" open><summary>{e(t["table"])}</summary>{_curve_table(g, axis, lang, gu)}</details></div>')
         n = network.get(g["algo"])
         net = None
         if n:
@@ -412,10 +427,13 @@ def ocmap_section(curves, lang, network, model_name, unit_h="TH/s"):
         return curve_section(curves, lang, network)
     t = CURVE_TXT[lang]
     groups = sorted(groups, key=lambda g: (-g["cards"], -len(g["pts"])))
+    # Единица секции — от первой (показываемой по умолчанию) группы; каждой группе в blob
+    # дополнительно кладём её собственную единицу (для будущего переключения в ocmap.js).
+    unit_h = algo_unit(groups[0]["algo"], network)
     data = []
     for g in groups:
         label = f'{g["algo"]} · {mname(g["miner"])} {g["miner_version"]} · {g["cards"]} {_cards_word(g["cards"], lang)}'
-        data.append({"id": f'{g["algo"]}|{g["miner"]}|{g["miner_version"]}', "label": label, "cards": g["cards"],
+        data.append({"id": f'{g["algo"]}|{g["miner"]}|{g["miner_version"]}', "label": label, "cards": g["cards"], "unit": algo_unit(g["algo"], network),
                      "boards": g.get("boards") or None, "pts": g["pts"], "net": _net_k(network, g["algo"])})
     blob = json.dumps({"lang": lang, "model": model_name, "unit": unit_h, "groups": data}, ensure_ascii=False,
                       separators=(",", ":")).replace("</", "<\\/")

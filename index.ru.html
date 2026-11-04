@@ -178,6 +178,9 @@ python3 -m ocbot --config config.json --self-update</pre>
       e.sort(function (a, b) { return b.efficiency - a.efficiency; });
       document.getElementById("liveSub").textContent = "Моделей: " + Object.keys(models).length + " · карт в данных: " + cards + " · присылают боты с ригов, без UUID и имён.";
       var top3 = e.slice(0, 3);
+      // Единица хэшрейта зависит от алгоритма (pearl = TH/s, noid = MH/s — по hashrate_to_hs из network.json).
+      var UNIT_BY_SCALE = { 1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s" };
+      function effUnitOf(x) { var n = network[x.algo]; return ((n && UNIT_BY_SCALE[n.hashrate_to_hs]) || "TH/s").split("/")[0] + "/Вт"; }
       function coinsPerDay(x) {
         var n = network[x.algo];
         if (!n || !x.hashrate) return null;
@@ -193,7 +196,7 @@ python3 -m ocbot --config config.json --self-update</pre>
             : !price ? '<div class="rev"><span class="na">курс загружается…</span></div>'
             : '<div class="rev"><span>доход, за сутки</span><b>' + (cpd * price).toFixed(2) + ' ₽</b></div>';
           return "<div><div class=\"meta\"><small>№" + (i + 1) + " по эффективности</small><b><a class=\"mlink\" href=\"" + slugOf(x) + ".ru.html\">" + esc(String(x.model).replace(/^(NVIDIA\s+)?(GeForce\s+)?/i, "")) + "</a></b><span class=\"v\">" +
-            x.efficiency.toFixed(3) + " TH/Вт</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " Вт</small></div>" + revBlock + "</div>";
+            x.efficiency.toFixed(3) + " " + effUnitOf(x) + "</span><small>core " + sg(x.best.core) + " · mem " + sg(x.best.mem) + " · PL " + Math.round(x.best.pl) + " Вт</small></div>" + revBlock + "</div>";
         }).join("");
         document.getElementById("live").className = "live on";
       });

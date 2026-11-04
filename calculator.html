@@ -183,6 +183,10 @@
     }
 
     function netw(e) { return state.network[e.algo] || null; }
+    // Единица хэшрейта зависит от алгоритма (pearl = TH/s, noid = MH/s — по hashrate_to_hs из network.json).
+    var UNIT_BY_SCALE = { 1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s" };
+    function unitOf(e) { var n = netw(e); return (n && UNIT_BY_SCALE[n.hashrate_to_hs]) || "TH/s"; }
+    function effUnit(e) { return unitOf(e).split("/")[0] + "/W"; }
     function coinsPerDay(e, qty) {
       var n = netw(e);
       if (!n || !e.hashrate) return null;
@@ -190,7 +194,7 @@
       return (hs / n.nethash_hs) * (86400 / n.block_time_s) * n.block_reward;
     }
 
-    var tCards = 0, tHash = 0, tPow = 0, tRev = null, tProfit = null, anyRev = false;
+    var tCards = 0, tHash = 0, tPow = 0, tRev = null, tProfit = null, anyRev = false, tUnits = {};
     function tr(e) {
       var k = keyOf(e), qty = state.qty[k] || 0;
       var coin = state.coinmap[e.algo] || null;
@@ -200,7 +204,7 @@
       var revDay = cpd != null && price != null ? cpd * price : null;
       var profitDay = revDay != null ? revDay - (elDay || 0) : null;
       if (qty > 0) {
-        tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty;
+        tCards += qty; tHash += (e.hashrate || 0) * qty; tPow += (e.power_w || 0) * qty; tUnits[unitOf(e)] = 1;
         if (revDay != null) { anyRev = true; tRev = (tRev || 0) + revDay * qty; tProfit = (tProfit || 0) + profitDay * qty; }
       }
       var priceCell = !coin ? '<span class="price-na">coin unknown</span>'
@@ -210,10 +214,10 @@
         : revDay == null ? '<span class="price-na">loading price</span>'
         : '<b>' + fmtCur(revDay, 2) + '</b>' + (profitDay != null ? '<span class="cost">profit ≈ ' + fmtCur(profitDay, 2) + '/day per card</span>' : '');
       return '<tr' + (qty ? ' class="sel"' : '') + '><td class="mdl"><b>' + esc(clean(e.model)) + '</b><small>' + esc(e.algo) + ' / ' + esc(e.miner) + (e.mem_vendor ? ' · ' + esc(e.mem_vendor) : '') + '</small></td>' +
-        '<td class="num" data-l="Hashrate, per card">' + num(e.hashrate, 1) + ' <small>TH/s</small></td>' +
+        '<td class="num" data-l="Hashrate, per card">' + num(e.hashrate, 1) + ' <small>' + unitOf(e) + '</small></td>' +
         '<td class="num" data-l="Power draw, per card">' + num(e.power_w, 0) + ' <small>W</small>' +
         (elDay != null ? '<span class="cost">≈ ' + fmtCur(elDay, 2) + '/day per card</span>' : '') + '</td>' +
-        '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/W</small></td>' +
+        '<td class="num effcell" data-l="Efficiency"><span class="good">' + num(e.efficiency, 3) + '</span> <small>' + effUnit(e) + '</small></td>' +
         '<td class="num" data-l="Coin price">' + priceCell + '</td>' +
         '<td class="num" data-l="Revenue, per day per card">' + revCell + '</td>' +
         '<td class="num" data-l="Cards you have"><input type="number" class="qty" min="0" max="500" step="1" value="' + qty + '" data-key="' + esc(k) + '" aria-label="Number of ' + esc(clean(e.model)) + ' cards"></td>' +
@@ -224,7 +228,8 @@
 
     $("totals").hidden = tCards === 0;
     $("t-cards").textContent = tCards;
-    $("t-hash").textContent = tCards ? num(tHash, 1) + " TH/s" : "—";
+    var tUnit = Object.keys(tUnits);
+    $("t-hash").textContent = tCards ? num(tHash, 1) + (tUnit.length === 1 ? " " + tUnit[0] : "") : "—";
     $("t-pow").textContent = tCards ? num(tPow, 0) + " W" : "—";
     $("t-el").textContent = tCards && kwh ? fmtCur(tPow * 24 / 1000 * kwh, 2) : "—";
     $("t-rev").textContent = anyRev ? fmtCur(tRev, 2) : "—";

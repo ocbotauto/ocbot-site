@@ -228,7 +228,7 @@
     $("kpi").innerHTML = '<div role="listitem"><b>' + Object.keys(models).length + '</b><span>моделей карт</span></div>' +
       '<div role="listitem"><b>' + cardsN + '</b><span>карт в данных</span></div>' +
       '<div role="listitem"><b>' + d.entries.length + '</b><span>проверенных пресетов</span></div>' +
-      '<div role="listitem"><b>' + (best ? num(best.efficiency, 3) : "—") + '</b><span>лучшая эффективность, TH/Вт</span></div>';
+      '<div role="listitem"><b>' + (best ? num(best.efficiency, 3) : "—") + '</b><span>лучшая эффективность, ' + (best ? effUnit(best) : "TH/Вт") + '</span></div>';
     var topL = d.entries.slice().sort(function (a, b) { return (b.efficiency || 0) - (a.efficiency || 0); }).slice(0, 3);
     $("top").innerHTML = topL.map(function (e, i) {
       var coin = state.coinmap[e.algo] || null;
@@ -238,7 +238,7 @@
         : price == null ? '<div class="rev"><span class="na">курс загружается…</span></div>'
         : cpd == null ? '<div class="rev"><span>курс</span><b>' + num(price, 4) + ' ₽</b><span class="cost">доход не считаем — нет данных о сложности сети</span></div>'
         : '<div class="rev"><span>доход, за сутки</span><b>' + num(cpd * price, 2) + ' ₽</b></div>';
-      return '<div><div class="meta"><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' TH/Вт</span>' +
+      return '<div><div class="meta"><small>№' + (i + 1) + ' по эффективности</small><b><a class="mlink" href="' + slugOf(e) + LANG_SUFFIX + '">' + esc(clean(e.model)) + '</a></b><span class="v">' + num(e.efficiency, 3) + ' ' + effUnit(e) + '</span>' +
         '<div class="p">core ' + sgn(e.best.core) + ' · mem ' + sgn(e.best.mem) + ' · PL ' + Math.round(e.best.pl) + ' Вт</div></div>' +
         revBlock + '</div>';
     }).join("");
@@ -276,7 +276,7 @@
       if (!others.length) return "";
       var order = { efficiency: 0, compromise: 1, hashrate: 2 };
       var list = (sibs[sibKey(e)] || []).slice().sort(function (a, b) { return order[obj(a)] - order[obj(b)]; });
-      return '<details class="cmp"><summary>Сравнить режимы</summary><table><thead><tr><th>Режим</th><th>TH/s</th><th>Вт</th><th>TH/Вт</th></tr></thead><tbody>' +
+      return '<details class="cmp"><summary>Сравнить режимы</summary><table><thead><tr><th>Режим</th><th>' + unitOf(e) + '</th><th>Вт</th><th>' + effUnit(e) + '</th></tr></thead><tbody>' +
         list.map(function (o) {
           var m = MODES.filter(function (x) { return x.id === obj(o); })[0];
           return '<tr' + (o === e ? ' class="cur"' : '') + '><td>' + esc(m ? m.name : obj(o)) + '</td><td>' + num(o.hashrate, 1) + '</td><td>' + num(o.power_w, 0) + '</td><td>' + num(o.efficiency, 3) + '</td></tr>';
@@ -284,6 +284,11 @@
     }
     function slugOf(e) { return (clean(e.model) + " " + (e.mem_vendor || "")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
     function netw(e) { return state.network[e.algo] || null; }
+    // Единица хэшрейта зависит от алгоритма (pearl = TH/s, noid = MH/s — по hashrate_to_hs из network.json);
+    // раньше везде было захардкожено "TH/s", и записи noid показывались с неверной подписью.
+    var UNIT_BY_SCALE = { 1: "H/s", 1e3: "kH/s", 1e6: "MH/s", 1e9: "GH/s", 1e12: "TH/s", 1e15: "PH/s" };
+    function unitOf(e) { var n = netw(e); return (n && UNIT_BY_SCALE[n.hashrate_to_hs]) || "TH/s"; }
+    function effUnit(e) { return unitOf(e).split("/")[0] + "/Вт"; }
     function coinsPerDay(e) {
       var n = netw(e);
       if (!n || !e.hashrate) return null;
@@ -317,10 +322,10 @@
         (e.source ? '<span class="tag plain">источник: ' + esc(e.source) + '</span>' : '') + '</div>' + compare(e) + '</td>' +
         '<td data-l="Лучший">' + pcell(e.best, "лучший") + '</td>' +
         typicalCell +
-        '<td class="num" data-l="Хешрейт">' + num(e.hashrate, 1) + ' <small>TH/s</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, 'TH/s', true) + '</td>' +
+        '<td class="num" data-l="Хешрейт">' + num(e.hashrate, 1) + ' <small>' + unitOf(e) + '</small>' + beforeAfter(e.stock_hashrate, e.hashrate, 1, unitOf(e), true) + '</td>' +
         '<td class="num" data-l="Потребление">' + num(e.power_w, 0) + ' <small>Вт</small>' + beforeAfter(e.stock_power_w, e.power_w, 0, 'Вт', false) +
         (elDay != null ? '<span class="cost">≈ ' + num(elDay, 1) + ' ₽/сутки эл-во' + (usingDefaultKwh ? ' <i>(по умолч. ' + DEFAULT_KWH.toFixed(2) + ' ₽/кВт·ч)</i>' : '') + '</span>' : '') + '</td>' +
-        '<td class="num effcell" data-l="Эффективность"><span class="good">' + num(e.efficiency, 3) + '</span> <small>TH/Вт</small>' +
+        '<td class="num effcell" data-l="Эффективность"><span class="good">' + num(e.efficiency, 3) + '</span> <small>' + effUnit(e) + '</small>' +
         '<div class="eff" aria-hidden="true"><i style="width:' + eff + '%"></i></div></td>' +
         '<td class="num" data-l="Доход, за сутки">' + revCell + '</td>' +
         '<td class="num" data-l="Обновлено">' + (e.updated_at ? esc(dateOf(e.updated_at)) : "—") + '</td></tr>';
