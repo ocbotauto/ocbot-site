@@ -1,7 +1,8 @@
 // Виджет чата поддержки. Пока SUPPORT_URL пуст, кнопка не показывается.
 (function () {
   var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";
-  var TG_LINK = "https://t.me/OCBotSupport_bot";
+  // Пока отдельного бота поддержки нет — ведём в канал проекта; когда бот появится, вернуть сюда его ссылку.
+  var TG_LINK = "https://t.me/ocbotauto";
   if (!SUPPORT_URL) return;
   var css = ".ocw-b{position:fixed;right:16px;bottom:16px;z-index:50;padding:12px 16px;border-radius:999px;border:0;background:#0f7a64;color:#fff;font:600 14px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2)}" +
     ".ocw-p{position:fixed;right:16px;bottom:68px;z-index:50;width:min(360px,calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;background:#fff;color:#16211e;border:1px solid #d6dfdc;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.22);font:14px/1.45 system-ui,sans-serif}" +
@@ -29,10 +30,7 @@
   function add(cls, node) { var m = document.createElement("div"); m.className = "ocw-m " + cls; m.appendChild(node); list.appendChild(m); list.scrollTop = list.scrollHeight; }
   var t = function (s) { return document.createTextNode(s); };
   var hello = document.createElement("div");
-  hello.appendChild(t("Здравствуйте! Спросите про установку, команды, ключи или оплату. Если что-то не нашлось — "));
-  var a1 = document.createElement("a"); a1.href = TG_LINK; a1.target = "_blank"; a1.rel = "noopener"; a1.textContent = "Telegram-бот поддержки";
-  hello.appendChild(a1);
-  hello.appendChild(t(", а новости и статьи — в канале "));
+  hello.appendChild(t("Здравствуйте! Спросите про установку, команды, ключи или оплату. Новости, статьи и связь — в нашем канале "));
   var a2 = document.createElement("a"); a2.href = "https://t.me/ocbotauto"; a2.target = "_blank"; a2.rel = "noopener"; a2.textContent = "t.me/ocbotauto";
   hello.appendChild(a2);
   hello.appendChild(t("."));

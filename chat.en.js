@@ -1,7 +1,8 @@
 // Support chat widget. While SUPPORT_URL is empty, the button is hidden.
 (function () {
   var SUPPORT_URL = "https://ocbot-support.ocbotauto.workers.dev";
-  var TG_LINK = "https://t.me/OCBotSupport_bot";
+  // No dedicated support bot yet — point to the project channel; restore the bot link here once it exists.
+  var TG_LINK = "https://t.me/ocbotauto";
   if (!SUPPORT_URL) return;
   var css = ".ocw-b{position:fixed;right:16px;bottom:16px;z-index:50;padding:12px 16px;border-radius:999px;border:0;background:#0f7a64;color:#fff;font:600 14px system-ui,sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2)}" +
     ".ocw-p{position:fixed;right:16px;bottom:68px;z-index:50;width:min(360px,calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;background:#fff;color:#16211e;border:1px solid #d6dfdc;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.22);font:14px/1.45 system-ui,sans-serif}" +
@@ -29,10 +30,7 @@
   function add(cls, node) { var m = document.createElement("div"); m.className = "ocw-m " + cls; m.appendChild(node); list.appendChild(m); list.scrollTop = list.scrollHeight; }
   var t = function (s) { return document.createTextNode(s); };
   var hello = document.createElement("div");
-  hello.appendChild(t("Hello! Ask about installation, commands, keys or payment. Not covered? Message the "));
-  var a1 = document.createElement("a"); a1.href = TG_LINK; a1.target = "_blank"; a1.rel = "noopener"; a1.textContent = "Telegram support bot";
-  hello.appendChild(a1);
-  hello.appendChild(t("; news and articles are in our channel "));
+  hello.appendChild(t("Hello! Ask about installation, commands, keys or payment. News, articles and how to reach us — in our channel "));
   var a2 = document.createElement("a"); a2.href = "https://t.me/ocbotauto"; a2.target = "_blank"; a2.rel = "noopener"; a2.textContent = "t.me/ocbotauto";
   hello.appendChild(a2);
   hello.appendChild(t("."));
