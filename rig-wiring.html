@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home wiring for a mining rig: outlets, cables and breakers</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="A 2 kW rig is a heater-sized load running 24/7. One outlet per rig, why extension cords overheat, a dedicated circuit for two or more rigs, grounding, and the warning signs of overheating contacts.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Home wiring for a mining rig: outlets, cables and breakers">
+<meta property="og:description" content="A constant kilowatt-scale load is not what household wiring handles with headroom. One outlet per rig, cable gauge, a dedicated circuit from the panel, and a warm plug as an alarm.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/rig-wiring.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/rig-wiring.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/rig-wiring.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="rig-wiring.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Home wiring for a mining rig: outlets, cables and breakers</h1>
+    <p class="lede">Plenty is written about the rig's power supply, and almost nothing about what sits between the PSU and the breaker panel. Unfairly: a rig drawing one and a half to two kilowatts is a space heater that runs not for a couple of hours but for months without a break. Household wiring tolerates that only when it is not pushed to the limit. Let's go through outlets, cables and breakers — the parts that actually burn.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Count from the wall, not from the cards' watt limits.</strong> The system and the PSU's efficiency add 15–20% on top.</li>
+    <li><strong>One rig — one outlet.</strong> No splitters or extension cords under a permanent load: they are the parts that overheat.</li>
+    <li><strong>Two rigs or more — a dedicated circuit from the panel:</strong> proper-gauge cable and its own breaker. That is an electrician's job, not a weekend experiment.</li>
+    <li><strong>A warm plug, a burning smell, a discolored outlet is already an incident.</strong> Not "keep watching" — switch off and investigate.</li>
+    <li><strong>Grounding is not a formality.</strong> Without it, static and a floating neutral add strange crashes no software test will ever catch.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="load"><h2>What a rig actually draws from the wall</h2>
+  <p>Mistake number one is sizing the load by the sum of the cards' power limits. The rig pulls more from the outlet: the cards plus motherboard, CPU and fans — all divided by the PSU's efficiency. Six cards at 250 W is 1500 W of cards; with the system and PSU losses the wall sees roughly 1.7–1.8 kW. On a 230 V line that is around 8 amps — permanently, for months.</p>
+  <p>A household outlet is rated 16 A "on paper", but the rating is about hours, not months. For a round-the-clock load a sane ceiling is 70–80% of nominal — roughly 2.5–2.8 kW per outlet. One average rig fits; two do not.</p>
+  </section>
+
+  <section class="block" id="outlets"><h2>Outlets, extension cords and why things heat up</h2>
+  <p>It is not "electricity" that overheats — it is a bad contact: loosened outlet terminals, a thin cord on a power strip, a half-seated plug. A bad contact spot becomes a small heater; the heat loosens the contact further, and the spiral spins itself up. Practical conclusions:</p>
+  <ul>
+    <li><strong>no extension cord under a rig.</strong> Especially a coiled one: a wound cable heats up several times worse, and a typical thin cord is undersized for 2 kW;</li>
+    <li><strong>the outlet should be a quality, fresh one</strong> with proper spring contacts; a loose outlet the plug slides out of goes straight to replacement;</li>
+    <li><strong>seat the plug fully.</strong> Sounds silly until you see your first melted one;</li>
+    <li><strong>once a month, touch the plug and the outlet</strong> under load: warm means "deal with it today", not "after the holidays".</li>
+  </ul>
+  </section>
+
+  <section class="block" id="line"><h2>A dedicated circuit, breaker and grounding</h2>
+  <p>With two rigs or more there is exactly one right answer — a dedicated circuit from the panel: a cable of proper gauge, its own breaker, and residual-current protection where possible. In older housing with aging aluminum wiring the apartment's total load is already near the limit: one light rig is tolerable, a farm is not. This is not where you save: the question costs a cable and a couple of electrician's hours, the mistake costs the wiring inside the walls.</p>
+  <p>On grounding. Without it, the farm's chassis carries stray potential, static accumulates on everything you touch, and grid surges hit the cards directly. No grounding in the building is not a reason to skip the rig, but it is a reason to avoid adding sketchy adapters and power strips on top.</p>
+  <p>And about protection on the rig itself: a PSU with headroom is part of the wiring too; why "just enough" costs more is covered in our <a href="psu-budget.html">PSU article</a>.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A bot cannot replace the wiring in the wall — but it sees everything past the outlet. <a href="index.html">OCBot</a> keeps the rig's total power budget within a set wattage and distributes it among the cards, so fitting a rig to a specific circuit's limits is one setting instead of hand-tuning presets. And if a card starts behaving oddly because of power, you hear about it in Telegram before you smell it.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice, not electrical installation guidance; panel work is done by an electrician. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

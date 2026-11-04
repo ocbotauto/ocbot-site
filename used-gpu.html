@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buying a used GPU for mining: how to avoid a dead one</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="An ex-mining card is not a death sentence: what matters is how it was run. What to check when buying used: fans and thermal pads over case dust, memory vendor over the brand on the shroud, and a 30-minute on-the-spot test.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Buying a used GPU for mining: how to avoid a dead one">
+<meta property="og:description" content="The 'killed by mining' myth, an inspection and on-the-spot test checklist, brands and revisions, and why Samsung/Micron/Hynix memory matters more than the logo on the shroud.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/used-gpu.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/used-gpu.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/used-gpu.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="used-gpu.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Buying a used GPU for mining: how to avoid a dead one</h1>
+    <p class="lede">The second-hand market is where farm GPUs come from, and it breeds more myths than facts. "Mined on — throw it away" and "a gaming card is always better" are equally wrong. The truth is duller: a GPU does not wear out like mechanics; what dies is fans and thermal interfaces — and those are consumables. Here is what to check when buying, and how to tell a card that was cared for from one that was abused.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>"Ex-mining" is not a verdict.</strong> A card run at a lowered power limit with stable temperatures is less worn than a gaming card doing heat-up/cool-down cycles every evening.</li>
+    <li><strong>Check fans and thermal pads, not the dust on the shroud.</strong> Dust blows off in a minute; a dying bearing and baked thermal paste cost time and money.</li>
+    <li><strong>The memory vendor matters more than the card brand.</strong> The same model ships with Samsung, Micron or Hynix memory and overclocks differently — for mining that outweighs the logo on the shroud.</li>
+    <li><strong>An on-the-spot test is mandatory:</strong> 30 minutes under load, core and memory temperatures, zero artifacts. A seller who refuses testing is a seller to walk away from.</li>
+    <li><strong>A price a third below market is not a discount, it is a diagnosis.</strong> Used cards have a market price, and a suspiciously cheap one always has a reason.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="myth"><h2>The "killed by mining" myth</h2>
+  <p>Silicon and memory degrade from heat and current, not from the name of the workload. Mining done properly is round-the-clock work at a reduced power limit, stable temperature and constant fan speed. Physics says this regime is gentler than gaming: there are no thermal cycles, the very thing that fatigues solder joints and capacitors (details in our <a href="gpu-temps.html">article on temperature and lifespan</a>, the Coffin–Manson law).</p>
+  <p>What actually dies in mining:</p>
+  <ul>
+    <li><strong>fans</strong> — mechanics with a finite lifespan; they spin 24/7 and honestly use it up. They are cheap to replace, question closed;</li>
+    <li><strong>thermal paste and pads</strong> — dry out over 2–3 years under heat. Replacement is routine maintenance, not repair;</li>
+    <li><strong>the card's power delivery</strong> — only suffers if the card was run at maximum watts in hot ambient. That shows on the power connectors.</li>
+  </ul>
+  <p>The conclusion neither camp likes: judge a used card not by "mined or not", but by the state of its consumables and its test results.</p>
+  </section>
+
+  <section class="block" id="checklist"><h2>Inspection and test: a 15-minute checklist</h2>
+  <ul>
+    <li><strong>Fans.</strong> Spin them by hand: quiet, no wobble, no grinding. Ask for a load test and listen at full speed — rattling or pulsing means a dying bearing (<a href="fan-health.html">how a fan predicts failure</a>).</li>
+    <li><strong>Power connectors.</strong> Darkened plastic and discolored contacts mean the card lived hot at high wattage. That is a price cut or a pass.</li>
+    <li><strong>Signs of disassembly.</strong> Scuffed screws and broken warranty seals mean someone has been inside. Not a problem if the paste and pads were replaced — ask directly. A problem if "nobody touched it" and the seals are gone.</li>
+    <li><strong>A 30-minute load test.</strong> Any stress test or miner. Watch: core and memory temperatures (on hot GDDR6X — <a href="vram-heat.html">a dedicated article</a>), no screen artifacts, stable clocks without sudden drops.</li>
+    <li><strong>An identification utility.</strong> Verify the model, memory size and memory vendor — sometimes a different revision is sold under a familiar name.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="brands"><h2>Brands, revisions and memory</h2>
+  <p>The same NVIDIA chip ships from dozens of board partners — ASUS, MSI, Gigabyte, Palit, Zotac, Colorful and others — with different power delivery and coolers. For mining, what matters most is invisible on the box: how the memory is cooled and how thick the heatsink is. A three-slot cooler with proper memory contact beats the name on the shroud.</p>
+  <p>The second invisible factor is the memory chip vendor. The same card model ships with Samsung, Micron or Hynix memory, and their overclocking headroom differs. On memory-bound algorithms that is a visible hashrate gap at the same watts. The vendor is identified by utilities in seconds — ask for a screenshot or check during the test. Our <a href="catalog.html">catalog</a> stores presets separately per memory vendor — it also shows what to expect from a specific model.</p>
+  <p>One line on firmware and modded BIOS: a card with non-stock firmware is somebody else's experiment with an unknown history. For a farm, predictability is worth more than promised percentages.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A used card almost never matches the "average from the forum": fresh pads and replaced fans give it their own thermal profile, and the specific memory gives its own OC ceiling. Forum presets made for someone else's card work poorly here. <a href="index.html">OCBot</a> tunes a stable overclock for the specific card and verifies it over long runs — and a good preset is remembered by model and memory vendor, so the second identical card gets configured faster than the first.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; a specific card's condition is determined only by inspection and testing. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

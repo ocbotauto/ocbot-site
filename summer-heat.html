@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A mining rig in the heat: how to survive summer without losses</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="In summer it is the exhaust fan that matters, not the air conditioner: hot air must leave the room, not be 'cooled' inside it. The physics of heat for GPUs, a summer mode with fewer watts, and the post-season checkup.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A mining rig in the heat: how to survive summer without losses">
+<meta property="og:description" content="Every +10 °C in the room is +10 °C on the cards. Exhaust beats air conditioning, a summer mode with reduced watts, and what to inspect in the fall.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/summer-heat.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/summer-heat.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/summer-heat.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="summer-heat.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>A mining rig in the heat: how to survive summer without losses</h1>
+    <p class="lede">A rig that ran like clockwork all winter starts acting up in summer: fans scream, temperatures climb, a stable overclock suddenly is not stable. The cards did not go bad — the room got ten degrees hotter. Summer is survived with three things: exhaust, fewer watts, and a fall inspection.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>A card lives in the room's air.</strong> Every +10 °C indoors is roughly +10 °C on the cards: fans will cover part of it, not all.</li>
+    <li><strong>Exhaust beats air conditioning.</strong> The job is to push hot air out of the room, not to "freshen" it inside.</li>
+    <li><strong>Summer mode means fewer watts.</strong> An overclock stable at 68 °F is often unstable at 95 °F; cutting the power limit by 10–20% brings stability back at almost no revenue cost.</li>
+    <li><strong>Memory suffers first.</strong> GDDR6X runs close to its limit even in winter — in summer, watch it before anything else.</li>
+    <li><strong>Fall is inspection month.</strong> After summer: blow-out, fan check, and thermal pad replacement if needed.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="physics"><h2>The physics of heat: why a "summer" overclock is different</h2>
+  <p>A card's temperature is the room temperature plus the cooler's "delta". A cooler does not create cold — it moves heat into the air, and the hotter the air, the worse the transfer. So an overclock that lived happily at 68 °F gets +27 °F on every sensor at 95 °F room temperature — and slides past the edge of stability.</p>
+  <p>GDDR6X memory takes the hit first: its headroom is small even in winter, and in summer it reaches the limit before anything else (details in the <a href="vram-heat.html">hot memory article</a>). The second candidate is thermal throttling: the card drops clocks on its own to survive, and hashrate falls further than it would from a voluntary watt cut.</p>
+  <p>The counterintuitive conclusion: in summer, "trimming watts" is not giving up revenue — it is how you avoid losing it to throttling and crashes. The physics of temperature and GPU lifespan is covered in detail <a href="gpu-temps.html">here</a>.</p>
+  </section>
+
+  <section class="block" id="ventilation"><h2>Ventilation: exhaust, not cooling</h2>
+  <p>A 1.5 kW rig emits exactly what a 1.5 kW heater does — literally all of its consumption becomes heat. An air conditioner grinds that heat down for extra kilowatts; an exhaust simply throws it outside. The order of priorities:</p>
+  <ul>
+    <li><strong>a duct fan to the outside</strong> (through a window, into a vent) — the main summer investment. Hot air pools at the top, so the exhaust goes high;</li>
+    <li><strong>intake down low.</strong> An exhaust without intake works at half strength: give the air a path, "in at the bottom — out at the top";</li>
+    <li><strong>do not line rigs up like a train:</strong> the second rig sitting in the first one's hot exhaust lives in a sauna;</li>
+    <li><strong>air conditioning is the last resort.</strong> It works, but it turns heat into a double power bill. Exhaust and watts first.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="summer-mode"><h2>The rig's summer mode</h2>
+  <ul>
+    <li><strong>Cut the power limit by 10–20%.</strong> The hashrate loss is usually half the wattage loss — and temperatures drop noticeably. Same logic as efficiency mode (the <a href="crypto-winter.html">winter article</a> covers the economics of it).</li>
+    <li><strong>Watch memory, not just the core.</strong> The core is still fine when the memory is already at the edge.</li>
+    <li><strong>Nights are cooler.</strong> If the rig lives at the limit, it is sometimes easier to sit out the hottest hours and run at night. The pros and cons of stopping — in the <a href="night-off.html">night article</a>.</li>
+    <li><strong>Do not panic over "high" fan speeds.</strong> Fans at 80–90% in summer are normal; the worry sign is rising temperatures at already-maxed fans.</li>
+  </ul>
+  <p>And the fall inspection: summer is a hard season for consumables. A blow-out, a fan check by RPM trend and a look at the thermal pads — on the <a href="maintenance.html">regular maintenance schedule</a>, just done right after the season.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>The summer switch is not "retune everything from scratch" — it is changing the mode. <a href="index.html">OCBot</a> runs each card in a chosen style — compromise, efficiency or hashrate — and keeps stable presets per card. Moving to efficiency for the summer and back to winter presets in the fall is a couple of Telegram commands, not a new season of hand-tuning.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual temperatures depend on your hardware and room. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

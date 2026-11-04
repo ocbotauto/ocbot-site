@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Майнинг-риг в жару: как пережить лето без потерь</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Летом решает не кондиционер, а вытяжка: горячий воздух надо выгнать из комнаты, а не «охладить» внутри. Физика жары для карт, летний режим с пониженными ваттами и проверка после сезона.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Майнинг-риг в жару: как пережить лето без потерь">
+<meta property="og:description" content="Каждые +10 °C в комнате — это +10 °C на картах. Вытяжка важнее кондиционера, летний режим с пониженными ваттами, и что проверить в сентябре.">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://ocbot.org/summer-heat.ru.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/summer-heat.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/summer-heat.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Разделы сайта"><div class="wrap">
+  <a class="brand" href="index.ru.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: авторазгон</span></a>
+  <a href="catalog.ru.html">Каталог</a><a href="calculator.ru.html">Калькулятор</a><a href="buy.ru.html">Купить</a>
+  <a href="blog.ru.html">Статьи</a><a href="security.ru.html">Безопасность</a>
+  <a href="summer-heat.html" hreflang="en" lang="en" onclick="try{localStorage.setItem('ocbot_lang','en')}catch(e){}">English</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Майнинг-риг в жару: как пережить лето без потерь</h1>
+    <p class="lede">Риг, который всю зиму работал как часы, летом начинает «капризничать»: вентиляторы ревут, температура ползёт вверх, стабильный разгон вдруг перестаёт быть стабильным. Это не карты испортились — это комната стала на десяток градусов горячее. Лето переживается тремя вещами: вытяжкой, снижением ватт и осенней ревизией.</p>
+  </div>
+
+  <section class="block"><h2>Коротко (для тех, кто без чтения)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Карта живёт в воздухе комнаты.</strong> Каждые +10 °C в помещении — это примерно +10 °C на картах: вентиляторы докрутят часть, но не всё.</li>
+    <li><strong>Вытяжка важнее кондиционера.</strong> Задача — выгнать горячий воздух наружу, а не «освежить» его внутри комнаты.</li>
+    <li><strong>Летний режим — минус ватты.</strong> Разгон, стабильный при +20, при +35 часто уже нестабилен; снижение лимита мощности на 10–20% возвращает стабильность почти без потери дохода.</li>
+    <li><strong>Первой страдает память.</strong> У карт с GDDR6X память и так живёт на пределе — летом следите в первую очередь за ней.</li>
+    <li><strong>Сентябрь — месяц ревизии.</strong> После лета: продувка, проверка вентиляторов и, при необходимости, замена термо-прокладок.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="physics"><h2>Физика жары: почему «летний» разгон другой</h2>
+  <p>Температура карты — это температура комнаты плюс «дельта» от системы охлаждения. Кулер не творит холод, он переносит тепло в воздух — и чем горячее воздух, тем хуже перенос. Поэтому разгон, спокойно живший при +20 °C, при +35 °C в комнате получает +15 °C по всем датчикам — и уходит за грань стабильности.</p>
+  <p>Особенно это касается памяти GDDR6X: у неё и зимой запас невелик, а летом она первой приходит к пределу (подробнее — <a href="vram-heat.ru.html">статья про горячую память</a>). Второй кандидат — троттлинг: карта сама сбрасывает частоты, спасаясь от перегрева, и хешрейт падает заметнее, чем упал бы от добровольного снижения ватт.</p>
+  <p>Вывод непривычный: летом «прижать ватты» — это не экономия на доходе, а способ его не потерять в троттлинге и отвалах. Физика температур и срока жизни карт подробно разобрана <a href="gpu-temps.ru.html">здесь</a>.</p>
+  </section>
+
+  <section class="block" id="ventilation"><h2>Вентиляция: выгнать, а не остудить</h2>
+  <p>Риг на 1,5 кВт выделяет как обогреватель на 1,5 кВт — буквально всё потребление уходит в тепло. Кондиционер это тепло «перемалывает» за дополнительные киловатты; вытяжка просто выбрасывает его на улицу. Порядок приоритетов:</p>
+  <ul>
+    <li><strong>канальный вентилятор наружу</strong> (в окно, в вентканал) — главная инвестиция лета. Горячий воздух скапливается сверху, вытяжка ставится высоко;</li>
+    <li><strong>приток снизу.</strong> Вытяжка без притока работает вполсилы: дайте воздуху путь «внизу вошёл — наверху ушёл»;</li>
+    <li><strong>не стройте риги «паровозиком»:</strong> второй риг в потоке горячего воздуха первого живёт в сауне;</li>
+    <li><strong>кондиционер — крайняя мера.</strong> Он работает, но превращает жару в двойной счёт за электричество. Сначала вытяжка и ватты.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="summer-mode"><h2>Летний режим рига</h2>
+  <ul>
+    <li><strong>Снизьте лимит мощности на 10–20%.</strong> Потеря хешрейта обычно вдвое меньше потери ватт — а температура падает ощутимо. Это та же логика, что в efficiency-режиме (<a href="crypto-winter.ru.html">зимняя статья</a> — про экономику этого решения).</li>
+    <li><strong>Следите за памятью, а не только за ядром.</strong> Ядро ещё в норме, когда память уже на грани.</li>
+    <li><strong>Ночные часы холоднее.</strong> Если риг живёт на пределе, дневную жару иногда проще переждать: остановка в самые горячие часы и работа ночью. Аргументы «за и против» остановок — в <a href="night-off.ru.html">статье про ночь</a>.</li>
+    <li><strong>Не паникуйте из-за «высоких» оборотов.</strong> Вентиляторы на 80–90% летом — норма; повод для беспокойства — рост температур при уже максимальных оборотах.</li>
+  </ul>
+  <p>И сентябрьская ревизия: лето — тяжёлый сезон для расходников. Продувка, контроль вентиляторов по оборотам и оценка термо-прокладок — по <a href="maintenance.ru.html">обычному графику обслуживания</a>, просто обязательно сразу после сезона.</p>
+  </section>
+
+  <section class="block" id="bot"><h2>Куда тут автоматика</h2>
+  <p>Летний переход — это не «перенастроить всё с нуля», а сменить режим. <a href="index.ru.html">OCBot</a> ведёт каждую карту в выбранном стиле — compromise, efficiency или hashrate — и хранит стабильные пресеты по каждой карте. Перейти на лето на efficiency, а осенью вернуться на зимние пресеты — вопрос пары команд в Telegram, а не нового сезона ручного подбора.</p>
+  </section>
+
+  <p class="legal">Статья — общая информация и пересказ общедоступной практики; конкретные температуры зависят от вашего железа и помещения. OCBot — независимый проект: не связан с NVIDIA и HiveOS/Hiveon. Использование — на ваш риск: <a href="guide.ru.html#terms">отказ от ответственности</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>

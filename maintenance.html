@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){try{if(localStorage.getItem('ocbot_lang')==='en'){location.replace(location.pathname.replace(/\.ru\.html$/,'.html')+location.search+location.hash);}}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mining rig maintenance: dust, thermal paste and a simple schedule</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%230c7a69%22/%3E%3Crect%20x%3D%229%22%20y%3D%2215%22%20width%3D%2230%22%20height%3D%2218%22%20rx%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M16%2028l5-6%204%203%207-8%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/guide.css">
+<meta name="description" content="Dust is a blanket on the heatsink: plus 5–15 °C after a year without cleaning. A one-page rig maintenance schedule: blow-out every 1–3 months, fans by RPM trend, paste and pads every 2–3 years, annual power inspection.">
+<meta name="theme-color" content="#0f7a64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mining rig maintenance: dust, thermal paste and a simple schedule">
+<meta property="og:description" content="Prevention is cheaper than repair: how to blow out cards properly, when to replace thermal paste and pads, and why a temperature log is the best alarm clock.">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://ocbot.org/maintenance.html">
+<link rel="alternate" hreflang="en" href="https://ocbot.org/maintenance.html">
+<link rel="alternate" hreflang="ru" href="https://ocbot.org/maintenance.ru.html">
+</head>
+<body>
+<nav class="top" aria-label="Site navigation"><div class="wrap">
+  <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" width="28" height="28" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46c8af"/><stop offset="1" stop-color="#0c7a69"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#lg)"/><rect x="9" y="15" width="30" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="19" cy="24" r="4.6" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M19 24l3-3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M28 28l3-4 3 2 3-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 36v3M20 36v3M26 36v3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg><span>OCBot: auto-overclock</span></a>
+  <a href="catalog.html">Catalog</a><a href="calculator.html">Calculator</a><a href="buy.html">Buy</a>
+  <a href="blog.html">Articles</a><a href="security.html">Security</a>
+  <a href="maintenance.ru.html" hreflang="ru" lang="ru" onclick="try{localStorage.setItem('ocbot_lang','ru')}catch(e){}">Russian</a>
+</div></nav>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Mining rig maintenance: dust, thermal paste and a simple schedule</h1>
+    <p class="lede">A rig does not need daily attention — that is its charm. But "set it up and forget it for two years" always ends the same way: temperatures creeping up for no visible reason. The reason is always the same — dust and aging thermal interfaces. The good news: all rig maintenance fits on a one-page schedule.</p>
+  </div>
+
+  <section class="block"><h2>The short version (for the no-time-to-read)</h2>
+  <div class="card" style="margin-top:8px">
+  <ul>
+    <li><strong>Dust is a blanket on the heatsink.</strong> A year without cleaning easily adds 5–15 °C at the same wattage.</li>
+    <li><strong>Blow out every 1–3 months</strong> (depending on how dusty the room is) — cheaper than replacing fans and pads.</li>
+    <li><strong>Thermal paste lives 2–3 years, memory pads about the same.</strong> A card older than three years with no service is almost certainly running hotter than it should.</li>
+    <li><strong>Hold the fan blades while blowing.</strong> An air stream overspins the fan: bad for the bearing, and the motor acts as a generator feeding voltage back into the card.</li>
+    <li><strong>A temperature log is the best alarm.</strong> An upward trend at unchanged settings means: grab the air can, not a new card.</li>
+  </ul>
+  </div>
+  </section>
+
+  <section class="block" id="dust"><h2>What dust actually does</h2>
+  <p>Dust harms three ways. First, a layer on the heatsink fins acts as insulation: heat leaves worse, temperatures rise at the same watts. Second, dust works into fan bearings and accelerates wear — and fans are already consumable number one (<a href="fan-health.html">how a fan predicts failure</a>). Third, dust plus humidity makes a conductive film on the board; rare, but spectacular.</p>
+  <p>The indirect effect is worse than the direct one: a hotter card → higher fan speeds → a louder rig and faster wear → even worse cooling. Regular cleaning breaks this loop at its cheapest point.</p>
+  </section>
+
+  <section class="block" id="schedule"><h2>A one-page maintenance schedule</h2>
+  <ul>
+    <li><strong>Every 1–3 months — blow-out.</strong> The interval depends on the room: a balcony with a filtered intake — quarterly, a garage — monthly. A simple marker: card temperatures creeping up at unchanged settings — time to clean.</li>
+    <li><strong>Monthly — a glance at RPM and connectors.</strong> Fan speeds rising at familiar temperatures means a tired fan. Check power connectors for discoloration while you are at it.</li>
+    <li><strong>Every 2–3 years — thermal paste and pads.</strong> Paste dries and cracks, pads lose elasticity. The symptom is a growing gap between core and memory temperatures (on hot GDDR6X — <a href="vram-heat.html">here</a>).</li>
+    <li><strong>Yearly — a general inspection.</strong> Snug the connectors, look over the cables, make sure the risers sit tight (on their quirks — <a href="risers.html">a dedicated article</a>).</li>
+  </ul>
+  </section>
+
+  <section class="block" id="how"><h2>How to clean it right</h2>
+  <ul>
+    <li><strong>Rig off and unplugged.</strong> Blowing "hot" turns dust into a conductive fog inside running hardware.</li>
+    <li><strong>Compressed air, not a vacuum.</strong> A vacuum cleaner on a live board is a static generator. Use a can or a compressor with short bursts.</li>
+    <li><strong>Hold the fans with a finger or a zip tie.</strong> The air stream overspins the rotor past its rated RPM: the bearing suffers, and the motor works as a generator pushing voltage back into the board.</li>
+    <li><strong>Outside, not around the room.</strong> Blowing a rig out in a living room just relocates dust from the heatsinks to your lungs. Balcony, street, garage.</li>
+    <li><strong>Measure after cleaning.</strong> Before/after temperatures at the same settings are the best proof the work was worth it. Usually minus 5–10 °C.</li>
+  </ul>
+  </section>
+
+  <section class="block" id="bot"><h2>Where automation fits</h2>
+  <p>A temperature trend is invisible day to day — it shows in history. <a href="index.html">OCBot</a> watches the rig around the clock: every card's temperatures and fan speeds are recorded continuously, so a slow temperature rise at unchanged settings is visible in numbers long before it becomes audible. Cleaning the rig on an alarm is nicer than replacing fans after a failure.</p>
+  </section>
+
+  <p class="legal">This article is general information summarizing public practice; actual intervals depend on your room and hardware. OCBot is an independent project: not affiliated with NVIDIA, HiveOS or Hiveon. Use at your own risk — see the <a href="guide.html#terms">disclaimer</a>.</p>
+</main>
+<script src="chat.js" defer></script>
+</body>
+</html>
