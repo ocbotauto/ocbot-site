@@ -248,6 +248,16 @@
     }).join("");
     $("source").innerHTML = (state.isSample ? "<b>Пример</b>" : state.remote ? "<b>Данные сайта</b>" : "<b>Ваш файл</b>") + (d.label ? " · " + esc(d.label) : "") +
       "<br>записей: " + all.entries.length + (d.created_at ? " · " + esc(dateOf(d.created_at)) : "");
+    // Каталог запущен недавно, и все записи датированы последними днями — без пояснения это читается как
+    // «этим никто не пользуется». Говорим прямо и подкрепляем живыми числами из самих записей.
+    if (state.remote) {
+      var plural = function (n, f) { var a = Math.abs(n) % 100, b = a % 10; return f[(a > 10 && a < 20) ? 2 : (b > 1 && b < 5) ? 1 : (b === 1) ? 0 : 2]; };
+      var weekAgo = Date.now() - 7 * 864e5;
+      var fresh = all.entries.filter(function (e) { var t = Date.parse(e.updated_at || ""); return !isNaN(t) && t >= weekAgo; }).length;
+      $("source").innerHTML += "<br>Каталог молодой — пополняется с каждой установкой: " +
+        (fresh ? fresh + " " + plural(fresh, ["пресет", "пресета", "пресетов"]) + " добавлено или обновлено за последние 7 дней."
+               : "новые записи появляются по мере того, как риги присылают проверенные пресеты.");
+    }
 
     if (!rows.length) {
       $("list").innerHTML = '<div class="empty">' + (d.entries.length ? 'Ничего не найдено. Измените запрос или серию.' : 'Для режима «' + esc(curMode.name) + '» пока нет данных: запись появляется, когда риги в этом режиме пришлют проверенные пресеты.') + '</div>';

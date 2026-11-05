@@ -247,6 +247,15 @@
     }).join("");
     $("source").innerHTML = (state.isSample ? "<b>Example</b>" : state.remote ? "<b>Site data</b>" : "<b>Your file</b>") + (d.label ? " · " + esc(d.label) : "") +
       "<br>entries: " + all.entries.length + (d.created_at ? " · " + esc(dateOf(d.created_at)) : "");
+    // The catalog launched recently and every entry is dated within the last days — without context that
+    // reads as "nobody uses this". Say it outright and back it with live numbers from the entries themselves.
+    if (state.remote) {
+      var weekAgo = Date.now() - 7 * 864e5;
+      var fresh = all.entries.filter(function (e) { var t = Date.parse(e.updated_at || ""); return !isNaN(t) && t >= weekAgo; }).length;
+      $("source").innerHTML += "<br>The catalog is young — it grows with every install: " +
+        (fresh ? fresh + " preset" + (fresh === 1 ? "" : "s") + " added or updated in the last 7 days."
+               : "new entries appear as rigs submit verified presets.");
+    }
 
     if (!rows.length) {
       $("list").innerHTML = '<div class="empty">' + (d.entries.length ? 'Nothing found. Try a different search or series.' : 'No data yet for “' + esc(curMode.name) + '” mode: an entry appears once rigs running this mode submit verified presets.') + '</div>';
