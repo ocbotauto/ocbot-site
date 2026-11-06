@@ -502,6 +502,9 @@ def page(model, mem, entries, all_models, base, lang, network, curves=None):
         head_cols = "<th>Режим</th><th>Пресет</th><th class=\"num\">Хешрейт</th><th class=\"num\">Потребл.</th><th class=\"num\">Эффективность</th><th class=\"num\">Доход</th>"
         script_src, og_locale = "chat.js", "ru_RU"
         rev_cur, rev_prefix, rev_suffix = "rub", "", " ₽/сутки"
+        preset_note = ("Хешрейт и потребление в таблице — замер с конкретной карты, на которой пресет прошёл "
+                       "двухчасовую проверку на риге. Каждая карта индивидуальна: ваша может показать чуть больше "
+                       "или чуть меньше — бот подберёт разгон именно под неё.")
     else:
         title = f"{name}: mining overclock presets"
         desc = (f"Verified overclock presets for {name}: core, mem, power limit, hashrate and power draw across three "
@@ -515,6 +518,9 @@ def page(model, mem, entries, all_models, base, lang, network, curves=None):
         head_cols = "<th>Mode</th><th>Preset</th><th class=\"num\">Hashrate</th><th class=\"num\">Power</th><th class=\"num\">Efficiency</th><th class=\"num\">Revenue</th>"
         script_src, og_locale = "chat.en.js", "en_US"
         rev_cur, rev_prefix, rev_suffix = "usd", "$", "/day"
+        preset_note = ("Hashrate and power draw in the table are measured on the specific card that verified "
+                       "the preset in a two-hour rig run. Every card is different: yours may do a bit better "
+                       "or worse — the bot tunes the overclock for your exact card.")
 
     body_rows, copied, _ = "", "Copied", ""
     rows_html = []
@@ -529,7 +535,8 @@ def page(model, mem, entries, all_models, base, lang, network, curves=None):
                 "location.replace(location.pathname.replace(/\\.ru\\.html$/,'.html')+location.search+location.hash);}")
 
     presets_html = (f'<div class="tw"><table class="tbl"><thead><tr>{head_cols}</tr></thead>'
-                    f'<tbody>{"".join(rows_html)}</tbody></table></div>') if rows_html else ""
+                    f'<tbody>{"".join(rows_html)}</tbody></table></div>'
+                    f'<p class="note">{e(preset_note)}</p>') if rows_html else ""
     nav = NAV[lang].format(logo=LOGO)
     others = others_links(model, mem, all_models, lang)
 
@@ -637,12 +644,58 @@ def update_sitemap(site_dir, base, model_slugs):
         f.write(SITEMAP_HEAD + "".join(kept) + fresh + "</urlset>\n")
 
 
+# --- Слияние с архивом исторических максимумов (history.json воркера) --------------------------------
+# catalog.json показывает «лучшее из того, что риги держат СЕЙЧАС»: если единственный риг с картой
+# сидит на жёстком лимите БП (или карта в переподборе), страница показывает заниженную цифру.
+# Архив hist:* хранит исторический максимум по связке и не протухает — берём максимум из двух.
+def score(x):
+    return (x.get("hashrate") or 0) if x.get("objective") == "hashrate" else (x.get("efficiency") or 0)
+
+
+def combo_key(x):
+    return (clean(x.get("model")), x.get("mem_vendor") or "", x.get("algo"),
+            x.get("miner"), x.get("miner_version"), x.get("objective") or "")
+
+
+HIST_DROP = ("first_seen", "last_seen", "rigs_total", "t")
+
+
+def merge_history(entries, hist):
+    by, order = {}, []
+    for x in entries:
+        k = combo_key(x)
+        by[k] = x
+        order.append(k)
+    added = up = 0
+    for h in hist:
+        if not h.get("best") or not h.get("hashrate"):
+            continue
+        h = {k2: v for k2, v in h.items() if k2 not in HIST_DROP}
+        k = combo_key(h)
+        cur = by.get(k)
+        if cur is None:
+            by[k] = h
+            order.append(k)
+            added += 1
+        elif score(h) > score(cur):
+            m = dict(h)
+            # живые счётчики ригов/карт и медиану оставляем от текущего снапшота
+            for keep in ("rigs", "cards", "median"):
+                if cur.get(keep) is not None:
+                    m[keep] = cur[keep]
+            by[k] = m
+            up += 1
+    return [by[k] for k in order], added, up
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="")
     ap.add_argument("--file", default="catalog-data.json")
     ap.add_argument("--curves", default="curves-data.json")
     ap.add_argument("--curves-url", default="")
+    ap.add_argument("--history-file", default="history-data.json")
+    ap.add_argument("--history-url", default="")
     ap.add_argument("--base", default="https://example.github.io/ocbot-site/")
     ap.add_argument("--site", default=os.path.dirname(os.path.abspath(__file__)))
     a = ap.parse_args()
@@ -650,19 +703,38 @@ def main():
     if a.url:
         req = urllib.request.Request(a.url, headers={"User-Agent": "ocbot-site-build/1.0 (+https://ocbot.org)"})
         with urllib.request.urlopen(req, timeout=30) as r:
-            raw = r.read()
-            data = json.loads(raw.decode("utf-8"))
-        # важный same-origin снапшот: сайт грузит ./catalog.json в первую
-        # очередь (см. catalog.html) — без файла посетители видят устаревший каталог
-        try:
-            with open(os.path.join(a.site, "catalog.json"), "wb") as f:
-                f.write(raw)
-        except OSError:
-            pass
+            data = json.loads(r.read().decode("utf-8"))
     else:
         with open(a.file, encoding="utf-8") as f:
             data = json.load(f)
     entries = [x for x in data.get("entries", []) if x.get("best") and x.get("hashrate")]
+    # архив исторических максимумов: тот же приёмник, файл history.json; без него — как раньше
+    hist = []
+    history_url = a.history_url or (a.url.rsplit("/", 1)[0] + "/history.json" if a.url else "")
+    try:
+        if history_url:
+            req = urllib.request.Request(history_url, headers={"User-Agent": "ocbot-site-build/1.0 (+https://ocbot.org)"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                hist = json.loads(r.read().decode("utf-8")).get("entries", [])
+        else:
+            with open(a.history_file, encoding="utf-8") as f:
+                hist = json.load(f).get("entries", [])
+    except Exception as ex:
+        print(f"history.json недоступен ({ex}) — страницы без слияния с архивом")
+    if hist:
+        entries, added, up = merge_history(entries, hist)
+        print(f"архив: +{added} связок, улучшено {up}")
+    # важный same-origin снапшот: сайт грузит ./catalog.json в первую очередь (см. catalog.html) —
+    # пишем СЛИЯНИЕ, чтобы страница каталога не показывала просевшие «текущие» цифры
+    if a.url:
+        try:
+            snap = {"format": data.get("format", "ocbot-catalog"), "version": data.get("version", 1),
+                    "created_at": data.get("created_at"), "label": data.get("label", "общий каталог"),
+                    "entries": entries}
+            with open(os.path.join(a.site, "catalog.json"), "w", encoding="utf-8") as f:
+                json.dump(snap, f, ensure_ascii=False, separators=(",", ":"))
+        except OSError:
+            pass
     # таблицы «разгон → хешрейт» (необязательно: без файла страницы строятся как раньше)
     curves_by = {}
     cdoc = None
